@@ -1,0 +1,12 @@
+name: ${project.name}
+version: ${project.version}
+main: ${project.groupId}.${project.artifactId}.${project.name}Plugin
+softdepend: [LuckPerms]
+author: Chickenpowerrr
+description: ${project.description}
+
+commands:
+  ranksync:
+    description: Link your account to another service
+    aliases: [link, sync, synchronize, syncrank, synchronizerank, giverank]
+    permission: ranksync.command.ranksync
