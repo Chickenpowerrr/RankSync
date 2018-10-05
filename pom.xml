@@ -6,8 +6,9 @@
 
     <groupId>com.gmail.chickenpowerrr</groupId>
     <artifactId>ranksync</artifactId>
+    <name>RankSync</name>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>api</module>
         <module>discord</module>

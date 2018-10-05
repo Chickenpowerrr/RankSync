@@ -13,7 +13,10 @@ import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerUpdateOnl
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.PlayerJoinEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.LuckPermsRankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.RankHelper;
+import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.VaultRankResource;
 import lombok.Getter;
+import me.lucko.luckperms.LuckPerms;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
@@ -34,14 +37,24 @@ public final class RankSyncPlugin extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
 
+        RankResource rankResource;
+
+        if(Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
+            rankResource = new LuckPermsRankResource(LuckPerms.getApi());
+        } else if(Bukkit.getPluginManager().getPlugin("Vault") != null && getServer().getServicesManager().getRegistration(Permission.class) != null) {
+            rankResource = new VaultRankResource(getServer().getServicesManager().getRegistration(Permission.class).getProvider());
+        } else {
+            Bukkit.getLogger().severe("You should use either LuckPerms of Vault to work with RankSync");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         this.linkHelper = new LinkHelper();
         Main.main(new String[]{});
         RankSyncApi.getApi().getBotFactory("Discord");
         PluginCommand command = getCommand("ranksync");
         command.setExecutor(new RankSyncCommandExecutor());
         command.setTabCompleter(new RankSyncTabCompleter());
-
-        RankResource rankResource = new LuckPermsRankResource();
 
         this.bots.put("discord", RankSyncApi.getApi().getBotFactory("Discord").getBot(new BasicProperties()
                 .addProperty("name", getConfig().getString("discord.name"))

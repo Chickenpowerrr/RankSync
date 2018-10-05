@@ -5,41 +5,34 @@ import com.gmail.chickenpowerrr.ranksync.api.Rank;
 import com.gmail.chickenpowerrr.ranksync.api.RankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
 import lombok.Setter;
-import me.lucko.luckperms.api.LuckPermsApi;
-import me.lucko.luckperms.api.Node;
+import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public class LuckPermsRankResource implements RankResource {
+public class VaultRankResource implements RankResource {
 
-    private final LuckPermsApi api;
+    private final Permission permission;
     @Setter private Bot bot;
     private RankHelper rankHelper = null;
 
-    public LuckPermsRankResource(LuckPermsApi luckPermsApi, Bot bot) {
-        this.api = luckPermsApi;
-        this.bot = bot;
-    }
-
-    public LuckPermsRankResource(LuckPermsApi luckPermsApi) {
-        this(luckPermsApi, null);
+    public VaultRankResource(Permission permission) {
+        this.permission = permission;
     }
 
     @Override
     public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
-        CompletableFuture<Collection<Rank>> completableFuture = new CompletableFuture<>();
-
         if(this.rankHelper == null) {
             this.rankHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getRankHelper();
         }
 
-        api.getUserManager().loadUser(uuid).thenAcceptAsync(user ->
-            completableFuture.complete(user.getOwnNodes().stream().filter(Node::isGroupNode).map(Node::getGroupName).map(groupName -> this.rankHelper.getRank(this.bot, groupName)).filter(Objects::nonNull).collect(Collectors.toSet())));
+        CompletableFuture<Collection<Rank>> completableFuture = CompletableFuture.supplyAsync(() -> Arrays.stream(this.permission.getPlayerGroups(Bukkit.getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(uuid))).map(groupName -> this.rankHelper.getRank(this.bot, groupName)).filter(Objects::nonNull).collect(Collectors.toSet()));
 
         completableFuture.exceptionally(throwable -> {
             throwable.printStackTrace();
