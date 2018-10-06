@@ -1,23 +1,52 @@
+# The basic setup for Discord
 discord:
+# This is NOT the name that will be displayed in Discord. This is a name that should
+# be unique because the Database will use it to identify which ranks should be linked.
+# if you set it equal to a bot that runs on another place, it will use the exact same
+# UUID's to link the accounts
   name: "Your Bot"
+# The Discord token of your bot. More information on how you can create this token,
+# please use this tutorial on how to create a token:
+# https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token
   token: "YOURTOKEN"
+# This defines the server that will use this bot. This token can be found like this:
+# https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-
   guild-id: 444222000
+# The basic setup where all of the data should be saved
 database:
+# The way the data should be saved, right now SQL is the only supported way of saving data
   type: "SQL"
 
+# The basic SQL setup
   sql:
+# The maximum pool size for SQL
     max-pool-size: 10
+# The host that runs the SQL server
     host: "127.0.0.1"
+# The port the SQL server runs on, it is 3306 by default
     port: 3306
+# The database that will contain all of the data
     database: "ranksync"
+# The username to login into the SQL server
     user: "root"
+# The password to login into the SQL server
     password: ""
 
+# The ranks that should be synchronized between Discord and Minecraft.
+# Please note that the Minecraft ranks define which Discord ranks will be given to the Player.
+# Changes to the Discord ranks on the other hand will have no impact on the Minecraft rank.
 ranks:
+# The platform whose ranks should be synced
   discord:
+# A random prefix that is handy for you. The code doesn't do anything with it.
     test:
+# The name of the Minecraft group. It is case sensitive
       minecraft: "admin"
+# The name of the Discord group. It is case insensitive
       discord: "Minecraft Administrator"
+# A random prefix that is handy for you. The code doesn't do anything with it.
     kaas:
+# The name of the Minecraft group. It is case sensitive
       minecraft: "mod"
+# The name of the Discord group. It is case insensitive
       discord: "Minecraft Moderator"
