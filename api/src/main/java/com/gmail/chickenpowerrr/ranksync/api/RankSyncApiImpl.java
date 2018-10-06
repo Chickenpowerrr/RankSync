@@ -1,28 +1,24 @@
-package com.gmail.chickenpowerrr.ranksync.core;
+package com.gmail.chickenpowerrr.ranksync.api;
 
-import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
-import com.gmail.chickenpowerrr.ranksync.api.ApiManager;
-import com.gmail.chickenpowerrr.ranksync.api.BotFactory;
 import com.gmail.chickenpowerrr.ranksync.api.event.CancelableEvent;
 import com.gmail.chickenpowerrr.ranksync.api.event.Event;
 import com.gmail.chickenpowerrr.ranksync.api.event.Listener;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-//DON'T USE THIS CLASS DIRECTLY
 final class RankSyncApiImpl implements RankSyncApi {
+
+    @Getter(value = AccessLevel.MODULE) private static final RankSyncApi instance = new RankSyncApiImpl();
 
     private final Map<String, BotFactory> botCache = new HashMap<>();
     private final Map<Class<? extends Event>, Collection<Listener>> listeners = new HashMap<>();
 
     private RankSyncApiImpl(){}
-
-    static void start() {
-        ApiManager.setInstance(new RankSyncApiImpl());
-    }
 
     public BotFactory getBotFactory(String resource) {
         return this.botCache.get(resource);

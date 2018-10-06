@@ -7,7 +7,7 @@ import com.gmail.chickenpowerrr.ranksync.api.event.Listener;
 public interface RankSyncApi {
 
     static RankSyncApi getApi() {
-        return ApiManager.getRankSyncApi();
+        return RankSyncApiImpl.getInstance();
     }
 
     BotFactory getBotFactory(String resource);

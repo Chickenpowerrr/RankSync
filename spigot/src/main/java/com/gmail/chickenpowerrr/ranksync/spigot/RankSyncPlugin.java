@@ -1,10 +1,10 @@
 package com.gmail.chickenpowerrr.ranksync.spigot;
 
+import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
 import com.gmail.chickenpowerrr.ranksync.api.BasicProperties;
 import com.gmail.chickenpowerrr.ranksync.api.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.RankResource;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
-import com.gmail.chickenpowerrr.ranksync.core.Main;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommandExecutor;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncTabCompleter;
 import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
@@ -50,7 +50,7 @@ public final class RankSyncPlugin extends JavaPlugin {
         }
 
         this.linkHelper = new LinkHelper();
-        Main.main(new String[]{});
+        RankSyncManager.getInstance().setup();
         RankSyncApi.getApi().getBotFactory("Discord");
         PluginCommand command = getCommand("ranksync");
         command.setExecutor(new RankSyncCommandExecutor());
