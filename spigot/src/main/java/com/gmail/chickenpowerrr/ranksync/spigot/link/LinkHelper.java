@@ -21,7 +21,6 @@ public class LinkHelper {
 
     public LinkHelper() {
         this.middleware.setNext(new ValidServiceCheckMiddleware(this))
-                .setNext(new NotLinkedCheckMiddleware(this))
                 .setNext(new ValidIdCheckMiddleware(this));
 
         startAuthCleanup();
@@ -64,7 +63,8 @@ public class LinkHelper {
         this.authenticationKeys.remove(key);
     }
 
+    @SuppressWarnings("unchecked")
     public void updateRanks(UUID uuid) {
-        this.linkInfos.values().stream().filter(entry -> entry.containsKey(uuid)).map(map -> map.get(uuid)).forEach(Player::updateRanks);
+        JavaPlugin.getPlugin(RankSyncPlugin.class).getBot("discord").getPlayerFactory().getPlayer(uuid).thenAccept(player -> ((Player) player).updateRanks());
     }
 }

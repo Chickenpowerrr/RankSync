@@ -17,16 +17,23 @@ public class RankSyncCommandExecutor implements CommandExecutor {
     private final LinkHelper linkHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getLinkHelper();
     private final String services = JavaPlugin.getPlugin(RankSyncPlugin.class).getLinkHelper().getLinkInfos().stream().sorted().map(LinkInfo::getName).collect(Collectors.joining("/", "<", ">"));
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             LinkInfo linkInfo = args.length > 0 ? this.linkHelper.getLinkInfo(args[0]) : null;
             switch(args.length) {
                 case 2:
-                    if(this.linkHelper.isAllowedToLink(sender, ((Player) sender).getUniqueId(), args[0], args[1])) {
-                        this.linkHelper.link(((Player) sender).getUniqueId(), args[0], args[1]);
-                        sender.sendMessage(ChatColor.DARK_RED + "Your account has been linked!");
-                    }
+                    JavaPlugin.getPlugin(RankSyncPlugin.class).getBot(args[0]).getPlayerFactory().getPlayer(((Player) sender).getUniqueId()).thenAccept(player -> {
+                        if(player == null) {
+                            if(this.linkHelper.isAllowedToLink(sender, ((Player) sender).getUniqueId(), args[0], args[1])) {
+                                this.linkHelper.link(((Player) sender).getUniqueId(), args[0], args[1]);
+                                sender.sendMessage(ChatColor.DARK_RED + "Your account has been linked!");
+                            }
+                        } else {
+                            sender.sendMessage(ChatColor.DARK_RED + "Your account has already been linked to " + ChatColor.RED + args[0]);
+                        }
+                    });
                     break;
                 case 1:
                     if(linkInfo == null) {

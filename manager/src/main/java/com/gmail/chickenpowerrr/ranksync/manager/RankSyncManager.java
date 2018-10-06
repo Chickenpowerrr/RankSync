@@ -12,10 +12,12 @@ public class RankSyncManager {
 
     private RankSyncManager(){}
 
-    public void setup() {
+    public synchronized void setup() {
         if(!started) {
             RankSyncApi.getApi().addBotFactory("Discord", BotFactory.getInstance());
             started = true;
+        } else {
+            throw new IllegalStateException("The program has already been initialized!");
         }
     }
 }
