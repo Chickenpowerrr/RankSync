@@ -13,7 +13,7 @@ class SqlDatabase implements Database {
 
     private final HikariDataSource dataSource;
     private final RankResource rankResource;
-    private final Bot bot;
+    private final Bot<?,?> bot;
 
     SqlDatabase(Bot bot, Properties properties) {
         this.bot = bot;
@@ -108,19 +108,31 @@ class SqlDatabase implements Database {
 
     @Override
     public CompletableFuture<Void> setUuid(String playerId, UUID uuid) {
-        return CompletableFuture.runAsync(() -> {
-            try(Connection connection = this.dataSource.getConnection();
-                PreparedStatement createPlayer = connection.prepareStatement("INSERT IGNORE player (uuid) VALUES (?);");
-                PreparedStatement saveUuid = connection.prepareStatement("INSERT INTO synced_players (bot_id, identifier, player_id) VALUES ((SELECT id FROM bot WHERE name = ?), ?, (SELECT id FROM player WHERE uuid = ?));")) {
-                createPlayer.setString(1, uuid.toString());
-                createPlayer.execute();
+        return this.bot.getPlayerFactory().setUuid(playerId, uuid).thenAcceptAsync(a -> {
+            if(uuid != null) {
+                try(Connection connection = this.dataSource.getConnection();
+                    PreparedStatement createPlayer = connection.prepareStatement("INSERT IGNORE player (uuid) VALUES (?);");
+                    PreparedStatement saveUuid = connection.prepareStatement("INSERT INTO synced_players (bot_id, identifier, player_id) VALUES ((SELECT id FROM bot WHERE name = ?), ?, (SELECT id FROM player WHERE uuid = ?));")) {
+                    createPlayer.setString(1, uuid.toString());
+                    createPlayer.execute();
 
-                saveUuid.setString(1, this.bot.getName());
-                saveUuid.setString(2, playerId);
-                saveUuid.setString(3, uuid.toString());
-                saveUuid.execute();
-            } catch(SQLException e) {
-                e.printStackTrace();
+                    saveUuid.setString(1, this.bot.getName());
+                    saveUuid.setString(2, playerId);
+                    saveUuid.setString(3, uuid.toString());
+                    saveUuid.execute();
+                } catch(SQLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try(Connection connection = this.dataSource.getConnection();
+                    PreparedStatement unLink = connection.prepareStatement("DELETE FROM synced_players WHERE identifier = ? AND bot_id = (SELECT id FROM bot WHERE name = ?);")) {
+                    unLink.setString(1, playerId);
+                    unLink.setString(2, this.bot.getName());
+
+                    unLink.execute();
+                } catch(SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }).exceptionally(throwable -> {
             throwable.printStackTrace();

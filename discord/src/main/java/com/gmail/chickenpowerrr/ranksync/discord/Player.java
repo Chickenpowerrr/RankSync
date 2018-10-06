@@ -5,6 +5,7 @@ import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.Rank;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotPlayerRanksUpdateEvent;
 import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 class Player implements com.gmail.chickenpowerrr.ranksync.api.Player {
 
-    @Getter private final UUID uuid;
+    @Getter @Setter private UUID uuid;
     private final Member member;
     private final RankFactory rankFactory;
     @Getter private final Bot bot;

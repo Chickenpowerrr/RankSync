@@ -7,6 +7,7 @@ import com.gmail.chickenpowerrr.ranksync.api.RankResource;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommandExecutor;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncTabCompleter;
+import com.gmail.chickenpowerrr.ranksync.spigot.command.UnSyncCommandExecutor;
 import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerLinkCodeCreateEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerUpdateOnlineStatusEventListener;
@@ -52,9 +53,14 @@ public final class RankSyncPlugin extends JavaPlugin {
         this.linkHelper = new LinkHelper();
         RankSyncManager.getInstance().setup();
         RankSyncApi.getApi().getBotFactory("Discord");
-        PluginCommand command = getCommand("ranksync");
-        command.setExecutor(new RankSyncCommandExecutor());
-        command.setTabCompleter(new RankSyncTabCompleter());
+
+        PluginCommand rankSyncCommand = getCommand("ranksync");
+        rankSyncCommand.setExecutor(new RankSyncCommandExecutor());
+        rankSyncCommand.setTabCompleter(new RankSyncTabCompleter());
+
+        PluginCommand unSyncCommand = getCommand("unsync");
+        unSyncCommand.setExecutor(new UnSyncCommandExecutor());
+        unSyncCommand.setTabCompleter(new RankSyncTabCompleter());
 
         this.bots.put("discord", RankSyncApi.getApi().getBotFactory("Discord").getBot(new BasicProperties()
                 .addProperty("name", getConfig().getString("discord.name"))
@@ -106,7 +112,7 @@ public final class RankSyncPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new AsyncPlayerPreLoginEventListener(), this);
     }
 
-    public Bot getBot(String name) {
+    public Bot<?,?> getBot(String name) {
         return this.bots.get(name.toLowerCase());
     }
 }

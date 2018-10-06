@@ -10,4 +10,6 @@ public interface PlayerFactory<P> {
     CompletableFuture<Player> getPlayer(UUID uuid);
 
     Bot<P, ?> getBot();
+
+    CompletableFuture<Void> setUuid(String playerId, UUID uuid);
 }

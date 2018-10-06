@@ -20,4 +20,6 @@ public interface Player {
     String getFancyName();
 
     void updateRanks();
+
+    void setUuid(UUID uuid);
 }

@@ -10,3 +10,7 @@ commands:
     description: Link your account to another service
     aliases: [link, sync, synchronize, syncrank, synchronizerank, giverank]
     permission: ranksync.command.ranksync
+  unsync:
+    description: Unlink your account from another service
+    aliases: [unlink, unranksync, unsynchronize, unsyncrank, unsynchronizerank, revertrank]
+    permission: ranksync.command.unsync

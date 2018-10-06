@@ -19,7 +19,7 @@ public class ValidServiceCheckMiddleware extends AbstractMiddleware {
     @Override
     protected boolean check(CommandSender commandSender, UUID uuid, String service, String key) {
         if(super.linkHelper.getLinkInfo(service) == null) {
-            commandSender.sendMessage(ChatColor.DARK_RED + "Please use the command as like this: " + ChatColor.RED + "/ranksync " + this.services);
+            commandSender.sendMessage(ChatColor.DARK_RED + "Please use the command as like this: " + ChatColor.RED + "/ranksync " + this.services + " <code>");
             return false;
         }
         return true;

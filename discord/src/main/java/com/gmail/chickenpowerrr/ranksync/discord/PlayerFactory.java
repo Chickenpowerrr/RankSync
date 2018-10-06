@@ -36,6 +36,20 @@ class PlayerFactory implements com.gmail.chickenpowerrr.ranksync.api.PlayerFacto
     }
 
     @Override
+    public CompletableFuture<Void> setUuid(String playerId, UUID uuid) {
+        return getPlayer(this.guild.getMemberById(playerId)).thenAccept(player -> {
+            if(uuid == null) {
+                this.players.remove(player.getUuid());
+                player.setUuid(null);
+            } else {
+                this.players.remove(player.getUuid());
+                this.players.put(uuid, player);
+                player.setUuid(uuid);
+            }
+        });
+    }
+
+    @Override
     public CompletableFuture<Player> getPlayer(Member member) {
         CompletableFuture<Player> completableFuture = new CompletableFuture<>();
         this.bot.getEffectiveDatabase().getUuid(member.getUser().getId()).thenAccept(uuid -> {

@@ -13,15 +13,17 @@ import java.util.stream.Collectors;
 
 public class LinkHelper {
 
-    private final AbstractMiddleware middleware = new RequestLimitCheckMiddleware(this);
+    private final AbstractMiddleware linkMiddleware = new RequestLimitCheckMiddleware(this);
+    private final AbstractMiddleware unlinkMiddleware = new RequestLimitCheckMiddleware(this);
     private final Map<String, Map.Entry<Long, Player>> authenticationKeys = new HashMap<>();
     private final Map<LinkInfo, Map<UUID, Player>> linkInfos = new HashMap<LinkInfo, Map<UUID, Player>>() {{
         put(new BasicLinkInfo("Discord", "type !link in the Bot channel on Discord"), new HashMap<>());
     }};
 
     public LinkHelper() {
-        this.middleware.setNext(new ValidServiceCheckMiddleware(this))
+        this.linkMiddleware.setNext(new ValidServiceCheckMiddleware(this))
                 .setNext(new ValidIdCheckMiddleware(this));
+        this.unlinkMiddleware.setNext(new ValidServiceCheckMiddleware(this));
 
         startAuthCleanup();
     }
@@ -31,7 +33,11 @@ public class LinkHelper {
     }
 
     public boolean isAllowedToLink(CommandSender commandSender, UUID uuid, String service, String key) {
-        return this.middleware.allowed(commandSender, uuid, service, key);
+        return this.linkMiddleware.allowed(commandSender, uuid, service, key);
+    }
+
+    public boolean isAllowedToUnlink(CommandSender commandSender, UUID uuid, String service) {
+        return this.unlinkMiddleware.allowed(commandSender, uuid, service, null);
     }
 
     boolean isValidAuthenticationKey(String string) {
@@ -63,7 +69,6 @@ public class LinkHelper {
         this.authenticationKeys.remove(key);
     }
 
-    @SuppressWarnings("unchecked")
     public void updateRanks(UUID uuid) {
         JavaPlugin.getPlugin(RankSyncPlugin.class).getBot("discord").getPlayerFactory().getPlayer(uuid).thenAccept(player -> ((Player) player).updateRanks());
     }
