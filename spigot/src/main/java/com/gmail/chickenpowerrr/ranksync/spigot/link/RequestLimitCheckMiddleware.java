@@ -12,11 +12,12 @@ import java.util.UUID;
 
 class RequestLimitCheckMiddleware extends AbstractMiddleware {
 
+    private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
     private final Map<UUID, Long> timeOuts = new HashMap<>();
 
     RequestLimitCheckMiddleware(LinkHelper linkHelper) {
         super(linkHelper);
-        Bukkit.getScheduler().runTaskTimer(JavaPlugin.getPlugin(RankSyncPlugin.class), this.timeOuts::clear, 20 * 30, 20 * 30);
+        Bukkit.getScheduler().runTaskTimer(this.rankSyncPlugin, this.timeOuts::clear, 20 * 30, 20 * 30);
     }
 
     @Override

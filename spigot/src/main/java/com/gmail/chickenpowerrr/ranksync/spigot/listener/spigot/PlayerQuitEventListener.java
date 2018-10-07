@@ -8,8 +8,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class PlayerQuitEventListener implements Listener {
 
+    private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        JavaPlugin.getPlugin(RankSyncPlugin.class).getLinkHelper().updateRanks(event.getPlayer().getUniqueId());
+        this.rankSyncPlugin.getLinkHelper().updateRanks(event.getPlayer().getUniqueId());
     }
 }

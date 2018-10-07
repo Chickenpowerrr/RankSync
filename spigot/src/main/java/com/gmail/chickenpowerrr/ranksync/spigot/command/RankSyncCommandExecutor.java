@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class RankSyncCommandExecutor implements CommandExecutor {
 
+    private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
     private final LinkHelper linkHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getLinkHelper();
     private final String services = JavaPlugin.getPlugin(RankSyncPlugin.class).getLinkHelper().getLinkInfos().stream().sorted().map(LinkInfo::getName).collect(Collectors.joining("/", "<", ">"));
 
@@ -24,7 +25,7 @@ public class RankSyncCommandExecutor implements CommandExecutor {
             LinkInfo linkInfo = args.length > 0 ? this.linkHelper.getLinkInfo(args[0]) : null;
             switch(args.length) {
                 case 2:
-                    Bot<?,?> bot = JavaPlugin.getPlugin(RankSyncPlugin.class).getBot(args[0]);
+                    Bot<?,?> bot = this.rankSyncPlugin.getBot(args[0]);
                     if(bot != null) {
                         bot.getPlayerFactory().getPlayer(((Player) sender).getUniqueId()).thenAccept(player -> {
                             if(player == null) {

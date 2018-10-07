@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class UnSyncCommandExecutor implements CommandExecutor {
 
+    private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
     private final LinkHelper linkHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getLinkHelper();
     private final String services = JavaPlugin.getPlugin(RankSyncPlugin.class).getLinkHelper().getLinkInfos().stream().sorted().map(LinkInfo::getName).collect(Collectors.joining("/", "<", ">"));
 
@@ -22,7 +23,7 @@ public class UnSyncCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             if(args.length == 1) {
-                Bot<?,?> bot = JavaPlugin.getPlugin(RankSyncPlugin.class).getBot(args[0]);
+                Bot<?,?> bot = this.rankSyncPlugin.getBot(args[0]);
 
                 if(bot != null) {
                     bot.getPlayerFactory().getPlayer(((Player) sender).getUniqueId()).thenAccept(player -> {

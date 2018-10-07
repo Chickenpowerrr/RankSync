@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class LinkHelper {
 
+    private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
     private final AbstractMiddleware linkMiddleware = new RequestLimitCheckMiddleware(this);
     private final AbstractMiddleware unlinkMiddleware = new RequestLimitCheckMiddleware(this);
     private final Map<String, Map.Entry<Long, Player>> authenticationKeys = new HashMap<>();
@@ -49,7 +50,7 @@ public class LinkHelper {
     }
 
     private void startAuthCleanup() {
-        Bukkit.getScheduler().runTaskTimer(JavaPlugin.getPlugin(RankSyncPlugin.class), () -> {
+        Bukkit.getScheduler().runTaskTimer(this.rankSyncPlugin, () -> {
             this.authenticationKeys.entrySet().stream().filter(entry -> entry.getValue().getKey() + 1000 * 60 * 5 < System.currentTimeMillis()).map(Map.Entry::getKey).collect(Collectors.toSet()).forEach(this.authenticationKeys::remove);
         }, 20 * 30, 20 * 30);
     }
@@ -65,11 +66,11 @@ public class LinkHelper {
     public void link(UUID uuid, String service, String key) {
         Map.Entry<Long, Player> authInfo = this.authenticationKeys.get(key);
         this.linkInfos.get(getLinkInfo(service)).put(uuid, authInfo.getValue());
-        JavaPlugin.getPlugin(RankSyncPlugin.class).getBot(service).getEffectiveDatabase().setUuid(authInfo.getValue().getPersonalId(), uuid);
+        this.rankSyncPlugin.getBot(service).getEffectiveDatabase().setUuid(authInfo.getValue().getPersonalId(), uuid);
         this.authenticationKeys.remove(key);
     }
 
     public void updateRanks(UUID uuid) {
-        JavaPlugin.getPlugin(RankSyncPlugin.class).getBot("discord").getPlayerFactory().getPlayer(uuid).thenAccept(player -> ((Player) player).updateRanks());
+        this.rankSyncPlugin.getBot("discord").getPlayerFactory().getPlayer(uuid).thenAccept(player -> ((Player) player).updateRanks());
     }
 }
