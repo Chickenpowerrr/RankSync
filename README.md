@@ -8,6 +8,7 @@ NOT THE OTHER WAY AROUND. People will only get their rank on Discord when the ra
 they have are included in the config.yml.
 
 ##Support
+
 Right now the RankSync supports the following permission systems:
 - Vault
 - LuckPerms
