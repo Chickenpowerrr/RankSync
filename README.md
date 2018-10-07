@@ -7,8 +7,7 @@ Please note that the ranks will be given on Discord, based on the Minecraft rank
 NOT THE OTHER WAY AROUND. People will only get their rank on Discord when the ranks
 they have are included in the config.yml.
 
-##Support
-
+## Support
 Right now the RankSync supports the following permission systems:
 - Vault
 - LuckPerms
