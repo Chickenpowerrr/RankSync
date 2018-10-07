@@ -12,6 +12,7 @@ import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerLinkCodeCreateEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerUpdateOnlineStatusEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.AsyncPlayerPreLoginEventListener;
+import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.PlayerQuitEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.LuckPermsRankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.VaultRankResource;
@@ -110,6 +111,7 @@ public final class RankSyncPlugin extends JavaPlugin {
         RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener());
 
         Bukkit.getPluginManager().registerEvents(new AsyncPlayerPreLoginEventListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), this);
     }
 
     public Bot<?,?> getBot(String name) {
