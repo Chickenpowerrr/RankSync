@@ -24,3 +24,7 @@ Those are the things you'll need if you want to compile this project for yoursel
 * Maven
 * Git
 * JDK 8+
+
+
+## License
+This project is licensed under the MIT license - see the [LICENSE](LICENSE.md) file for details
