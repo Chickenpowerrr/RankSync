@@ -1,7 +1,7 @@
 name: ${parent.name}
 version: ${project.version}
 main: ${project.groupId}.${project.artifactId}.${parent.name}Plugin
-softdepend: [LuckPerms]
+softdepend: [LuckPerms, Vault]
 author: Chickenpowerrr
 description: ${project.description}
 
