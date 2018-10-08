@@ -39,7 +39,42 @@ class SqlDatabase implements Database {
         }
 
         try(Connection connection = this.dataSource.getConnection();
+            Statement statement = connection.createStatement();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT IGNORE bot (name) VALUES (?);")) {
+            statement.execute("create table if not exists  bot" +
+                    "(" +
+                    "  id   int unsigned auto_increment" +
+                    "    primary key," +
+                    "  name varchar(64) not null," +
+                    "  constraint bot_name_uindex" +
+                    "  unique (name)" +
+                    ");");
+
+            statement.execute("create table if not exists player" +
+                    "(" +
+                    "  id   int unsigned auto_increment" +
+                    "    primary key," +
+                    "  uuid char(36) not null," +
+                    "  constraint player_uuid_uindex" +
+                    "  unique (uuid)" +
+                    ");");
+
+            statement.execute("create table if not exists synced_players" +
+                    "(" +
+                    "  id         int unsigned auto_increment" +
+                    "    primary key," +
+                    "  bot_id     int unsigned not null," +
+                    "  identifier tinytext     not null," +
+                    "  player_id  int unsigned not null," +
+                    "  constraint synced_players_bot_id_fk" +
+                    "  foreign key (bot_id) references bot (id)" +
+                    "    on update cascade" +
+                    "    on delete cascade," +
+                    "  constraint synced_players_player_id_fk" +
+                    "  foreign key (player_id) references player (id)" +
+                    "    on update cascade" +
+                    "    on delete cascade" +
+                    ");");
             preparedStatement.setString(1, this.bot.getName());
             preparedStatement.execute();
         } catch(SQLException e) {
