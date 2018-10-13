@@ -5,7 +5,7 @@
     <parent>
         <artifactId>ranksync</artifactId>
         <groupId>com.gmail.chickenpowerrr</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -32,6 +32,7 @@
                 <configuration>
                     <finalName>RankSync-Spigot-${version}</finalName>
 
+                    <!--
                     <relocations>
                         <relocation>
                             <pattern>com.zaxxer.hikari</pattern>
@@ -42,6 +43,7 @@
                             <shadedPattern>com.gmail.chickenpowerrr.libs.ranksync.mysql</shadedPattern>
                         </relocation>
                     </relocations>
+                    -->
                 </configuration>
 
                 <executions>
@@ -73,14 +75,21 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
             <artifactId>manager</artifactId>
-            <version>1.0.1</version>
+            <version>${parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
+            <artifactId>api</artifactId>
+            <version>${parent.version}</version>
             <scope>compile</scope>
         </dependency>
 

@@ -2,8 +2,6 @@ package com.gmail.chickenpowerrr.ranksync.discord;
 
 import com.gmail.chickenpowerrr.ranksync.api.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.Properties;
-import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
-import com.gmail.chickenpowerrr.ranksync.api.event.BotEnabledEvent;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -29,7 +27,6 @@ public class BotFactory implements com.gmail.chickenpowerrr.ranksync.api.BotFact
         } else {
             Bot bot = new DiscordBot(properties);
             this.botCache.put(properties, bot);
-            RankSyncApi.getApi().execute(new BotEnabledEvent(bot));
             return bot;
         }
     }

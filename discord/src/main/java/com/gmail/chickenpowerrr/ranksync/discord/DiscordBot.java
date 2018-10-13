@@ -5,6 +5,8 @@ import com.gmail.chickenpowerrr.ranksync.api.CommandFactory;
 import com.gmail.chickenpowerrr.ranksync.api.DatabaseFactory;
 import com.gmail.chickenpowerrr.ranksync.api.PlayerFactory;
 import com.gmail.chickenpowerrr.ranksync.api.RankFactory;
+import com.gmail.chickenpowerrr.ranksync.api.event.BotEnabledEvent;
+import com.gmail.chickenpowerrr.ranksync.api.event.BotForceShutdownEvent;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.core.JDA;
@@ -42,11 +44,17 @@ class DiscordBot implements Bot<Member, Role> {
 
     void enable(JDA jda) {
         this.guild = jda.getGuildById(properties.getLong("guild_id"));
-        this.rankFactory = com.gmail.chickenpowerrr.ranksync.discord.RankFactory.getInstance(this, guild);
-        this.playerFactory = com.gmail.chickenpowerrr.ranksync.discord.PlayerFactory.getInstance(this, guild);
-        this.databaseFactory = com.gmail.chickenpowerrr.ranksync.discord.DatabaseFactory.getInstance(this, guild);
-        this.commandFactory = com.gmail.chickenpowerrr.ranksync.discord.CommandFactory.getInstance(this, guild);
-        this.effectiveDatabase = this.databaseFactory.getDatabase("type", properties);
-        this.commandFactory.addCommand(new LinkCommand("link", new HashSet<>()));
+        if(this.guild != null) {
+            this.rankFactory = com.gmail.chickenpowerrr.ranksync.discord.RankFactory.getInstance(this, guild);
+            this.playerFactory = com.gmail.chickenpowerrr.ranksync.discord.PlayerFactory.getInstance(this, guild);
+            this.databaseFactory = com.gmail.chickenpowerrr.ranksync.discord.DatabaseFactory.getInstance(this, guild);
+            this.commandFactory = com.gmail.chickenpowerrr.ranksync.discord.CommandFactory.getInstance(this, guild);
+            this.effectiveDatabase = this.databaseFactory.getDatabase("type", properties);
+            this.commandFactory.addCommand(new LinkCommand("link", new HashSet<>()));
+            RankSyncApi.getApi().execute(new BotEnabledEvent(this));
+        } else {
+            RankSyncApi.getApi().execute(new BotForceShutdownEvent(this, "The given guild id is invalid"));
+            jda.shutdownNow();
+        }
     }
 }

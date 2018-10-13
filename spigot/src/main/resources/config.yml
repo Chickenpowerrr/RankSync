@@ -38,14 +38,14 @@ database:
 ranks:
 # The platform whose ranks should be synced
   discord:
-# A random UNIQUE prefix that is handy for you. The code doesn't do anything with it as long as it is unique.
-    test:
+# A random UNIQUE prefix that is handy for you. The code doesn't do anything with it as long as it is UNIQUE.
+    administrator:
 # The name of the Minecraft group. It is case sensitive
       minecraft: "admin"
 # The name of the Discord group. It is case insensitive
       discord: "Minecraft Administrator"
-# A random UNIQUE prefix that is handy for you. The code doesn't do anything with it as long as it is unique.
-    kaas:
+# A random UNIQUE prefix that is handy for you. The code doesn't do anything with it as long as it is UNIQUE.
+    moderator:
 # The name of the Minecraft group. It is case sensitive
       minecraft: "mod"
 # The name of the Discord group. It is case insensitive

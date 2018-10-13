@@ -41,4 +41,9 @@ public class VaultRankResource implements RankResource {
 
         return completableFuture;
     }
+
+    @Override
+    public boolean isValidRank(String name) {
+        return Arrays.asList(this.permission.getGroups()).contains(name);
+    }
 }

@@ -71,6 +71,10 @@ public class LinkHelper {
     }
 
     public void updateRanks(UUID uuid) {
-        this.rankSyncPlugin.getBot("discord").getPlayerFactory().getPlayer(uuid).thenAccept(player -> ((Player) player).updateRanks());
+        this.rankSyncPlugin.getBot("discord").getPlayerFactory().getPlayer(uuid).thenAccept(player -> {
+            if(player != null) {
+                player.updateRanks();
+            }
+        });
     }
 }

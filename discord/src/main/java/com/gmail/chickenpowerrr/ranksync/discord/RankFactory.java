@@ -28,7 +28,9 @@ class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.RankFactory<R
 
     static RankFactory getInstance(Bot<?, Role> bot, Guild guild) {
         if(!instances.containsKey(guild)) {
-            instances.put(guild, new RankFactory(bot, guild));
+            if(guild != null) {
+                instances.put(guild, new RankFactory(bot, guild));
+            }
         }
         return instances.get(guild);
     }

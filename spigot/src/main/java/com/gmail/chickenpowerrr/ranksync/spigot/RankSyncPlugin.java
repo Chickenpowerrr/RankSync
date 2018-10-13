@@ -1,14 +1,16 @@
 package com.gmail.chickenpowerrr.ranksync.spigot;
 
-import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
 import com.gmail.chickenpowerrr.ranksync.api.BasicProperties;
 import com.gmail.chickenpowerrr.ranksync.api.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.RankResource;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
+import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommandExecutor;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncTabCompleter;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.UnSyncCommandExecutor;
 import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
+import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotEnabledEventListener;
+import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotForceShutdownEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerLinkCodeCreateEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerUpdateOnlineStatusEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.AsyncPlayerPreLoginEventListener;
@@ -109,6 +111,8 @@ public final class RankSyncPlugin extends JavaPlugin {
 
         RankSyncApi.getApi().registerListener(new PlayerUpdateOnlineStatusEventListener());
         RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener());
+        RankSyncApi.getApi().registerListener(new BotEnabledEventListener(this.rankHelper));
+        RankSyncApi.getApi().registerListener(new BotForceShutdownEventListener());
 
         Bukkit.getPluginManager().registerEvents(new AsyncPlayerPreLoginEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), this);

@@ -28,6 +28,7 @@ class SqlDatabase implements Database {
             this.dataSource.addDataSourceProperty("databaseName", properties.getString("database"));
             this.dataSource.addDataSourceProperty("user", properties.getString("username"));
             this.dataSource.addDataSourceProperty("password", properties.getString("password"));
+            this.dataSource.addDataSourceProperty("useSSL", false);
         } else {
             throw new IllegalStateException("Not all of the required properties for an SQL database have been entered");
         }
@@ -173,5 +174,17 @@ class SqlDatabase implements Database {
             throwable.printStackTrace();
             return null;
         });
+    }
+
+    @Override
+    public CompletableFuture<Boolean> isValidRank(String rankName) {
+        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> rankResource.isValidRank(rankName));
+
+        future.exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
+        });
+
+        return future;
     }
 }

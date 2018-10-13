@@ -51,7 +51,11 @@ class Player implements com.gmail.chickenpowerrr.ranksync.api.Player {
     @Override
     public void updateRanks() {
         if(this.uuid != null) {
-            this.bot.getEffectiveDatabase().getRanks(uuid).thenAccept(this::setRanks);
+            this.bot.getEffectiveDatabase().getRanks(uuid).thenAccept(ranks -> {
+                if(ranks != null) {
+                    setRanks(ranks);
+                }
+            });
         } else {
             setRanks(new HashSet<>());
         }

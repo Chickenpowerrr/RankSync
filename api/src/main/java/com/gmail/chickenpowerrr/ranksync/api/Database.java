@@ -13,4 +13,6 @@ public interface Database {
     CompletableFuture<String> getPlayerId(UUID uuid);
 
     CompletableFuture<Collection<Rank>> getRanks(UUID uuid);
+
+    CompletableFuture<Boolean> isValidRank(String rankName);
 }

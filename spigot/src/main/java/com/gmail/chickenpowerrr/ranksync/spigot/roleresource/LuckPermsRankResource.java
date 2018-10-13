@@ -48,4 +48,9 @@ public class LuckPermsRankResource implements RankResource {
 
         return completableFuture;
     }
+
+    @Override
+    public boolean isValidRank(String name) {
+        return this.api.getGroup(name) != null;
+    }
 }
