@@ -5,6 +5,13 @@ import com.gmail.chickenpowerrr.ranksync.api.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * This event will get called when a player changed
+ * its status
+ *
+ * @author Chickenpowerrr
+ * @since  1.0.0
+ */
 @AllArgsConstructor
 public class PlayerUpdateOnlineStatusEvent implements PlayerEvent {
 
