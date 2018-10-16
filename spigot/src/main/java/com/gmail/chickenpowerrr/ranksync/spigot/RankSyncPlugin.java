@@ -1,5 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.spigot;
 
+import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import com.gmail.chickenpowerrr.ranksync.api.BasicProperties;
 import com.gmail.chickenpowerrr.ranksync.api.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.RankResource;
@@ -35,10 +36,12 @@ public final class RankSyncPlugin extends JavaPlugin {
     @Getter private LinkHelper linkHelper;
     private Map<String, Bot> bots = new HashMap<>();
     @Getter private RankHelper rankHelper;
+    @Getter private LanguageHelper languageHelper;
 
     @SuppressWarnings("unchecked")
     @Override
     public void onEnable() {
+        this.languageHelper = new LanguageHelper(getDataFolder());
         saveDefaultConfig();
 
         RankResource rankResource;
