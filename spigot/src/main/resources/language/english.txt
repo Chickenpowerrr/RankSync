@@ -1,1 +1,13 @@
-startup = We're live!
+startup-translations = The translations have been loaded (took %time%ms)
+startup-ranks = The ranks have been loaded (took %time%ms)
+invalid-code = &4This is not a valid code. Please note those codes are case sensitive. It could also have been expired (codes expire after 5 minutes).
+ranksync-command-usage = &4Please use the command as like this: &c/ranksync %services% <code>
+ranksync-command-request-limit = &4Slow down brother, you're only allowed to do this every &c 2 &4seconds
+ranksync-command-linked = &aYour account has been linked!
+ranksync-command-already-linked =&4Your account has already been linked to &c%service%
+ranksync-command-get-code = &4You'll have to get a code by &c%explanation% &4and link your account by typing &c/ranksync %service% THE_CODE_%SERVICE%_GAVE_YOU &4into the Minecraft server
+command-playeronly = &4You should be a player to execute this command
+unsync-command-unlinked = &aYour account has been unlinked!
+unsync-command-not-linked = &4Your account hasn't been linked to: &c%service%
+unsync-command-invalid-service = &c%service% &4isn't a valid service, please use one of those: &c%services%
+unsync-command-usage = &4Please use the command as like this: &c/unsync %services%

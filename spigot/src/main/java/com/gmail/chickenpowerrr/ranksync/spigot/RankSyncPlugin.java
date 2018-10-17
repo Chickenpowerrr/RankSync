@@ -1,6 +1,5 @@
 package com.gmail.chickenpowerrr.ranksync.spigot;
 
-import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import com.gmail.chickenpowerrr.ranksync.api.BasicProperties;
 import com.gmail.chickenpowerrr.ranksync.api.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.RankResource;
@@ -9,6 +8,8 @@ import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommandExecutor;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncTabCompleter;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.UnSyncCommandExecutor;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Language;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotEnabledEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotForceShutdownEventListener;
@@ -36,13 +37,15 @@ public final class RankSyncPlugin extends JavaPlugin {
     @Getter private LinkHelper linkHelper;
     private Map<String, Bot> bots = new HashMap<>();
     @Getter private RankHelper rankHelper;
-    @Getter private LanguageHelper languageHelper;
 
     @SuppressWarnings("unchecked")
     @Override
     public void onEnable() {
-        this.languageHelper = new LanguageHelper(getDataFolder());
+        long time = System.currentTimeMillis();
+        Translation.setLanguage(Language.DUTCH);
+        getLogger().info(Translation.STARTUP_TRANSLATIONS.getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
         saveDefaultConfig();
+        time = System.currentTimeMillis();
 
         RankResource rankResource;
 
@@ -119,6 +122,7 @@ public final class RankSyncPlugin extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new AsyncPlayerPreLoginEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), this);
+        getLogger().info(Translation.STARTUP_RANKS.getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
     }
 
     public Bot<?,?> getBot(String name) {

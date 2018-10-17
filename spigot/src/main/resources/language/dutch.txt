@@ -1,1 +1,13 @@
-startup = We zijn opgestart!
+startup-translations = De vertaling zijn ingeladen (duurde %time%ms)
+startup-ranks = De rollen zijn ingeladen (duurde %time%ms)
+invalid-code = &4Dit is geen valide code. Let erop dat deze codes hoofdlettergevoelig zijn. Hij kan ook verlopen zijn (codes verlopen na 5 minuten).
+ranksync-command-usage = &4Gebruik dit commando alsjeblieft op de volgende manier: &c/ranksync %services% <code>
+ranksync-command-request-limit = &4Neem even je tijd, je mag dit elke &c2 &4seconden doen
+ranksync-command-linked = &aJe account wordt nu gesynchroniseerd!
+ranksync-command-already-linked =&4Je account is al gesynchroniseerd met &c%service%
+ranksync-command-get-code = &4Je moet een code krijgen door &c%explanation% &4en synchroniseer je account door &c/ranksync %service% DE_CODE_DIE_%SERVICE%_JE_GAF &4te typen in de Minecraft server
+command-playeronly = &4Alleen spelers mogen dit commando uitvoeren!
+unsync-command-unlinked = &aJe account wordt niet meer gesynchroniseerd!
+unsync-command-not-linked = &4Je account is niet gesynchroniseerd met: &c%service%
+unsync-command-invalid-service = &c%service% &4is geen valide service, gebruik alsjeblieft een van de volgende: &c%services%
+unsync-command-usage = &4Gebruik dit commando alsjeblieft op de volgende manier: &c/unsync %services%

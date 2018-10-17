@@ -1,8 +1,8 @@
 package com.gmail.chickenpowerrr.ranksync.spigot.link;
 
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,7 +23,8 @@ class RequestLimitCheckMiddleware extends AbstractMiddleware {
     @Override
     protected boolean check(CommandSender commandSender, UUID uuid, String service, String key) {
         if(this.timeOuts.containsKey(uuid) && this.timeOuts.get(uuid) + 1000 * 2 >= System.currentTimeMillis()) {
-            commandSender.sendMessage(ChatColor.DARK_RED + "Slow down brother, you're only allowed to do this every " + ChatColor.RED + 2 + ChatColor.DARK_RED + " seconds");
+            commandSender.sendMessage(Translation.RANKSYNC_COMMAND_REQUEST_LIMIT.getTranslation());
+            //commandSender.sendMessage(ChatColor.DARK_RED + "Slow down brother, you're only allowed to do this every " + ChatColor.RED + 2 + ChatColor.DARK_RED + " seconds");
             return false;
         } else {
             this.timeOuts.put(uuid, System.currentTimeMillis());
