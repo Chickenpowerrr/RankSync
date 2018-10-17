@@ -1,3 +1,6 @@
+# The language that should be used (all supported language can be found in the /plugin/RankSync/language directory
+language: english
+
 # The basic setup for Discord
 discord:
 # This is NOT the name that will be displayed in Discord. This is a name that should

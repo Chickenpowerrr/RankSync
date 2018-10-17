@@ -23,7 +23,7 @@ public enum Translation {
     UNSYNC_COMMAND_USAGE;
 
     private static final LanguageHelper LANGUAGE_HELPER = new LanguageHelper(JavaPlugin.getProvidingPlugin(RankSyncPlugin.class).getDataFolder());
-    @Setter private static Language language;
+    @Setter private static String language;
 
     private final String key;
 
@@ -36,7 +36,7 @@ public enum Translation {
     }
 
     public String getTranslation(String... replacements) {
-        String message = LANGUAGE_HELPER.getMessage(language.toString(), this.key);
+        String message = LANGUAGE_HELPER.getMessage(language, this.key);
 
         for(int i = 0; i < replacements.length; i += 2) {
             message = message.replaceAll("%" + replacements[i] + "%", replacements[i + 1]);

@@ -8,7 +8,6 @@ import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommandExecutor;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncTabCompleter;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.UnSyncCommandExecutor;
-import com.gmail.chickenpowerrr.ranksync.spigot.language.Language;
 import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotEnabledEventListener;
@@ -41,10 +40,16 @@ public final class RankSyncPlugin extends JavaPlugin {
     @SuppressWarnings("unchecked")
     @Override
     public void onEnable() {
-        long time = System.currentTimeMillis();
-        Translation.setLanguage(Language.DUTCH);
-        getLogger().info(Translation.STARTUP_TRANSLATIONS.getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
         saveDefaultConfig();
+
+        String language = getConfig().getString("language");
+        if(language == null) {
+            language = "english";
+            getLogger().warning("The config.yml doesn't contain a language field, so it's set to English");
+        }
+        long time = System.currentTimeMillis();
+        Translation.setLanguage(language);
+        getLogger().info(Translation.STARTUP_TRANSLATIONS.getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
         time = System.currentTimeMillis();
 
         RankResource rankResource;
