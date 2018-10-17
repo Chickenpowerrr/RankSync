@@ -1,24 +1,15 @@
-package com.gmail.chickenpowerrr.ranksync.spigot.language;
+package com.gmail.chickenpowerrr.ranksync.discord;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import lombok.Setter;
-import org.bukkit.ChatColor;
 
-public enum Translation {
+enum Translation {
 
-    STARTUP_TRANSLATIONS,
-    STARTUP_RANKS,
-    INVALID_CODE,
-    RANKSYNC_COMMAND_USAGE,
-    RANKSYNC_COMMAND_REQUEST_LIMIT,
-    RANKSYNC_COMMAND_LINKED,
-    RANKSYNC_COMMAND_ALREADY_LINKED,
-    RANKSYNC_COMMAND_GET_CODE,
-    COMMAND_PLAYERONLY,
-    UNSYNC_COMMAND_UNLINKED,
-    UNSYNC_COMMAND_NOT_LINKED,
-    UNSYNC_COMMAND_INVALID_SERVICE,
-    UNSYNC_COMMAND_USAGE;
+    LINK_COMMAND_ALREADY_LINKED,
+    LINK_COMMAND_RIGHTTHERE,
+    LINK_COMMAND_REQUEST_LIMIT,
+    LINK_COMMAND_PUBLIC,
+    LINK_COMMAND_PRIVATE;
 
     @Setter private static LanguageHelper languageHelper;
     @Setter private static String language;
@@ -26,7 +17,7 @@ public enum Translation {
     private final String key;
 
     Translation() {
-        this.key = "minecraft-" + super.toString().toLowerCase().replace("_", "-");
+        this.key = "discord-" + super.toString().toLowerCase().replace("_", "-");
     }
 
     Translation(String key) {
@@ -39,7 +30,7 @@ public enum Translation {
         for(int i = 0; i < replacements.length; i += 2) {
             message = message.replaceAll("%" + replacements[i] + "%", replacements[i + 1]);
         }
-        return ChatColor.translateAlternateColorCodes('&', message);
+        return message.replace("!n", "\n");
     }
 
     @Override
