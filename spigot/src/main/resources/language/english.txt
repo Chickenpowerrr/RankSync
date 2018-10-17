@@ -16,4 +16,4 @@ discord-link-command-already-linked = Your account has already been linked %name
 discord-link-command-rightthere = Your message is right there ^
 discord-link-command-request-limit = You are only allowed to do this every two minutes %name%!
 discord-link-command-public = Thanks %name% you'll find the secret code in your private messages. DON'T share this code!
-discord-link-command-private = Hello %name% and thanks for linking your Minecraft account! !n Your private key is: `%key%` please DON'T share this code with anyone.!nTo link your account please enter: `/ranksync Discord %key%` into Minecraft. !n This will automatically give you the right Discord ranks. !n!n Have a nice day :D
+discord-link-command-private = Hello %name% and thanks for linking your Minecraft account! !nYour private key is: `%key%` please DON'T share this code with anyone.!nTo link your account please enter: `/ranksync Discord %key%` into Minecraft. !nThis will automatically give you the right Discord ranks. !n!nHave a nice day :D
