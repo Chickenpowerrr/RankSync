@@ -42,23 +42,12 @@ public class LinkCommand implements Command {
 
                 invoker.sendPrivateMessage(Translation.LINK_COMMAND_PRIVATE.getTranslation("name", invoker.getFancyName(), "key", secretKey));
                 return Translation.LINK_COMMAND_PUBLIC.getTranslation("name", invoker.getFancyName());
-                /*invoker.sendPrivateMessage("Hello " + invoker.getFancyName() + " and thanks for linking your Minecraft account! \n" +
-                        "Your private key is: `" + secretKey + "` please DON'T share this code with anyone.\n" +
-                        "To link your account please enter: `/ranksync Discord " + secretKey + "` into Minecraft.\n" +
-                        "This will automatically give you the right Discord ranks. \n\n" +
-                        "Have a nice day :D");
-                        */
-                //return "Thanks " + invoker.getFancyName() + " you'll find the secret code in your private messages. DON'T share this code!";
             } else {
                 invoker.sendPrivateMessage(Translation.LINK_COMMAND_RIGHTTHERE.getTranslation());
                 return Translation.LINK_COMMAND_REQUEST_LIMIT.getTranslation("name", invoker.getFancyName());
-
-                //invoker.sendPrivateMessage("Your message is right there ^");
-                //return "You are only allowed to do this every two minutes " + invoker.getFancyName() + "!";
             }
         } else {
             return Translation.LINK_COMMAND_ALREADY_LINKED.getTranslation("name", invoker.getFancyName());
-            //return "Your account has already been linked " + invoker.getFancyName();
         }
     }
 

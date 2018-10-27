@@ -20,7 +20,6 @@ public class ValidServiceCheckMiddleware extends AbstractMiddleware {
     protected boolean check(CommandSender commandSender, UUID uuid, String service, String key) {
         if(super.linkHelper.getLinkInfo(service) == null) {
             commandSender.sendMessage(Translation.RANKSYNC_COMMAND_USAGE.getTranslation("services", this.services));
-            //commandSender.sendMessage(ChatColor.DARK_RED + "Please use the command as like this: " + ChatColor.RED + "/ranksync " + this.services + " <code>");
             return false;
         }
         return true;

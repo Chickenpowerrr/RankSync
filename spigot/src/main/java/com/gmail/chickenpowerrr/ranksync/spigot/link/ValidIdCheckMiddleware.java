@@ -17,7 +17,6 @@ class ValidIdCheckMiddleware extends AbstractMiddleware {
             return true;
         } else {
             commandSender.sendMessage(Translation.INVALID_CODE.getTranslation());
-            //commandSender.sendMessage(ChatColor.DARK_RED + "This is not a valid code. Please note those codes are case-sensitive. It could also have been expired (codes expire after 5 minutes).");
             return false;
         }
     }
