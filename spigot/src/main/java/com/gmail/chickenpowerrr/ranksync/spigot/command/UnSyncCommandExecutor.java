@@ -3,8 +3,8 @@ package com.gmail.chickenpowerrr.ranksync.spigot.command;
 import com.gmail.chickenpowerrr.ranksync.api.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.LinkInfo;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,20 +30,20 @@ public class UnSyncCommandExecutor implements CommandExecutor {
                         if(player != null) {
                             if(this.linkHelper.isAllowedToUnlink(sender, ((Player) sender).getUniqueId(), args[0])) {
                                 bot.getEffectiveDatabase().setUuid(player.getPersonalId(), null);
-                                sender.sendMessage(ChatColor.GREEN + "Your account has been unlinked!");
+                                sender.sendMessage(Translation.UNSYNC_COMMAND_UNLINKED.getTranslation());
                             }
                         } else {
-                            sender.sendMessage(ChatColor.DARK_RED + "Your account hasn't been linked to: " + ChatColor.RED + args[0]);
+                            sender.sendMessage(Translation.UNSYNC_COMMAND_NOT_LINKED.getTranslation("service", args[0]));
                         }
                     });
                 } else {
-                    sender.sendMessage(ChatColor.RED + args[0] + ChatColor.DARK_RED + " isn't a valid platform, please use one of those: " + ChatColor.RED + services);
+                    sender.sendMessage(Translation.UNSYNC_COMMAND_INVALID_SERVICE.getTranslation("service", args[0], "services", services));
                 }
             } else {
-                sender.sendMessage(ChatColor.DARK_RED + "Please use the command as like this: " + ChatColor.RED + "/unsync " + this.services);
+                sender.sendMessage(Translation.UNSYNC_COMMAND_USAGE.getTranslation("services", this.services));
             }
         } else {
-            sender.sendMessage(ChatColor.DARK_RED + "You should be a player to execute this command");
+            sender.sendMessage(Translation.COMMAND_PLAYERONLY.getTranslation());
         }
         return true;
     }

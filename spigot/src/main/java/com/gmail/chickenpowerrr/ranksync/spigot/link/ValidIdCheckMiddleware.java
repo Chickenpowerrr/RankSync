@@ -1,6 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.spigot.link;
 
-import org.bukkit.ChatColor;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
@@ -16,7 +16,7 @@ class ValidIdCheckMiddleware extends AbstractMiddleware {
         if(super.linkHelper.isValidAuthenticationKey(key)) {
             return true;
         } else {
-            commandSender.sendMessage(ChatColor.DARK_RED + "This is not a valid code. Please note those codes are case-sensitive. It could also have been expired (codes expire after 5 minutes).");
+            commandSender.sendMessage(Translation.INVALID_CODE.getTranslation());
             return false;
         }
     }

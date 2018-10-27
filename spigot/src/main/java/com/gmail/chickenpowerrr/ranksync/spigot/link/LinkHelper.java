@@ -4,6 +4,7 @@ import com.gmail.chickenpowerrr.ranksync.api.BasicLinkInfo;
 import com.gmail.chickenpowerrr.ranksync.api.LinkInfo;
 import com.gmail.chickenpowerrr.ranksync.api.Player;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,7 +19,7 @@ public class LinkHelper {
     private final AbstractMiddleware unlinkMiddleware = new RequestLimitCheckMiddleware(this);
     private final Map<String, Map.Entry<Long, Player>> authenticationKeys = new HashMap<>();
     private final Map<LinkInfo, Map<UUID, Player>> linkInfos = new HashMap<LinkInfo, Map<UUID, Player>>() {{
-        put(new BasicLinkInfo("Discord", "type !link in the Bot channel on Discord"), new HashMap<>());
+        put(new BasicLinkInfo("Discord", Translation.DISCORD_LINKINFO.getTranslation()), new HashMap<>());
     }};
 
     public LinkHelper() {

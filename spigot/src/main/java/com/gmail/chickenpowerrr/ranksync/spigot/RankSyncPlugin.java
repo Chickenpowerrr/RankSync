@@ -1,5 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.spigot;
 
+import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import com.gmail.chickenpowerrr.ranksync.api.BasicProperties;
 import com.gmail.chickenpowerrr.ranksync.api.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.RankResource;
@@ -8,6 +9,7 @@ import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommandExecutor;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncTabCompleter;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.UnSyncCommandExecutor;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotEnabledEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotForceShutdownEventListener;
@@ -40,6 +42,18 @@ public final class RankSyncPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
+        long time = System.currentTimeMillis();
+        LanguageHelper languageHelper = new LanguageHelper(getDataFolder());
+        Translation.setLanguageHelper(languageHelper);
+        String language = getConfig().getString("language");
+        if(language == null) {
+            language = "english";
+            getLogger().warning("The config.yml doesn't contain a language field, so it's set to English");
+        }
+        Translation.setLanguage(language);
+        getLogger().info(Translation.STARTUP_TRANSLATIONS.getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
+        time = System.currentTimeMillis();
 
         RankResource rankResource;
 
@@ -76,8 +90,12 @@ public final class RankSyncPlugin extends JavaPlugin {
                 .addProperty("database", getConfig().getString("database.sql.database"))
                 .addProperty("username", getConfig().getString("database.sql.user"))
                 .addProperty("password", getConfig().getString("database.sql.password"))
-                .addProperty("rank_resource", rankResource)));
-        rankResource.setBot(this.bots.get("discord"));
+                .addProperty("rank_resource", rankResource)
+                .addProperty("language", language)
+                .addProperty("language_helper", languageHelper)));
+
+        Bot discordBot = getBot("discord");
+        rankResource.setBot(discordBot);
 
         Map<String, Map<Bot, String>> syncedRanks = new HashMap<>();
 
@@ -116,6 +134,7 @@ public final class RankSyncPlugin extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new AsyncPlayerPreLoginEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), this);
+        getLogger().info(Translation.STARTUP_RANKS.getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
     }
 
     public Bot<?,?> getBot(String name) {
