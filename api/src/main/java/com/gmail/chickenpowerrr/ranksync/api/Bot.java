@@ -1,5 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.api;
 
+import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
+
 /**
  * This interface is primary used to control all of
  * the factories that can be used to get the data that
@@ -61,4 +63,21 @@ public interface Bot<P, R> {
      * @return the name that is assigned to this Bot
      */
     String getName();
+
+    /**
+     * Update the {@code LanguageHelper} that will be used to get the right
+     * translations
+     *
+     * @param languageHelper the {@code LanguageHelper} that will be used to
+     *                       get the right translations
+     */
+    void setLanguageHelper(LanguageHelper languageHelper);
+
+    /**
+     * Update the Language that will be used to get the right translations
+     *
+     * @param string the Language that will be used to get the right
+     *               translations
+     */
+    void setLanguage(String string);
 }

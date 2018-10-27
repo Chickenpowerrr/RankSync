@@ -3,8 +3,8 @@ package com.gmail.chickenpowerrr.ranksync.spigot.command;
 import com.gmail.chickenpowerrr.ranksync.api.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.LinkInfo;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,29 +31,29 @@ public class RankSyncCommandExecutor implements CommandExecutor {
                             if(player == null) {
                                 if(this.linkHelper.isAllowedToLink(sender, ((Player) sender).getUniqueId(), args[0], args[1])) {
                                     this.linkHelper.link(((Player) sender).getUniqueId(), args[0], args[1]);
-                                    sender.sendMessage(ChatColor.GREEN + "Your account has been linked!");
+                                    sender.sendMessage(Translation.RANKSYNC_COMMAND_LINKED.getTranslation());
                                 }
                             } else {
-                                sender.sendMessage(ChatColor.DARK_RED + "Your account has already been linked to " + ChatColor.RED + args[0]);
+                                sender.sendMessage(Translation.RANKSYNC_COMMAND_ALREADY_LINKED.getTranslation("service", args[0]));
                             }
                         });
                     } else {
-                        sender.sendMessage(ChatColor.DARK_RED + "Please use the command as like this: " + ChatColor.RED + "/ranksync " + this.services + " <code>");
+                        sender.sendMessage(Translation.RANKSYNC_COMMAND_USAGE.getTranslation("services", this.services));
                     }
                     break;
                 case 1:
                     if(linkInfo == null) {
-                        sender.sendMessage(ChatColor.DARK_RED + "Please use the command as like this: " + ChatColor.RED + "/ranksync " + this.services + " <code>");
+                        sender.sendMessage(Translation.RANKSYNC_COMMAND_USAGE.getTranslation("services", this.services));
                     } else {
-                        sender.sendMessage(ChatColor.DARK_RED + "You'll have to get a code by " + ChatColor.RED + linkInfo.getLinkExplanation() + ChatColor.DARK_RED + " and link your account by typing " + ChatColor.RED + "/ranksync " + linkInfo.getName() + " THE_CODE_" + linkInfo.getName().toUpperCase() + "_GAVE_YOU" + ChatColor.DARK_RED + " into the Minecraft server");
+                        sender.sendMessage(Translation.RANKSYNC_COMMAND_GET_CODE.getTranslation("explanation", linkInfo.getLinkExplanation(), "service", linkInfo.getName(), "SERVICE", linkInfo.getName().toUpperCase()));
                     }
                     break;
                 default:
-                    sender.sendMessage(ChatColor.DARK_RED + "Please use the command as like this: " + ChatColor.RED + "/ranksync " + this.services + " <code>");
+                    sender.sendMessage(Translation.RANKSYNC_COMMAND_USAGE.getTranslation("services", this.services));
                     break;
             }
         } else {
-            sender.sendMessage(ChatColor.DARK_RED + "You should be a player to execute this command");
+            sender.sendMessage(Translation.COMMAND_PLAYERONLY.getTranslation());
         }
         return true;
     }

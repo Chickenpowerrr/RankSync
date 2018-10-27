@@ -1,5 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
+import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import com.gmail.chickenpowerrr.ranksync.api.*;
 import com.gmail.chickenpowerrr.ranksync.api.CommandFactory;
 import com.gmail.chickenpowerrr.ranksync.api.DatabaseFactory;
@@ -34,6 +35,8 @@ class DiscordBot implements Bot<Member, Role> {
     DiscordBot(Properties properties) {
         this.properties = properties;
         this.name = properties.getString("name");
+        Translation.setLanguageHelper((LanguageHelper) properties.getObject("language_helper"));
+        Translation.setLanguage(properties.getString("language"));
 
         try {
             new JDABuilder(properties.getString("token")).addEventListener(new DiscordEventListeners(this)).build();
@@ -56,5 +59,15 @@ class DiscordBot implements Bot<Member, Role> {
             RankSyncApi.getApi().execute(new BotForceShutdownEvent(this, "The given guild id is invalid"));
             jda.shutdownNow();
         }
+    }
+
+    @Override
+    public void setLanguageHelper(LanguageHelper languageHelper) {
+        Translation.setLanguageHelper(languageHelper);
+    }
+
+    @Override
+    public void setLanguage(String string) {
+        Translation.setLanguage(string);
     }
 }
