@@ -2,16 +2,17 @@ package com.gmail.chickenpowerrr.ranksync.spigot.command;
 
 import com.gmail.chickenpowerrr.ranksync.api.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.LinkInfo;
+import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
+import com.gmail.chickenpowerrr.ranksync.api.event.PlayerLinkedEvent;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
 import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
+import java.util.stream.Collectors;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.stream.Collectors;
 
 public class RankSyncCommandExecutor implements CommandExecutor {
 
@@ -32,6 +33,9 @@ public class RankSyncCommandExecutor implements CommandExecutor {
                                 if(this.linkHelper.isAllowedToLink(sender, ((Player) sender).getUniqueId(), args[0], args[1])) {
                                     this.linkHelper.link(((Player) sender).getUniqueId(), args[0], args[1]);
                                     sender.sendMessage(Translation.RANKSYNC_COMMAND_LINKED.getTranslation());
+                                    bot.getPlayerFactory().getPlayer(((Player) sender).getUniqueId()).thenAccept(linkedPlayer -> {
+                                        RankSyncApi.getApi().execute(new PlayerLinkedEvent(linkedPlayer));
+                                    });
                                 }
                             } else {
                                 sender.sendMessage(Translation.RANKSYNC_COMMAND_ALREADY_LINKED.getTranslation("service", args[0]));

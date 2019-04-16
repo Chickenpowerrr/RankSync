@@ -50,6 +50,14 @@ class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.DatabaseF
                 case "sql":
                     database = new SqlDatabase(this.bot, credentials);
                     break;
+                case "yaml":
+                    String basePath = credentials.getString("base_path");
+                    if(basePath != null) {
+                        database = new YamlDatabase(credentials, basePath);
+                    } else {
+                        throw new IllegalStateException("The Yaml resource needs a path");
+                    }
+                    break;
                 default:
                     throw new IllegalStateException("You should add a valid database to the properties");
             }

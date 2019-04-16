@@ -35,11 +35,6 @@
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>net.sf.trove4j</groupId>
-                    <artifactId>trove4j</artifactId>
-                </exclusion>
-
-                <exclusion>
                     <groupId>club.minnced</groupId>
                     <artifactId>opus-java</artifactId>
                 </exclusion>
@@ -78,6 +73,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.5</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.21</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

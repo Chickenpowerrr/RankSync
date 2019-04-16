@@ -5,16 +5,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
- * This class is one of the easiest possible implementations
- * of the LinkInfo interface
+ * This class is one of the easiest possible implementations of the LinkInfo interface
  *
  * @author Chickenpowerrr
- * @since  1.0.0
+ * @since 1.0.0
  */
+@Getter
 @EqualsAndHashCode
 @AllArgsConstructor
 public class BasicLinkInfo implements LinkInfo {
 
-    @Getter private final String name;
-    @Getter private final String linkExplanation;
+  private final String name;
+  private final String linkExplanation;
 }

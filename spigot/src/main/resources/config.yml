@@ -4,11 +4,6 @@ language: english
 
 # The basic setup for Discord
 discord:
-# This is NOT the name that will be displayed in Discord. This is a name that should
-# be unique because the Database will use it to identify which ranks should be linked.
-# if you set it equal to a bot that runs on another place, it will use the exact same
-# UUID's to link the accounts
-  name: "Your Bot"
 # The Discord token of your bot. More information on how you can create this token,
 # please use this tutorial on how to create a token:
 # https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token

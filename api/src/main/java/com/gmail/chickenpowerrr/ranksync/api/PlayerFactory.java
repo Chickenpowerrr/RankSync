@@ -4,50 +4,44 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * This interface manages all of the data that a Developer
- * will probably need to synchronize the Player data between multiple
- * services
+ * This interface manages all of the data that a Developer will probably need to synchronize the
+ * Player data between multiple services
  *
- * @param <P> the Player class used by the platform API, not
- *            the RankSync API
+ * @param <P> the Player class used by the platform API, not the RankSync API
  * @author Chickenpowerrr
- * @since  1.0.0
+ * @since 1.0.0
  */
 public interface PlayerFactory<P> {
 
-    /**
-     * Turn an internally used player into a player that is supported
-     * by the RankSync API
-     *
-     * @param internalObject the player object used by the platform API, not
-     *                       the RankSync API
-     * @return the RankSync representation of the player
-     */
-    CompletableFuture<Player> getPlayer(P internalObject);
+  /**
+   * Turn an internally used player into a player that is supported by the RankSync API
+   *
+   * @param internalObject the player object used by the platform API, not the RankSync API
+   * @return the RankSync representation of the player
+   */
+  CompletableFuture<Player> getPlayer(P internalObject);
 
-    /**
-     * Get a Player object based on its UUID that came from the other service
-     *
-     * @param uuid the UUID that represents this player on another service
-     * @return a {@code CompletableFuture} that will be completed whenever
-     *         the player has been found
-     */
-    CompletableFuture<Player> getPlayer(UUID uuid);
+  /**
+   * Get a Player object based on its UUID that came from the other service
+   *
+   * @param uuid the UUID that represents this player on another service
+   * @return a {@code CompletableFuture} that will be completed whenever the player has been found
+   */
+  CompletableFuture<Player> getPlayer(UUID uuid);
 
-    /**
-     * Update the link for a given Player
-     *
-     * @param playerId the id that represents the player on the current service
-     * @param uuid     the uuid that represents the player on the other service
-     * @return a {@code CompletableFuture} that will be completed whenever
-     *         the process is done
-     */
-    CompletableFuture<Void> setUuid(String playerId, UUID uuid);
+  /**
+   * Update the link for a given Player
+   *
+   * @param playerId the id that represents the player on the current service
+   * @param uuid the uuid that represents the player on the other service
+   * @return a {@code CompletableFuture} that will be completed whenever the process is done
+   */
+  CompletableFuture<Void> setUuid(String playerId, UUID uuid);
 
-    /**
-     * Get the {@code Bot} that uses this factory
-     *
-     * @return the {@code Bot} that uses this factory
-     */
-    Bot<P, ?> getBot();
+  /**
+   * Get the {@code Bot} that uses this factory
+   *
+   * @return the {@code Bot} that uses this factory
+   */
+  Bot<P, ?> getBot();
 }

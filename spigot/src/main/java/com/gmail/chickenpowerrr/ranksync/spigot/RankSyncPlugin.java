@@ -14,6 +14,7 @@ import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotEnabledEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotForceShutdownEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerLinkCodeCreateEventListener;
+import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerLinkedEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerUpdateOnlineStatusEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.AsyncPlayerPreLoginEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.PlayerQuitEventListener;
@@ -90,6 +91,7 @@ public final class RankSyncPlugin extends JavaPlugin {
                 .addProperty("database", getConfig().getString("database.sql.database"))
                 .addProperty("username", getConfig().getString("database.sql.user"))
                 .addProperty("password", getConfig().getString("database.sql.password"))
+                .addProperty("base_path", getDataFolder() + "/data/")
                 .addProperty("rank_resource", rankResource)
                 .addProperty("language", language)
                 .addProperty("language_helper", languageHelper)));
@@ -131,6 +133,7 @@ public final class RankSyncPlugin extends JavaPlugin {
         RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener());
         RankSyncApi.getApi().registerListener(new BotEnabledEventListener(this.rankHelper));
         RankSyncApi.getApi().registerListener(new BotForceShutdownEventListener());
+        RankSyncApi.getApi().registerListener(new PlayerLinkedEventListener());
 
         Bukkit.getPluginManager().registerEvents(new AsyncPlayerPreLoginEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), this);
