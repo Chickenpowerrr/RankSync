@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.data;
 
 import java.io.File;
 import java.io.IOException;

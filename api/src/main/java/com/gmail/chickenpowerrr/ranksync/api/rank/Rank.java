@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.rank;
 
 /**
  * This interface defines a very simple rank

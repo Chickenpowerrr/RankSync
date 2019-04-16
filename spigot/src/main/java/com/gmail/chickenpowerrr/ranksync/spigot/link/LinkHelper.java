@@ -1,8 +1,8 @@
 package com.gmail.chickenpowerrr.ranksync.spigot.link;
 
-import com.gmail.chickenpowerrr.ranksync.api.BasicLinkInfo;
-import com.gmail.chickenpowerrr.ranksync.api.LinkInfo;
-import com.gmail.chickenpowerrr.ranksync.api.Player;
+import com.gmail.chickenpowerrr.ranksync.api.bot.BasicLinkInfo;
+import com.gmail.chickenpowerrr.ranksync.api.player.LinkInfo;
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
 import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import org.bukkit.Bukkit;

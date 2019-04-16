@@ -1,7 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.spigot.command;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.LinkInfo;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.player.LinkInfo;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.event.PlayerLinkedEvent;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;

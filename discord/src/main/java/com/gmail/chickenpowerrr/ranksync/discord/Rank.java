@@ -4,7 +4,7 @@ import lombok.Getter;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 
-class Rank implements com.gmail.chickenpowerrr.ranksync.api.Rank {
+class Rank implements com.gmail.chickenpowerrr.ranksync.api.rank.Rank {
 
     @Getter private final Role role;
 

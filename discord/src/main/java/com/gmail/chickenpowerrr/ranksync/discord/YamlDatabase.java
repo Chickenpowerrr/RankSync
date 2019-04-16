@@ -1,9 +1,9 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
-import com.gmail.chickenpowerrr.ranksync.api.AbstractFileDatabase;
-import com.gmail.chickenpowerrr.ranksync.api.Properties;
-import com.gmail.chickenpowerrr.ranksync.api.Rank;
-import com.gmail.chickenpowerrr.ranksync.api.RankResource;
+import com.gmail.chickenpowerrr.ranksync.api.data.AbstractFileDatabase;
+import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
+import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;

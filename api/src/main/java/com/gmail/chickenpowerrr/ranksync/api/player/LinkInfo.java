@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.player;
 
 /**
  * This interface contains all of the basic information a Player needs to link his account between

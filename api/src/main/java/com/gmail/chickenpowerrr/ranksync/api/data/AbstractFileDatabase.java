@@ -1,4 +1,6 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.data;
+
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 
 public abstract class AbstractFileDatabase<F extends AutoCreatingFile> implements Database {
 

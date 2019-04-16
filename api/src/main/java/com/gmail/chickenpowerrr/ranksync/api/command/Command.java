@@ -1,5 +1,6 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.command;
 
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import java.util.Collection;
 import java.util.List;
 

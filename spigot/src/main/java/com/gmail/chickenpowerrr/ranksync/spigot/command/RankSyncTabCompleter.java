@@ -1,6 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.spigot.command;
 
-import com.gmail.chickenpowerrr.ranksync.api.LinkInfo;
+import com.gmail.chickenpowerrr.ranksync.api.player.LinkInfo;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

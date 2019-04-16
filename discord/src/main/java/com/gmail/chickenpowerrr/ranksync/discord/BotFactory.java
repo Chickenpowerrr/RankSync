@@ -1,13 +1,13 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.Properties;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
 import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BotFactory implements com.gmail.chickenpowerrr.ranksync.api.BotFactory {
+public class BotFactory implements com.gmail.chickenpowerrr.ranksync.api.bot.BotFactory {
 
     @Getter private static final BotFactory instance = new BotFactory();
 

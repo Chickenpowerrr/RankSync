@@ -1,5 +1,6 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.bot;
 
+import com.gmail.chickenpowerrr.ranksync.api.player.LinkInfo;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

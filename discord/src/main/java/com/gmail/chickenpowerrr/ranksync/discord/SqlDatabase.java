@@ -1,7 +1,10 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
-import com.gmail.chickenpowerrr.ranksync.api.*;
-import com.gmail.chickenpowerrr.ranksync.api.Rank;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.data.Database;
+import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
+import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.*;

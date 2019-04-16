@@ -1,6 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.api.event;
 
-import com.gmail.chickenpowerrr.ranksync.api.Player;
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

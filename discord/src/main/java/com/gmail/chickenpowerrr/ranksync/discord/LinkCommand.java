@@ -1,7 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
-import com.gmail.chickenpowerrr.ranksync.api.Command;
-import com.gmail.chickenpowerrr.ranksync.api.Player;
+import com.gmail.chickenpowerrr.ranksync.api.command.Command;
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.event.PlayerLinkCodeCreateEvent;
 import lombok.Getter;

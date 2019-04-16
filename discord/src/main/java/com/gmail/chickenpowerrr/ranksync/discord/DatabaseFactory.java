@@ -1,15 +1,15 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.Database;
-import com.gmail.chickenpowerrr.ranksync.api.Properties;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.data.Database;
+import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
 import lombok.Getter;
 import net.dv8tion.jda.core.entities.Guild;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.DatabaseFactory {
+class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory {
 
     @Getter private static final Map<Guild, DatabaseFactory> instances = new HashMap<>();
 

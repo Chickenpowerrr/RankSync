@@ -1,8 +1,8 @@
 package com.gmail.chickenpowerrr.ranksync.spigot.roleresource;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.Rank;
-import com.gmail.chickenpowerrr.ranksync.api.RankResource;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
 import lombok.Setter;
 import net.milkbowl.vault.permission.Permission;

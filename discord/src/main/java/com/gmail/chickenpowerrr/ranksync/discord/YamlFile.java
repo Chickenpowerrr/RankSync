@@ -1,6 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
-import com.gmail.chickenpowerrr.ranksync.api.AutoCreatingFile;
+import com.gmail.chickenpowerrr.ranksync.api.data.AutoCreatingFile;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;

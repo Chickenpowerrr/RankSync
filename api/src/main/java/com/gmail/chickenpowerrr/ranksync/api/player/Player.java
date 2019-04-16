@@ -1,5 +1,7 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.player;
 
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import java.util.Collection;
 import java.util.UUID;
 

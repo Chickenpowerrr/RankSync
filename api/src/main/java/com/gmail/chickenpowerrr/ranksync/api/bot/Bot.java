@@ -1,6 +1,11 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.bot;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
+import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
+import com.gmail.chickenpowerrr.ranksync.api.command.CommandFactory;
+import com.gmail.chickenpowerrr.ranksync.api.data.Database;
+import com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
 
 /**
  * This interface is primary used to control all of the factories that can be used to get the data

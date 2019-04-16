@@ -2,10 +2,13 @@ package com.gmail.chickenpowerrr.ranksync.discord;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import com.gmail.chickenpowerrr.ranksync.api.*;
-import com.gmail.chickenpowerrr.ranksync.api.CommandFactory;
-import com.gmail.chickenpowerrr.ranksync.api.DatabaseFactory;
-import com.gmail.chickenpowerrr.ranksync.api.PlayerFactory;
-import com.gmail.chickenpowerrr.ranksync.api.RankFactory;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.command.CommandFactory;
+import com.gmail.chickenpowerrr.ranksync.api.data.Database;
+import com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory;
+import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
+import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotEnabledEvent;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotForceShutdownEvent;
 import lombok.Getter;

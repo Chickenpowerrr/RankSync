@@ -1,13 +1,14 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.Command;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.command.Command;
 import net.dv8tion.jda.core.entities.Guild;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandFactory implements com.gmail.chickenpowerrr.ranksync.api.CommandFactory {
+public class CommandFactory implements
+    com.gmail.chickenpowerrr.ranksync.api.command.CommandFactory {
 
     private static final Map<Guild, CommandFactory> instances = new HashMap<>();
 

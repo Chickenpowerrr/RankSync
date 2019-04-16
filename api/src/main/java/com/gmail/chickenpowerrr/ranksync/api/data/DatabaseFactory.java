@@ -1,4 +1,6 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.data;
+
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 
 /**
  * This interface manages all of the possible databases

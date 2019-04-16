@@ -1,5 +1,6 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.data;
 
+import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;

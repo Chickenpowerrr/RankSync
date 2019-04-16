@@ -1,4 +1,6 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.bot;
+
+import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
 
 /**
  * This interface can be used to create instances for a bot on any platform this factory supports

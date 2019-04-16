@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.data;
 
 /**
  * This interface defines all of the basic things an Object needs to save very basic data

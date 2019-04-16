@@ -1,5 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.api;
 
+import com.gmail.chickenpowerrr.ranksync.api.bot.BotFactory;
 import com.gmail.chickenpowerrr.ranksync.api.event.CancelableEvent;
 import com.gmail.chickenpowerrr.ranksync.api.event.Event;
 import com.gmail.chickenpowerrr.ranksync.api.event.Listener;

@@ -1,7 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.spigot.roleresource;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.Rank;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import lombok.AllArgsConstructor;
 
 import java.util.Collection;

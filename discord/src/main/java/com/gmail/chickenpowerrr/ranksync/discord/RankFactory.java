@@ -1,7 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.Rank;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import lombok.Getter;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.RankFactory<Role> {
+class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory<Role> {
 
     private static final Map<Guild, RankFactory> instances = new HashMap<>();
 

@@ -1,9 +1,9 @@
 package com.gmail.chickenpowerrr.ranksync.discord;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.Command;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.command.Command;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
-import com.gmail.chickenpowerrr.ranksync.api.Status;
+import com.gmail.chickenpowerrr.ranksync.api.player.Status;
 import com.gmail.chickenpowerrr.ranksync.api.event.PlayerUpdateOnlineStatusEvent;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Member;

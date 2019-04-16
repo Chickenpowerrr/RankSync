@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.player;
 
 /**
  * This enum contains all of the statuses someone needs to have when an user is registered on one of

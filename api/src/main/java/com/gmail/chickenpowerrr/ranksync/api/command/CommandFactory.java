@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.api;
+package com.gmail.chickenpowerrr.ranksync.api.command;
 
 /**
  * This interface manages all of the things that are needed to easily control commands on the given

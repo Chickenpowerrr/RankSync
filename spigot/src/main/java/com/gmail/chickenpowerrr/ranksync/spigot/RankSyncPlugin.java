@@ -1,9 +1,9 @@
 package com.gmail.chickenpowerrr.ranksync.spigot;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
-import com.gmail.chickenpowerrr.ranksync.api.BasicProperties;
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.RankResource;
+import com.gmail.chickenpowerrr.ranksync.api.data.BasicProperties;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommandExecutor;
