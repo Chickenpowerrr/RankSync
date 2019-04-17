@@ -24,46 +24,34 @@ public interface Bot<P, R> {
   void setEffectiveDatabase(Database database);
 
   /**
-   * Get the way the Bot requests its data
-   *
-   * @return the way the Bot requests its data
+   * Returns the way the Bot requests its data
    */
   Database getEffectiveDatabase();
 
   /**
-   * Get the factory that controls all of the Player related data
-   *
-   * @return the factory that controls all of the Player related data
+   * Returns the factory that controls all of the Player related data
    */
   PlayerFactory<P> getPlayerFactory();
 
   /**
-   * Get the factory that controls all of the Rank related data
-   *
-   * @return the factory that controls all of the Rank related data
+   * Returns the factory that controls all of the Rank related data
    */
   RankFactory<R> getRankFactory();
 
   /**
-   * Get the factory that controls all of the Database related data
-   *
-   * @return the factory that controls all of the Database related data
+   * Returns the factory that controls all of the Database related data
    */
   DatabaseFactory getDatabaseFactory();
 
   /**
-   * Get the factory that controls all of the Command related data
-   *
-   * @return the factory that controls all of the Command related data
+   * Returns the factory that controls all of the Command related data
    */
   CommandFactory getCommandFactory();
 
   /**
-   * Get the name that is assigned to this Bot
-   *
-   * @return the name that is assigned to this Bot
+   * Returns the platform that is assigned to this Bot
    */
-  String getName();
+  String getPlatform();
 
   /**
    * Update the {@code LanguageHelper} that will be used to get the right translations

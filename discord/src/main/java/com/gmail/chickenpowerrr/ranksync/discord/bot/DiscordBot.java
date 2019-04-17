@@ -28,8 +28,7 @@ import java.util.HashSet;
 public class DiscordBot implements Bot<Member, Role> {
 
   @Getter private Guild guild;
-  @Getter private final String name;
-
+  @Getter private final String platform = "Discord";
   @Getter @Setter private Database effectiveDatabase;
   @Getter private PlayerFactory<Member> playerFactory;
   @Getter private RankFactory<Role> rankFactory;
@@ -40,7 +39,6 @@ public class DiscordBot implements Bot<Member, Role> {
 
   DiscordBot(Properties properties) {
     this.properties = properties;
-    this.name = properties.getString("name");
     Translation.setLanguageHelper((LanguageHelper) properties.getObject("language_helper"));
     Translation.setLanguage(properties.getString("language"));
 

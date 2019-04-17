@@ -11,7 +11,10 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SqlDatabase implements Database {
 
   private final HikariDataSource dataSource;
@@ -44,44 +47,12 @@ public class SqlDatabase implements Database {
     }
 
     try (Connection connection = this.dataSource.getConnection();
-        Statement statement = connection.createStatement();
         PreparedStatement preparedStatement = connection
-            .prepareStatement("INSERT IGNORE bot (name) VALUES (?);")) {
-      statement.execute("create table if not exists  bot" +
-          "(" +
-          "  id   int unsigned auto_increment" +
-          "    primary key," +
-          "  name varchar(64) not null," +
-          "  constraint bot_name_uindex" +
-          "  unique (name)" +
-          ");");
+            .prepareStatement("INSERT IGNORE bot (platform) VALUES (?);")) {
+      DatabaseUpdater databaseUpdater = new DatabaseUpdater(connection);
+      databaseUpdater.update(databaseUpdater.getVersion());
 
-      statement.execute("create table if not exists player" +
-          "(" +
-          "  id   int unsigned auto_increment" +
-          "    primary key," +
-          "  uuid char(36) not null," +
-          "  constraint player_uuid_uindex" +
-          "  unique (uuid)" +
-          ");");
-
-      statement.execute("create table if not exists synced_players" +
-          "(" +
-          "  id         int unsigned auto_increment" +
-          "    primary key," +
-          "  bot_id     int unsigned not null," +
-          "  identifier tinytext     not null," +
-          "  player_id  int unsigned not null," +
-          "  constraint synced_players_bot_id_fk" +
-          "  foreign key (bot_id) references bot (id)" +
-          "    on update cascade" +
-          "    on delete cascade," +
-          "  constraint synced_players_player_id_fk" +
-          "  foreign key (player_id) references player (id)" +
-          "    on update cascade" +
-          "    on delete cascade" +
-          ");");
-      preparedStatement.setString(1, this.bot.getName());
+      preparedStatement.setString(1, this.bot.getPlatform());
       preparedStatement.execute();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -98,9 +69,9 @@ public class SqlDatabase implements Database {
     CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
       try (Connection connection = this.dataSource.getConnection();
           PreparedStatement preparedStatement = connection.prepareStatement(
-              "SELECT sp.identifier FROM player p LEFT JOIN synced_players sp on p.id = sp.player_id JOIN bot b on sp.bot_id = b.id WHERE p.uuid = ? AND b.name = ?;")) {
+              "SELECT sp.identifier FROM player p LEFT JOIN synced_players sp on p.id = sp.player_id JOIN bot b on sp.bot_id = b.id WHERE p.uuid = ? AND b.platform = ?;")) {
         preparedStatement.setString(1, uuid.toString());
-        preparedStatement.setString(2, this.bot.getName());
+        preparedStatement.setString(2, this.bot.getPlatform());
         try (ResultSet resultSet = preparedStatement.executeQuery()) {
           if (resultSet.next()) {
             return resultSet.getString("identifier");
@@ -126,9 +97,9 @@ public class SqlDatabase implements Database {
     CompletableFuture<UUID> completableFuture = CompletableFuture.supplyAsync(() -> {
       try (Connection connection = this.dataSource.getConnection();
           PreparedStatement preparedStatement = connection.prepareStatement(
-              "SELECT p.uuid FROM player p LEFT JOIN synced_players sp ON p.id = sp.player_id JOIN bot b ON sp.bot_id = b.id WHERE sp.identifier = ? AND sp.bot_id = (SELECT id FROM bot WHERE b.name = ?);")) {
+              "SELECT p.uuid FROM player p LEFT JOIN synced_players sp ON p.id = sp.player_id JOIN bot b ON sp.bot_id = b.id WHERE sp.identifier = ? AND sp.bot_id = (SELECT id FROM bot WHERE b.platform = ?);")) {
         preparedStatement.setString(1, playerId);
-        preparedStatement.setString(2, this.bot.getName());
+        preparedStatement.setString(2, this.bot.getPlatform());
         try (ResultSet resultSet = preparedStatement.executeQuery()) {
           if (resultSet.next()) {
             return UUID.fromString(resultSet.getString("uuid"));
@@ -157,11 +128,11 @@ public class SqlDatabase implements Database {
             PreparedStatement createPlayer = connection
                 .prepareStatement("INSERT IGNORE player (uuid) VALUES (?);");
             PreparedStatement saveUuid = connection.prepareStatement(
-                "INSERT INTO synced_players (bot_id, identifier, player_id) VALUES ((SELECT id FROM bot WHERE name = ?), ?, (SELECT id FROM player WHERE uuid = ?));")) {
+                "INSERT INTO synced_players (bot_id, identifier, player_id) VALUES ((SELECT id FROM bot WHERE platform = ?), ?, (SELECT id FROM player WHERE uuid = ?));")) {
           createPlayer.setString(1, uuid.toString());
           createPlayer.execute();
 
-          saveUuid.setString(1, this.bot.getName());
+          saveUuid.setString(1, this.bot.getPlatform());
           saveUuid.setString(2, playerId);
           saveUuid.setString(3, uuid.toString());
           saveUuid.execute();
@@ -171,9 +142,9 @@ public class SqlDatabase implements Database {
       } else {
         try (Connection connection = this.dataSource.getConnection();
             PreparedStatement unLink = connection.prepareStatement(
-                "DELETE FROM synced_players WHERE identifier = ? AND bot_id = (SELECT id FROM bot WHERE name = ?);")) {
+                "DELETE FROM synced_players WHERE identifier = ? AND bot_id = (SELECT id FROM bot WHERE platform = ?);")) {
           unLink.setString(1, playerId);
-          unLink.setString(2, this.bot.getName());
+          unLink.setString(2, this.bot.getPlatform());
 
           unLink.execute();
         } catch (SQLException e) {
@@ -197,5 +168,108 @@ public class SqlDatabase implements Database {
     });
 
     return future;
+  }
+
+  @AllArgsConstructor
+  private class DatabaseUpdater {
+
+    private final Connection connection;
+
+    private void update(String version) {
+      try (Statement statement = this.connection.createStatement()) {
+        if (version != null) {
+          switch (version) {
+            case "1.1.0":
+              statement
+                  .execute("create table if not exists version (version varchar(10) not null);");
+              statement.execute("ALTER TABLE bot RENAME COLUMN `name` TO platform;");
+              statement.execute("UPDATE bot SET platform = 'Discord';");
+              // Fall through
+            case "1.2.0":
+              statement.execute("DELETE FROM version");
+              statement.execute("INSERT INTO version (version) VALUES ('1.2.0');");
+
+              generateDefaultTables();
+              break;
+            default:
+              log.warn("Your version: \"" + version + "\" isn't known by the database updater");
+              break;
+          }
+        } else {
+          generateDefaultTables();
+          statement.execute("INSERT INTO version (version) VALUES ('1.2.0');");
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+
+    private void generateDefaultTables() {
+      try (Statement statement = this.connection.createStatement()) {
+        statement.execute("create table if not exists  bot" +
+            "(" +
+            "  id   int unsigned auto_increment" +
+            "    primary key," +
+            "  name varchar(64) not null," +
+            "  constraint bot_name_uindex" +
+            "  unique (name)" +
+            ");");
+
+        statement.execute("create table if not exists player" +
+            "(" +
+            "  id   int unsigned auto_increment" +
+            "    primary key," +
+            "  uuid char(36) not null," +
+            "  constraint player_uuid_uindex" +
+            "  unique (uuid)" +
+            ");");
+
+        statement.execute("create table if not exists synced_players" +
+            "(" +
+            "  id         int unsigned auto_increment" +
+            "    primary key," +
+            "  bot_id     int unsigned not null," +
+            "  identifier tinytext     not null," +
+            "  player_id  int unsigned not null," +
+            "  constraint synced_players_bot_id_fk" +
+            "  foreign key (bot_id) references bot (id)" +
+            "    on update cascade" +
+            "    on delete cascade," +
+            "  constraint synced_players_player_id_fk" +
+            "  foreign key (player_id) references player (id)" +
+            "    on update cascade" +
+            "    on delete cascade" +
+            ");");
+
+        statement
+            .execute("create table if not exists version (version varchar(10) not null);");
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+
+    private String getVersion() {
+      try (Statement statement = this.connection.createStatement();
+          ResultSet versionTable = statement.executeQuery("SHOW TABLES LIKE 'version';");
+          ResultSet botTable = statement.executeQuery("SHOW TABLES LIKE 'bot';");
+          ResultSet version = statement.executeQuery("SELECT version FROM version;")) {
+
+        if (versionTable.next()) {
+          if (version.next()) {
+            return version.getString("version");
+          } else {
+            return "1.2.0";
+          }
+        } else {
+          if (botTable.next()) {
+            return "1.1.0";
+          } else {
+            return null;
+          }
+        }
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
+    }
   }
 }

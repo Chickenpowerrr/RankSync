@@ -19,7 +19,7 @@ public class RankHelper {
     this.ranks.values().stream().map(Map::entrySet).flatMap(Collection::stream)
         .filter(entry -> entry.getKey().equals(bot)).map(Map.Entry::getValue).forEach(rank -> {
       if (bot.getRankFactory().getRoleFromName(rank) == null) {
-        LOGGER.severe("The '" + bot.getName() + "' rank '" + rank + "' couldn't be found");
+        LOGGER.severe("The '" + bot.getPlatform() + "' rank '" + rank + "' couldn't be found");
       }
     });
 
