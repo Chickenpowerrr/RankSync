@@ -8,15 +8,15 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BotEnabledEventListener implements Listener<BotEnabledEvent> {
 
-    private final RankHelper rankHelper;
+  private final RankHelper rankHelper;
 
-    @Override
-    public Class<BotEnabledEvent> getTarget() {
-        return BotEnabledEvent.class;
-    }
+  @Override
+  public Class<BotEnabledEvent> getTarget() {
+    return BotEnabledEvent.class;
+  }
 
-    @Override
-    public void onEvent(BotEnabledEvent event) {
-        rankHelper.validateRanks(event.getBot());
-    }
+  @Override
+  public void onEvent(BotEnabledEvent event) {
+    rankHelper.validateRanks(event.getBot());
+  }
 }

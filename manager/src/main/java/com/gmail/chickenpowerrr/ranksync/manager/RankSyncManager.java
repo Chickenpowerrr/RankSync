@@ -6,18 +6,19 @@ import lombok.Getter;
 
 public class RankSyncManager {
 
-    @Getter public static final RankSyncManager instance = new RankSyncManager();
+  @Getter public static final RankSyncManager instance = new RankSyncManager();
 
-    private boolean started = false;
+  private boolean started = false;
 
-    private RankSyncManager(){}
+  private RankSyncManager() {
+  }
 
-    public synchronized void setup() {
-        if(!started) {
-            RankSyncApi.getApi().addBotFactory("Discord", BotFactory.getInstance());
-            started = true;
-        } else {
-            throw new IllegalStateException("The program has already been initialized!");
-        }
+  public synchronized void setup() {
+    if (!this.started) {
+      RankSyncApi.getApi().addBotFactory("Discord", BotFactory.getInstance());
+      this.started = true;
+    } else {
+      throw new IllegalStateException("The program has already been initialized!");
     }
+  }
 }

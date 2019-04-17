@@ -8,14 +8,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class BotForceShutdownEventListener implements Listener<BotForceShutdownEvent> {
 
-    @Override
-    public Class<BotForceShutdownEvent> getTarget() {
-        return BotForceShutdownEvent.class;
-    }
+  @Override
+  public Class<BotForceShutdownEvent> getTarget() {
+    return BotForceShutdownEvent.class;
+  }
 
-    @Override
-    public void onEvent(BotForceShutdownEvent event) {
-        Bukkit.getLogger().severe("Disabling the RankSync plugin: " + event.getReason());
-        Bukkit.getPluginManager().disablePlugin(JavaPlugin.getPlugin(RankSyncPlugin.class));
-    }
+  @Override
+  public void onEvent(BotForceShutdownEvent event) {
+    Bukkit.getLogger().severe("Disabling the RankSync plugin: " + event.getReason());
+    Bukkit.getPluginManager().disablePlugin(JavaPlugin.getPlugin(RankSyncPlugin.class));
+  }
 }

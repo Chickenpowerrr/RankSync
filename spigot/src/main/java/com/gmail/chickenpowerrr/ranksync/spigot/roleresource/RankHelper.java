@@ -11,32 +11,35 @@ import java.util.logging.Logger;
 @AllArgsConstructor
 public class RankHelper {
 
-    private static final Logger LOGGER = Logger.getLogger(RankHelper.class.getSimpleName());
+  private static final Logger LOGGER = Logger.getLogger(RankHelper.class.getSimpleName());
 
-    private final Map<String, Map<Bot, String>> ranks;
+  private final Map<String, Map<Bot, String>> ranks;
 
-    public void validateRanks(Bot bot) {
-        this.ranks.values().stream().map(Map::entrySet).flatMap(Collection::stream).filter(entry -> entry.getKey().equals(bot)).map(Map.Entry::getValue).forEach(rank -> {
-            if(bot.getRankFactory().getRoleFromName(rank) == null) {
-                LOGGER.severe("The '" + bot.getName() + "' rank '" + rank + "' couldn't be found");
-            }
-        });
+  public void validateRanks(Bot bot) {
+    this.ranks.values().stream().map(Map::entrySet).flatMap(Collection::stream)
+        .filter(entry -> entry.getKey().equals(bot)).map(Map.Entry::getValue).forEach(rank -> {
+      if (bot.getRankFactory().getRoleFromName(rank) == null) {
+        LOGGER.severe("The '" + bot.getName() + "' rank '" + rank + "' couldn't be found");
+      }
+    });
 
-        for(String rank : this.ranks.keySet()) {
-            bot.getEffectiveDatabase().isValidRank(rank).thenAccept(valid -> {
-                if(!valid) {
-                    LOGGER.severe("The 'Minecraft' rank '" + rank + "' couldn't be found");
-                }
-            });
+    for (String rank : this.ranks.keySet()) {
+      bot.getEffectiveDatabase().isValidRank(rank).thenAccept(valid -> {
+        if (!valid) {
+          LOGGER.severe("The 'Minecraft' rank '" + rank + "' couldn't be found");
         }
+      });
     }
+  }
 
-    @SuppressWarnings("unchecked")
-    Rank getRank(Bot bot, String minecraftGroupName) {
-        if(this.ranks.containsKey(minecraftGroupName) && this.ranks.get(minecraftGroupName).containsKey(bot)) {
-            return bot.getRankFactory().getRankFromRole(bot.getRankFactory().getRoleFromName(this.ranks.get(minecraftGroupName).get(bot)));
-        } else {
-            return null;
-        }
+  @SuppressWarnings("unchecked")
+  Rank getRank(Bot bot, String minecraftGroupName) {
+    if (this.ranks.containsKey(minecraftGroupName) && this.ranks.get(minecraftGroupName)
+        .containsKey(bot)) {
+      return bot.getRankFactory().getRankFromRole(
+          bot.getRankFactory().getRoleFromName(this.ranks.get(minecraftGroupName).get(bot)));
+    } else {
+      return null;
     }
+  }
 }

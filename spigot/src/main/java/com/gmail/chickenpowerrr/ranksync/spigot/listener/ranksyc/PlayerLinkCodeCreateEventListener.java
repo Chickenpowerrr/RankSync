@@ -7,15 +7,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class PlayerLinkCodeCreateEventListener implements Listener<PlayerLinkCodeCreateEvent> {
 
-    private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
+  private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
 
-    @Override
-    public Class<PlayerLinkCodeCreateEvent> getTarget() {
-        return PlayerLinkCodeCreateEvent.class;
-    }
+  @Override
+  public Class<PlayerLinkCodeCreateEvent> getTarget() {
+    return PlayerLinkCodeCreateEvent.class;
+  }
 
-    @Override
-    public void onEvent(PlayerLinkCodeCreateEvent event) {
-        this.rankSyncPlugin.getLinkHelper().addAuthenticationKey(event.getPlayer(), event.getCode());
-    }
+  @Override
+  public void onEvent(PlayerLinkCodeCreateEvent event) {
+    this.rankSyncPlugin.getLinkHelper().addAuthenticationKey(event.getPlayer(), event.getCode());
+  }
 }

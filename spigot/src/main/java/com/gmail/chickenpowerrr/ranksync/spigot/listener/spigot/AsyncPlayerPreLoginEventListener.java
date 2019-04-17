@@ -8,10 +8,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class AsyncPlayerPreLoginEventListener implements Listener {
 
-    private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
+  private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
 
-    @EventHandler
-    public void onJoin(AsyncPlayerPreLoginEvent event) {
-       this.rankSyncPlugin.getLinkHelper().updateRanks(event.getUniqueId());
-    }
+  @EventHandler
+  public void onJoin(AsyncPlayerPreLoginEvent event) {
+    this.rankSyncPlugin.getLinkHelper().updateRanks(event.getUniqueId());
+  }
 }

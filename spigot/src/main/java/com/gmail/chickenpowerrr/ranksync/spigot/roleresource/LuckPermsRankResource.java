@@ -17,40 +17,44 @@ import java.util.stream.Collectors;
 
 public class LuckPermsRankResource implements RankResource {
 
-    private final LuckPermsApi api;
-    @Setter private Bot bot;
-    private RankHelper rankHelper = null;
+  private final LuckPermsApi api;
+  @Setter
+  private Bot bot;
+  private RankHelper rankHelper = null;
 
-    public LuckPermsRankResource(LuckPermsApi luckPermsApi, Bot bot) {
-        this.api = luckPermsApi;
-        this.bot = bot;
+  public LuckPermsRankResource(LuckPermsApi luckPermsApi, Bot bot) {
+    this.api = luckPermsApi;
+    this.bot = bot;
+  }
+
+  public LuckPermsRankResource(LuckPermsApi luckPermsApi) {
+    this(luckPermsApi, null);
+  }
+
+  @Override
+  public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
+    CompletableFuture<Collection<Rank>> completableFuture = new CompletableFuture<>();
+
+    if (this.rankHelper == null) {
+      this.rankHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getRankHelper();
     }
 
-    public LuckPermsRankResource(LuckPermsApi luckPermsApi) {
-        this(luckPermsApi, null);
-    }
+    this.api.getUserManager().loadUser(uuid).thenAcceptAsync(user ->
+        completableFuture.complete(
+            user.getOwnNodes().stream().filter(Node::isGroupNode).map(Node::getGroupName)
+                .map(groupName -> this.rankHelper.getRank(this.bot, groupName))
+                .filter(Objects::nonNull).collect(Collectors.toSet())));
 
-    @Override
-    public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
-        CompletableFuture<Collection<Rank>> completableFuture = new CompletableFuture<>();
+    completableFuture.exceptionally(throwable -> {
+      throwable.printStackTrace();
+      return null;
+    });
 
-        if(this.rankHelper == null) {
-            this.rankHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getRankHelper();
-        }
+    return completableFuture;
+  }
 
-        api.getUserManager().loadUser(uuid).thenAcceptAsync(user ->
-            completableFuture.complete(user.getOwnNodes().stream().filter(Node::isGroupNode).map(Node::getGroupName).map(groupName -> this.rankHelper.getRank(this.bot, groupName)).filter(Objects::nonNull).collect(Collectors.toSet())));
-
-        completableFuture.exceptionally(throwable -> {
-            throwable.printStackTrace();
-            return null;
-        });
-
-        return completableFuture;
-    }
-
-    @Override
-    public boolean isValidRank(String name) {
-        return this.api.getGroup(name) != null;
-    }
+  @Override
+  public boolean isValidRank(String name) {
+    return this.api.getGroup(name) != null;
+  }
 }

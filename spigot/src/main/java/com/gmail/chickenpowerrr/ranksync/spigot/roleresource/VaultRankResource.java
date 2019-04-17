@@ -18,32 +18,36 @@ import java.util.stream.Collectors;
 
 public class VaultRankResource implements RankResource {
 
-    private final Permission permission;
-    @Setter private Bot bot;
-    private RankHelper rankHelper = null;
+  private final Permission permission;
+  @Setter private Bot bot;
+  private RankHelper rankHelper = null;
 
-    public VaultRankResource(Permission permission) {
-        this.permission = permission;
+  public VaultRankResource(Permission permission) {
+    this.permission = permission;
+  }
+
+  @Override
+  public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
+    if (this.rankHelper == null) {
+      this.rankHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getRankHelper();
     }
 
-    @Override
-    public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
-        if(this.rankHelper == null) {
-            this.rankHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getRankHelper();
-        }
+    CompletableFuture<Collection<Rank>> completableFuture = CompletableFuture.supplyAsync(
+        () -> Arrays.stream(this.permission
+            .getPlayerGroups(Bukkit.getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(uuid)))
+            .map(groupName -> this.rankHelper.getRank(this.bot, groupName)).filter(Objects::nonNull)
+            .collect(Collectors.toSet()));
 
-        CompletableFuture<Collection<Rank>> completableFuture = CompletableFuture.supplyAsync(() -> Arrays.stream(this.permission.getPlayerGroups(Bukkit.getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(uuid))).map(groupName -> this.rankHelper.getRank(this.bot, groupName)).filter(Objects::nonNull).collect(Collectors.toSet()));
+    completableFuture.exceptionally(throwable -> {
+      throwable.printStackTrace();
+      return null;
+    });
 
-        completableFuture.exceptionally(throwable -> {
-            throwable.printStackTrace();
-            return null;
-        });
+    return completableFuture;
+  }
 
-        return completableFuture;
-    }
-
-    @Override
-    public boolean isValidRank(String name) {
-        return Arrays.asList(this.permission.getGroups()).contains(name);
-    }
+  @Override
+  public boolean isValidRank(String name) {
+    return Arrays.asList(this.permission.getGroups()).contains(name);
+  }
 }

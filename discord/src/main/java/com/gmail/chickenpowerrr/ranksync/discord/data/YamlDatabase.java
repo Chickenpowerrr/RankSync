@@ -11,8 +11,7 @@ import lombok.Getter;
 
 public class YamlDatabase extends AbstractFileDatabase<YamlFile> {
 
-  @Getter
-  private final RankResource rankResource;
+  @Getter private final RankResource rankResource;
 
   public YamlDatabase(Properties properties, String basePath) {
     super(properties, new YamlFile(basePath, "players"));
@@ -48,7 +47,7 @@ public class YamlDatabase extends AbstractFileDatabase<YamlFile> {
       } else {
         String syncedUuid = super.players.getValue(playerId);
         super.players.removeValue(playerId);
-        if(syncedUuid != null) {
+        if (syncedUuid != null) {
           super.players.removeValue(syncedUuid);
         }
       }

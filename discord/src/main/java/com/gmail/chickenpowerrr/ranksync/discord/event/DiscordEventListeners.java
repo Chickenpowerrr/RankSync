@@ -21,40 +21,48 @@ import java.util.List;
 
 public class DiscordEventListeners implements EventListener {
 
-    private final DiscordBot bot;
+  private final DiscordBot bot;
 
-    public DiscordEventListeners(Bot<Member, Role> bot) {
-        this.bot = (DiscordBot) bot;
-    }
+  public DiscordEventListeners(Bot<Member, Role> bot) {
+    this.bot = (DiscordBot) bot;
+  }
 
-    @Override
-    public void onEvent(Event event) {
-        if(event instanceof UserUpdateOnlineStatusEvent) {
-            UserUpdateOnlineStatusEvent onlineStatusEvent = (UserUpdateOnlineStatusEvent) event;
-            if(onlineStatusEvent.getGuild().equals(bot.getGuild())) {
-                boolean fromOffline = onlineStatusEvent.getOldOnlineStatus().equals(OnlineStatus.OFFLINE);
-                boolean toOffline = onlineStatusEvent.getNewOnlineStatus().equals(OnlineStatus.OFFLINE);
-                this.bot.getPlayerFactory().getPlayer(onlineStatusEvent.getMember()).thenAccept(player -> RankSyncApi.getApi().execute(new PlayerUpdateOnlineStatusEvent(player, fromOffline ? Status.OFFLINE : Status.ONLINE, toOffline ? Status.OFFLINE : Status.ONLINE)));
-            }
-        } else if(event instanceof ReadyEvent) {
-            this.bot.enable(event.getJDA());
-        } else if(event instanceof MessageReceivedEvent) {
-            MessageReceivedEvent messageReceivedEvent = (MessageReceivedEvent) event;
-            if(messageReceivedEvent.getGuild() != null && messageReceivedEvent.getGuild().equals(bot.getGuild())) {
-                if(messageReceivedEvent.getMessage().getContentStripped().startsWith("!")) {
-                    List<String> commandData = Arrays.asList(messageReceivedEvent.getMessage().getContentStripped().split(" "));
-                    String commandLabel = commandData.get(0).replaceFirst("!", "").toLowerCase();
-                    Command command = this.bot.getCommandFactory().getCommand(commandLabel);
-                    if(command != null) {
-                        this.bot.getPlayerFactory().getPlayer(messageReceivedEvent.getMember()).thenAccept(player -> {
-                            String message = command.execute(player, commandData.size() > 0 ? commandData.subList(1, commandData.size()) : new ArrayList<>());
-                            if(message != null) {
-                                messageReceivedEvent.getTextChannel().sendMessage(message).queue();
-                            }
-                        });
-                    }
-                }
-            }
+  @Override
+  public void onEvent(Event event) {
+    if (event instanceof UserUpdateOnlineStatusEvent) {
+      UserUpdateOnlineStatusEvent onlineStatusEvent = (UserUpdateOnlineStatusEvent) event;
+      if (onlineStatusEvent.getGuild().equals(bot.getGuild())) {
+        boolean fromOffline = onlineStatusEvent.getOldOnlineStatus().equals(OnlineStatus.OFFLINE);
+        boolean toOffline = onlineStatusEvent.getNewOnlineStatus().equals(OnlineStatus.OFFLINE);
+        this.bot.getPlayerFactory().getPlayer(onlineStatusEvent.getMember()).thenAccept(
+            player -> RankSyncApi.getApi().execute(new PlayerUpdateOnlineStatusEvent(player,
+                fromOffline ? Status.OFFLINE : Status.ONLINE,
+                toOffline ? Status.OFFLINE : Status.ONLINE)));
+      }
+    } else if (event instanceof ReadyEvent) {
+      this.bot.enable(event.getJDA());
+    } else if (event instanceof MessageReceivedEvent) {
+      MessageReceivedEvent messageReceivedEvent = (MessageReceivedEvent) event;
+      if (messageReceivedEvent.getGuild() != null && messageReceivedEvent.getGuild()
+          .equals(bot.getGuild())) {
+        if (messageReceivedEvent.getMessage().getContentStripped().startsWith("!")) {
+          List<String> commandData = Arrays
+              .asList(messageReceivedEvent.getMessage().getContentStripped().split(" "));
+          String commandLabel = commandData.get(0).replaceFirst("!", "").toLowerCase();
+          Command command = this.bot.getCommandFactory().getCommand(commandLabel);
+          if (command != null) {
+            this.bot.getPlayerFactory().getPlayer(messageReceivedEvent.getMember())
+                .thenAccept(player -> {
+                  String message = command.execute(player,
+                      commandData.size() > 0 ? commandData.subList(1, commandData.size())
+                          : new ArrayList<>());
+                  if (message != null) {
+                    messageReceivedEvent.getTextChannel().sendMessage(message).queue();
+                  }
+                });
+          }
         }
+      }
     }
+  }
 }

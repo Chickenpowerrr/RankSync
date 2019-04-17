@@ -12,13 +12,17 @@ import java.util.stream.Collectors;
 
 public class RankSyncTabCompleter implements TabCompleter {
 
-    private final List<String> possibilities = JavaPlugin.getPlugin(RankSyncPlugin.class).getLinkHelper().getLinkInfos().stream().map(LinkInfo::getName).map(String::toLowerCase).sorted().collect(Collectors.toList());
+  private final List<String> possibilities = JavaPlugin.getPlugin(RankSyncPlugin.class)
+      .getLinkHelper().getLinkInfos().stream().map(LinkInfo::getName).map(String::toLowerCase)
+      .sorted().collect(Collectors.toList());
 
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if(args.length == 1) {
-            return this.possibilities.stream().filter(name -> name.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
-        }
-        return null;
+  @Override
+  public List<String> onTabComplete(CommandSender sender, Command command, String alias,
+      String[] args) {
+    if (args.length == 1) {
+      return this.possibilities.stream().filter(name -> name.startsWith(args[0].toLowerCase()))
+          .collect(Collectors.toList());
     }
+    return null;
+  }
 }
