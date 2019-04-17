@@ -85,7 +85,6 @@ public final class RankSyncPlugin extends JavaPlugin {
 
     this.bots
         .put("discord", RankSyncApi.getApi().getBotFactory("Discord").getBot(new BasicProperties()
-            .addProperty("name", getConfig().getString("discord.name"))
             .addProperty("token", getConfig().getString("discord.token"))
             .addProperty("guild_id", getConfig().getLong("discord.guild-id"))
             .addProperty("type", getConfig().getString("database.type"))

@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * This interface contains all of the method needed to create a functional command that will get
- * accepted by the {@code CommandFactory}
+ * accepted by the CommandFactory
  *
  * @author Chickenpowerrr
  * @since 1.0.0

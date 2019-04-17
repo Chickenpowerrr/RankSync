@@ -12,11 +12,23 @@ import java.util.Map;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
+/**
+ * This class is a wrapper to retrieve data from a Yaml file
+ *
+ * @author Chickenpowerrr
+ * @since 1.2.0
+ */
 public class YamlFile extends AutoCreatingFile {
 
   private final Yaml yaml;
   private final Map<String, Object> values;
 
+  /**
+   * Sets the Yaml options to be pretty and load the values from the file
+   *
+   * @param basePath the path to the file
+   * @param fileName the name of the file
+   */
   public YamlFile(String basePath, String fileName) {
     super(basePath, fileName);
 
@@ -33,6 +45,9 @@ public class YamlFile extends AutoCreatingFile {
     }
   }
 
+  /**
+   * Saves the Yaml with the updated data
+   */
   @SuppressWarnings("unchecked")
   @Override
   public void save() {
@@ -64,21 +79,40 @@ public class YamlFile extends AutoCreatingFile {
     });
   }
 
+  /**
+   * Returns a value from the Yaml file
+   *
+   * @param path the path to the value
+   * @param <T> the type of the value
+   * @return the value at the given path
+   */
   @SuppressWarnings("unchecked")
   public <T> T getValue(String path) {
     return (T) this.values.get(path);
   }
 
+  /**
+   * Sets a value at the given path
+   *
+   * @param path the path to the value
+   * @param value the value that should get set
+   * @param <T> the type of the value
+   */
   public <T> void setValue(String path, T value) {
     this.values.put(path, value);
   }
 
+  /**
+   * Deletes a value from a given path
+   *
+   * @param path the path to the value
+   */
   public void removeValue(String path) {
     this.values.remove(path);
   }
 
   /**
-   * Gets the important data from the given Object and puts them into the given map
+   * Retrieves the important data from the given Object and puts them into the given map
    *
    * @param key the prefix that should be used to get the keys later on
    * @param object the object that should be checked
@@ -98,7 +132,7 @@ public class YamlFile extends AutoCreatingFile {
   }
 
   /**
-   * Gets the values from the Yaml generated Map
+   * Returns the values from the Yaml generated Map
    *
    * @param objects the Yaml generated Map
    * @return the new Map that contains the values without the other Maps inside of the Map

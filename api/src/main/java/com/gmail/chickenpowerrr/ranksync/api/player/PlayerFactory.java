@@ -26,7 +26,7 @@ public interface PlayerFactory<P> {
    * Returns a Player object based on its UUID that came from the other service
    *
    * @param uuid the UUID that represents this player on another service
-   * @return a {@code CompletableFuture} that will be completed whenever the player has been found
+   * @return a CompletableFuture that will be completed whenever the player has been found
    */
   CompletableFuture<Player> getPlayer(UUID uuid);
 
@@ -35,14 +35,14 @@ public interface PlayerFactory<P> {
    *
    * @param playerId the id that represents the player on the current service
    * @param uuid the uuid that represents the player on the other service
-   * @return a {@code CompletableFuture} that will be completed whenever the process is done
+   * @return a CompletableFuture that will be completed whenever the process is done
    */
   CompletableFuture<Void> setUuid(String playerId, UUID uuid);
 
   /**
-   * Returns the {@code Bot} that uses this factory
+   * Returns the Bot that uses this factory
    *
-   * @return the {@code Bot} that uses this factory
+   * @return the Bot that uses this factory
    */
   Bot<P, ?> getBot();
 }

@@ -42,18 +42,14 @@ public class YamlField {
   }
 
   /**
-   * Gives the Objects that don't have sub-values
-   *
-   * @return the Objects that don't have sub-values
+   * Returns the Objects that don't have sub-values
    */
   public Collection<Object> getLastLayer() {
     return this.lastLayer != null ? Collections.unmodifiableCollection(this.lastLayer) : null;
   }
 
   /**
-   * Gives child Fields of this Field
-   *
-   * @return the child Fields of this Field
+   * Returns child Fields of this Field
    */
   public Collection<Map<String, Object>> getNextLayer() {
     return this.nextLayer != null ? Collections.unmodifiableCollection(this.nextLayer) : null;

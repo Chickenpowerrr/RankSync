@@ -11,6 +11,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * This class contains the functionalities to get the representation of a synchronized player
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public class PlayerFactory implements
     com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory<Member> {
 
@@ -20,11 +26,22 @@ public class PlayerFactory implements
   private final Guild guild;
   @Getter private final Bot<Member, ?> bot;
 
+  /**
+   * @param bot the Bot that is running
+   * @param guild the Guild the Bot is running on
+   */
   private PlayerFactory(Bot<Member, ?> bot, Guild guild) {
     this.bot = bot;
     this.guild = guild;
   }
 
+  /**
+   * Lazily returns an instance based on the Guild the Bot is running on
+   *
+   * @param bot the Bot that is running
+   * @param guild the Guild the Bot is running on
+   * @return an instance based on the Guild the Bot is running on
+   */
   public static PlayerFactory getInstance(Bot<Member, ?> bot, Guild guild) {
     if (!instances.containsKey(guild)) {
       instances.put(guild, new PlayerFactory(bot, guild));
@@ -32,10 +49,23 @@ public class PlayerFactory implements
     return instances.get(guild);
   }
 
+  /**
+   * Lazily returns an instance based on the Guild the Bot is running on
+   *
+   * @param guild the Guild the Bot is running on
+   * @return an instance based on the Guild the Bot is running on
+   */
   static PlayerFactory getInstance(Guild guild) {
     return getInstance(null, guild);
   }
 
+  /**
+   * Updates the link for a given Discord user
+   *
+   * @param playerId the id that represents the Discord user
+   * @param uuid the uuid that represents the player on the other service
+   * @return a CompletableFuture that will be completed whenever the process is done
+   */
   @Override
   public CompletableFuture<Void> setUuid(String playerId, UUID uuid) {
     return getPlayer(this.guild.getMemberById(playerId)).thenAccept(player -> {
@@ -50,6 +80,12 @@ public class PlayerFactory implements
     });
   }
 
+  /**
+   * Turns a JDA member instance into a player that is supported by the RankSync API
+   *
+   * @param member the member object used by JDA, not the RankSync API
+   * @return the RankSync representation of the player
+   */
   @Override
   public CompletableFuture<Player> getPlayer(Member member) {
     CompletableFuture<Player> completableFuture = new CompletableFuture<>();
@@ -75,6 +111,12 @@ public class PlayerFactory implements
     return completableFuture;
   }
 
+  /**
+   * Returns a Player object based on its UUID that came from the other service
+   *
+   * @param uuid the UUID that represents this player on another service
+   * @return a CompletableFuture that will be completed whenever the player has been found
+   */
   @Override
   public CompletableFuture<Player> getPlayer(UUID uuid) {
     CompletableFuture<Player> completableFuture = new CompletableFuture<>();

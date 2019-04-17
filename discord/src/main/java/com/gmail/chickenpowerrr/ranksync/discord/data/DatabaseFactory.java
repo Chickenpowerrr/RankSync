@@ -9,6 +9,12 @@ import net.dv8tion.jda.core.entities.Guild;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class can be used to get a data storage for the ranks
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory {
 
   @Getter private static final Map<Guild, DatabaseFactory> instances = new HashMap<>();
@@ -22,6 +28,13 @@ public class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.da
     this.guild = guild;
   }
 
+  /**
+   * Lazily returns an instance based on the Guild the Bot is running on
+   *
+   * @param bot the Bot that is running
+   * @param guild the Guild the Bot is running on
+   * @return an instance based on the Guild the Bot is running on
+   */
   public static DatabaseFactory getInstance(Bot bot, Guild guild) {
     if (!instances.containsKey(guild)) {
       instances.put(guild, new DatabaseFactory(bot, guild));
@@ -29,10 +42,23 @@ public class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.da
     return instances.get(guild);
   }
 
+  /**
+   * Lazily returns an instance based on the Guild the Bot is running on
+   *
+   * @param guild the Guild the Bot is running on
+   * @return an instance based on the Guild the Bot is running on
+   */
   static DatabaseFactory getInstance(Guild guild) {
     return getInstance(null, guild);
   }
 
+  /**
+   * Returns a
+   *
+   * @param name the name of the database
+   * @param credentials the information that is needed to establish a connection with the database
+   * @return
+   */
   @Override
   public Database getDatabase(String name, Properties credentials) {
     if (this.databaseConstructorCache.containsKey(name)) {

@@ -19,10 +19,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class handles all of the useful Discord events, coming in through the JDA
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public class DiscordEventListeners implements EventListener {
 
   private final DiscordBot bot;
-
+  /**
+   * @param bot the running Discord Bot
+   */
   public DiscordEventListeners(Bot<Member, Role> bot) {
     this.bot = (DiscordBot) bot;
   }

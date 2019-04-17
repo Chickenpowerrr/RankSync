@@ -7,6 +7,12 @@ import net.dv8tion.jda.core.entities.Guild;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This interface manages all of the things that are needed to easily control the Discord commands
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public class CommandFactory implements
     com.gmail.chickenpowerrr.ranksync.api.command.CommandFactory {
 
@@ -16,11 +22,22 @@ public class CommandFactory implements
   private final Guild guild;
   private final Map<String, Command> commands = new HashMap<>();
 
+  /**
+   * @param bot the Bot that is running
+   * @param guild the Guild the Bot is running on
+   */
   private CommandFactory(Bot bot, Guild guild) {
     this.bot = bot;
     this.guild = guild;
   }
 
+  /**
+   * Lazily returns an instance based on the Guild the Bot is running on
+   *
+   * @param bot the Bot that is running
+   * @param guild the Guild the Bot is running on
+   * @return an instance based on the Guild the Bot is running on
+   */
   public static CommandFactory getInstance(Bot bot, Guild guild) {
     if (!instances.containsKey(guild)) {
       instances.put(guild, new CommandFactory(bot, guild));

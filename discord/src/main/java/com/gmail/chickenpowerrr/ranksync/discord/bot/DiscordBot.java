@@ -66,7 +66,8 @@ public class DiscordBot implements Bot<Member, Role> {
           .getInstance(this, guild);
       this.commandFactory = com.gmail.chickenpowerrr.ranksync.discord.command.CommandFactory
           .getInstance(this, guild);
-      this.effectiveDatabase = this.databaseFactory.getDatabase("type", this.properties);
+      this.effectiveDatabase = this.databaseFactory
+          .getDatabase(this.properties.getString("type"), this.properties);
       this.commandFactory.addCommand(new LinkCommand("link", new HashSet<>()));
       RankSyncApi.getApi().execute(new BotEnabledEvent(this));
     } else {

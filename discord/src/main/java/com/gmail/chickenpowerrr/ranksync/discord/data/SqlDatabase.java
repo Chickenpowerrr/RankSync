@@ -14,6 +14,12 @@ import java.util.concurrent.CompletableFuture;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * This class uses a SQL server to save the synchronization data
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 @Slf4j
 public class SqlDatabase implements Database {
 
@@ -21,6 +27,12 @@ public class SqlDatabase implements Database {
   private final RankResource rankResource;
   private final Bot<?, ?> bot;
 
+  /**
+   * Updates the database tables and sets up the connection
+   *
+   * @param bot the Discord bot
+   * @param properties the credentials for the SQL server
+   */
   SqlDatabase(Bot bot, Properties properties) {
     this.bot = bot;
 
@@ -59,11 +71,23 @@ public class SqlDatabase implements Database {
     }
   }
 
+  /**
+   * Returns the ranks of the rank resource
+   *
+   * @param uuid the id that represents the player on the other service
+   * @return the ranks of the rank resource
+   */
   @Override
   public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
     return this.rankResource.getRanks(uuid);
   }
 
+  /**
+   * Returns the Discord identifier linked to the UUID
+   *
+   * @param uuid the id that represents the player on the other service
+   * @return the Discord identifier linked to the UUID
+   */
   @Override
   public CompletableFuture<String> getPlayerId(UUID uuid) {
     CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
@@ -92,6 +116,13 @@ public class SqlDatabase implements Database {
     return completableFuture;
   }
 
+  /**
+   * Returns the id that represents a player on the other service by Discord identifier
+   *
+   * @param playerId the Discord identifier
+   * @return a CompletableFuture that will be completed whenever the id of the other service has
+   * been found
+   */
   @Override
   public CompletableFuture<UUID> getUuid(String playerId) {
     CompletableFuture<UUID> completableFuture = CompletableFuture.supplyAsync(() -> {
@@ -120,6 +151,14 @@ public class SqlDatabase implements Database {
     return completableFuture;
   }
 
+  /**
+   * Sets the id that represents a player on the other service by their Discord identifier
+   *
+   * @param playerId the Discord identifier
+   * @param uuid the id that represents the player on the other service
+   * @return a CompletableFuture that will be completed whenever the id of the other service has
+   * been linked to this service
+   */
   @Override
   public CompletableFuture<Void> setUuid(String playerId, UUID uuid) {
     return this.bot.getPlayerFactory().setUuid(playerId, uuid).thenAcceptAsync(a -> {
@@ -157,6 +196,12 @@ public class SqlDatabase implements Database {
     });
   }
 
+  /**
+   * Returns if the rank is a valid rank according to the rank resource
+   *
+   * @param rankName the name of the Rank
+   * @return if the rank is a valid rank according to the rank resource
+   */
   @Override
   public CompletableFuture<Boolean> isValidRank(String rankName) {
     CompletableFuture<Boolean> future = CompletableFuture
@@ -170,11 +215,22 @@ public class SqlDatabase implements Database {
     return future;
   }
 
+  /**
+   * This class updates the database to the right version
+   *
+   * @author Chickenpowerrr
+   * @since 1.2.0
+   */
   @AllArgsConstructor
   private class DatabaseUpdater {
 
     private final Connection connection;
 
+    /**
+     * Updates the database to the current version of data storage
+     *
+     * @param version the version the database has been designed for
+     */
     private void update(String version) {
       try (Statement statement = this.connection.createStatement()) {
         if (version != null) {
@@ -204,6 +260,9 @@ public class SqlDatabase implements Database {
       }
     }
 
+    /**
+     * Generates the default tables
+     */
     private void generateDefaultTables() {
       try (Statement statement = this.connection.createStatement()) {
         statement.execute("create table if not exists  bot" +
@@ -248,6 +307,9 @@ public class SqlDatabase implements Database {
       }
     }
 
+    /**
+     * Returns the version the database has been designed for
+     */
     private String getVersion() {
       try (Statement statement = this.connection.createStatement();
           ResultSet versionTable = statement.executeQuery("SHOW TABLES LIKE 'version';")) {
@@ -276,11 +338,17 @@ public class SqlDatabase implements Database {
     }
   }
 
+  /**
+   * Returns all of the ranks the rank resource contains
+   */
   @Override
   public Collection<String> getAvailableRanks() {
     return this.rankResource.getAvailableRanks();
   }
 
+  /**
+   * Returns if the ranks are case sensitive when they are requested by their name
+   */
   @Override
   public boolean hasCaseSensitiveRanks() {
     return this.rankResource.hasCaseSensitiveRanks();
