@@ -11,7 +11,7 @@ import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 public interface BotEvent extends Event {
 
   /**
-   * Get the bot that did something
+   * Returns the bot that did something
    *
    * @return the bot that did something
    */

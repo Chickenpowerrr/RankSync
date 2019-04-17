@@ -11,14 +11,12 @@ import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
 public interface BotFactory {
 
   /**
-   * Get the instance of a basic bot
-   *
-   * @return the instance of a normal bot
+   * Returns the instance of a basic bot
    */
   Bot getBot();
 
   /**
-   * Create an instance if this bot doesn't exists, if it does exist, you'll get the cached
+   * Creates an instance if this bot doesn't exists, if it does exist, you'll get the cached
    * instance
    *
    * @param properties the information that the Bot needs in order to set up properly

@@ -43,7 +43,6 @@ public class RankHelper {
 
         if (!minecraftChecked.get()) {
           minecraftChecked.set(true);
-
           if (bot.getEffectiveDatabase().hasCaseSensitiveRanks() && !bot.getEffectiveDatabase()
               .getAvailableRanks().contains(minecraftRank)) {
             log.error(minecraftRank + " is not a valid rank on Minecraft");

@@ -30,7 +30,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -43,7 +43,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -56,7 +56,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -69,7 +69,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -82,7 +82,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -95,7 +95,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -106,7 +106,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -117,7 +117,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -128,7 +128,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -139,7 +139,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -160,7 +160,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Tells if the cache contains a given key
+   * Returns if the cache contains a given key
    *
    * @param key the key that is used to save and request the data
    * @return true if the cache contains the given key, false if not
@@ -171,7 +171,7 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
-   * Tells if the cache contains a multiple given keys
+   * Returns if the cache contains a multiple given keys
    *
    * @param keys the keys that are used to save and request the data
    * @return true if the cache contains all of the given keys, false if not

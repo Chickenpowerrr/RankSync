@@ -10,7 +10,7 @@ package com.gmail.chickenpowerrr.ranksync.api.data;
 public interface Properties<T extends Properties> extends Cloneable {
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -19,7 +19,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   T addProperty(String key, Object value);
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -28,7 +28,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   T addProperty(String key, String value);
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -37,7 +37,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   T addProperty(String key, int value);
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -46,7 +46,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   T addProperty(String key, double value);
 
   /**
-   * Add a property to the cache
+   * Adds a property to the cache
    *
    * @param key the key that is used to save and request the data
    * @param value the value that should be saved
@@ -55,7 +55,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   T addProperty(String key, long value);
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -63,7 +63,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   Object getObject(String key);
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -71,7 +71,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   String getString(String key);
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -79,7 +79,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   int getInt(String key);
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -87,7 +87,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   double getDouble(String key);
 
   /**
-   * Get a property from the cache
+   * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
    * @return the cached data
@@ -95,7 +95,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   long getLong(String key);
 
   /**
-   * Tells if the cache contains a given key
+   * Returns if the cache contains a given key
    *
    * @param key the key that is used to save and request the data
    * @return true if the cache contains the given key, false if not
@@ -103,7 +103,7 @@ public interface Properties<T extends Properties> extends Cloneable {
   boolean has(String key);
 
   /**
-   * Tells if the cache contains a multiple given keys
+   * Returns if the cache contains a multiple given keys
    *
    * @param keys the keys that are used to save and request the data
    * @return true if the cache contains all of the given keys, false if not

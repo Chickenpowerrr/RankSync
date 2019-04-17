@@ -10,7 +10,7 @@ package com.gmail.chickenpowerrr.ranksync.api.command;
 public interface CommandFactory {
 
   /**
-   * Get a command based on its label
+   * Returns a command based on its label
    *
    * @param label the label that represents the command
    * @return the command that matches the given label

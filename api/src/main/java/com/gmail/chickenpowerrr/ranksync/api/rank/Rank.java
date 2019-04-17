@@ -9,9 +9,7 @@ package com.gmail.chickenpowerrr.ranksync.api.rank;
 public interface Rank {
 
   /**
-   * Get the name of the Rank
-   *
-   * @return the name of the Rank
+   * Returns the name of the Rank
    */
   String getName();
 }

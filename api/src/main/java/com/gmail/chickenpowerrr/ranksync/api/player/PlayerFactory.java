@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public interface PlayerFactory<P> {
 
   /**
-   * Turn an internally used player into a player that is supported by the RankSync API
+   * Turns an internally used player into a player that is supported by the RankSync API
    *
    * @param internalObject the player object used by the platform API, not the RankSync API
    * @return the RankSync representation of the player
@@ -23,7 +23,7 @@ public interface PlayerFactory<P> {
   CompletableFuture<Player> getPlayer(P internalObject);
 
   /**
-   * Get a Player object based on its UUID that came from the other service
+   * Returns a Player object based on its UUID that came from the other service
    *
    * @param uuid the UUID that represents this player on another service
    * @return a {@code CompletableFuture} that will be completed whenever the player has been found
@@ -31,7 +31,7 @@ public interface PlayerFactory<P> {
   CompletableFuture<Player> getPlayer(UUID uuid);
 
   /**
-   * Update the link for a given Player
+   * Updates the link for a given Player
    *
    * @param playerId the id that represents the player on the current service
    * @param uuid the uuid that represents the player on the other service
@@ -40,7 +40,7 @@ public interface PlayerFactory<P> {
   CompletableFuture<Void> setUuid(String playerId, UUID uuid);
 
   /**
-   * Get the {@code Bot} that uses this factory
+   * Returns the {@code Bot} that uses this factory
    *
    * @return the {@code Bot} that uses this factory
    */

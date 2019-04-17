@@ -15,52 +15,58 @@ import java.util.concurrent.CompletableFuture;
 public interface Database {
 
   /**
-   * Get the id that represents a player on the other service by their id on this service
+   * Returns the id that represents a player on the other service by their id on this service
    *
    * @param playerId the id that represents the player on this service
-   * @return a {@code CompletableFuture} that will be completed whenever the id of the other service
-   * has been found
+   * @return a CompletableFuture that will be completed whenever the id of the other service has
+   * been found
    */
   CompletableFuture<UUID> getUuid(String playerId);
 
   /**
-   * Set the id that represents a player on the other service by their id on this service
+   * Sets the id that represents a player on the other service by their id on this service
    *
    * @param playerId the id that represents the player on this service
    * @param uuid the id that represents the player on the other service
-   * @return a {@code CompletableFuture} that will be completed whenever the id of the other service
-   * has been linked to this service
+   * @return a CompletableFuture that will be completed whenever the id of the other service has
+   * been linked to this service
    */
   CompletableFuture<Void> setUuid(String playerId, UUID uuid);
 
   /**
-   * Get the id that represents a player on this service by their id on the other service
+   * Returns the id that represents a player on this service by their id on the other service
    *
    * @param uuid the id that represents the player on the other service
-   * @return a {@code CompletableFuture} that will be completed whenever the id of this service has
-   * been found
+   * @return a CompletableFuture that will be completed whenever the id of this service has been
+   * found
    */
   CompletableFuture<String> getPlayerId(UUID uuid);
 
   /**
-   * Get the ranks based on the id that represents the player on the other service
+   * Returns the ranks based on the id that represents the player on the other service
    *
    * @param uuid the id that represents the player on the other service
-   * @return a {@code CompletableFuture} that will be completed whenever the ranks of this service
-   * has been found
+   * @return a CompletableFuture that will be completed whenever the ranks of this service has been
+   * found
    */
   CompletableFuture<Collection<Rank>> getRanks(UUID uuid);
 
   /**
-   * Get the if a rank with the given name exists
+   * Returns the if a rank with the given name exists
    *
    * @param rankName the name of the Rank
-   * @return a {@code CompletableFuture} that will be completed whenever we know if the rank exists,
-   * true if it exists, false if it doesn't
+   * @return a CompletableFuture that will be completed whenever we know if the rank exists, true if
+   * it exists, false if it doesn't
    */
   CompletableFuture<Boolean> isValidRank(String rankName);
 
+  /**
+   * Returns all of the ranks the database contains
+   */
   Collection<String> getAvailableRanks();
 
+  /**
+   * Returns if the ranks are case sensitive when they are requested by their name
+   */
   boolean hasCaseSensitiveRanks();
 }

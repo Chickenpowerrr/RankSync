@@ -18,7 +18,7 @@ import java.util.Collection;
 public interface Bot<P, R> {
 
   /**
-   * Update the way the Bot should get its data
+   * Updates the way the Bot should get its data
    *
    * @param database the new way the Bot should get its data
    */
@@ -55,7 +55,7 @@ public interface Bot<P, R> {
   String getPlatform();
 
   /**
-   * Update the {@code LanguageHelper} that will be used to get the right translations
+   * Updates the {@code LanguageHelper} that will be used to get the right translations
    *
    * @param languageHelper the {@code LanguageHelper} that will be used to get the right
    * translations
@@ -63,13 +63,19 @@ public interface Bot<P, R> {
   void setLanguageHelper(LanguageHelper languageHelper);
 
   /**
-   * Update the Language that will be used to get the right translations
+   * Updates the Language that will be used to get the right translations
    *
    * @param string the Language that will be used to get the right translations
    */
   void setLanguage(String string);
 
+  /**
+   * Returns all of the ranks the database contains
+   */
   Collection<String> getAvailableRanks();
 
+  /**
+   * Returns if the ranks are case sensitive when they are requested by their name
+   */
   boolean hasCaseSensitiveRanks();
 }

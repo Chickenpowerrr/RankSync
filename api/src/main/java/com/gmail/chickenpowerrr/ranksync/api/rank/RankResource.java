@@ -22,7 +22,7 @@ public interface RankResource {
   CompletableFuture<Collection<Rank>> getRanks(UUID uuid);
 
   /**
-   * Updates the {@code Bot} that uses this Resource
+   * Sets the {@code Bot} that uses this Resource
    *
    * @param bot the instance of the bot that makes use of this Resource
    */
@@ -36,7 +36,13 @@ public interface RankResource {
    */
   boolean isValidRank(String name);
 
+  /**
+   * Returns all of the ranks the database contains
+   */
   Collection<String> getAvailableRanks();
 
+  /**
+   * Returns if the ranks are case sensitive when they are requested by their name
+   */
   boolean hasCaseSensitiveRanks();
 }

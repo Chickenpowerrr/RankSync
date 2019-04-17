@@ -39,7 +39,7 @@ public class BotPlayerRanksUpdateEvent implements PlayerEvent, BotEvent, Cancela
   }
 
   /**
-   * Get if the event got cancelled or not
+   * Returns if the event got cancelled or not
    *
    * @return true if the event got cancelled, false if it didn't
    */

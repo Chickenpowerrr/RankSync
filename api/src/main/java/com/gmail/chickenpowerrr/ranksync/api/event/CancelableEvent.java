@@ -10,14 +10,14 @@ package com.gmail.chickenpowerrr.ranksync.api.event;
 public interface CancelableEvent extends Event {
 
   /**
-   * Get if the event got cancelled or not
+   * Returns if the event got cancelled or not
    *
    * @return true if the event got cancelled, false if it didn't
    */
   boolean cancelled();
 
   /**
-   * Set if the event should get cancelled or not
+   * Sets if the event should get cancelled or not
    *
    * @param cancelled true if this event shouldn't happen, false if it should
    */

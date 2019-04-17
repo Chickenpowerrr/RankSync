@@ -14,16 +14,12 @@ import java.util.List;
 public interface Command {
 
   /**
-   * Get the 'name' of the command
-   *
-   * @return the 'name' of the command
+   * Returns the 'name' of the command
    */
   String getLabel();
 
   /**
-   * Get all of the aliases that, besides the name can be used to invoke this command
-   *
-   * @return all of the aliases that, besides the name can be used to invoke this command
+   * Returns all aliases that, besides the name can get used to invoke this command
    */
   Collection<String> getAliases();
 
@@ -37,7 +33,7 @@ public interface Command {
   boolean hasPermission(Player player);
 
   /**
-   * Execute the command for a specific player with the given arguments
+   * Executes the command for a specific player with the given arguments
    *
    * @param invoker the player that invokes the command
    * @param arguments the arguments that came with the execution of the command

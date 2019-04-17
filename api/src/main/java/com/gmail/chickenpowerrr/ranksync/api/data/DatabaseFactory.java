@@ -11,7 +11,7 @@ import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 public interface DatabaseFactory {
 
   /**
-   * Get a new database if the requested database doesn't exist, otherwise it will give the cached
+   * Returns a new database if the requested database doesn't exist, otherwise it will give the cached
    * database instance
    *
    * @param name the name of the database
@@ -22,7 +22,7 @@ public interface DatabaseFactory {
   Database getDatabase(String name, Properties credentials);
 
   /**
-   * Get the {@code Bot} that uses this factory
+   * Returns the {@code Bot} that uses this factory
    *
    * @return the {@code Bot} that uses this factory
    */

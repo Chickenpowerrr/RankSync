@@ -9,14 +9,12 @@ package com.gmail.chickenpowerrr.ranksync.api.event;
 public interface Listener<T extends Event> {
 
   /**
-   * Get the event this Listener is listening to
-   *
-   * @return the event this Listener is listening to
+   * Returns the event this Listener is listening to
    */
   Class<T> getTarget();
 
   /**
-   * Defines what will happen when the event gets called
+   * Sets what will happen when the event gets called
    *
    * @param event the event that triggered the method
    */

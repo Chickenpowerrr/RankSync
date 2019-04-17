@@ -15,61 +15,51 @@ import java.util.UUID;
 public interface Player {
 
   /**
-   * Get the ranks the Player currently has on this service
-   *
-   * @return the ranks the Player currently has on this service
+   * Returns the ranks the Player currently has on this service
    */
   Collection<Rank> getRanks();
 
   /**
-   * Set the ranks for the Player on this service
+   * Sets the ranks for the Player on this service
    *
    * @param ranks the ranks the Player should have
    */
   void setRanks(Collection<Rank> ranks);
 
   /**
-   * Get the id that represents the Player on the other service
-   *
-   * @return the id that represents the Player on the other service
+   * Returns the id that represents the Player on the other service
    */
   UUID getUuid();
 
   /**
-   * Get the id that represents the Player on this service
-   *
-   * @return the id that represents the Player on this service
+   * Returns the id that represents the Player on this service
    */
   String getPersonalId();
 
   /**
-   * Get the {@code Bot} that uses this player
-   *
-   * @return the {@code Bot} that uses this player
+   * Returns the Bot that uses this player
    */
   Bot getBot();
 
   /**
-   * Send a private message to the Player on this service
+   * Sends a private message to the Player on this service
    *
    * @param message the message the Player should receive
    */
   void sendPrivateMessage(String message);
 
   /**
-   * Get the name the Player wants to hear when you're talking to it
-   *
-   * @return the name the Player wants to hear when you're talking to it
+   * Returns the name the Player wants to hear when you're talking to it
    */
   String getFancyName();
 
   /**
-   * Synchronize the current ranks of this Player
+   * Synchronizes the current ranks of this Player
    */
   void updateRanks();
 
   /**
-   * Update the id that represents this player on the other service
+   * Sets the id that represents this player on the other service
    *
    * @param uuid the id that represents this player on the other service
    */

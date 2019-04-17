@@ -14,7 +14,7 @@ import java.util.Collection;
 public interface RankFactory<R> {
 
   /**
-   * Turn an internally used role into a role that is supported by the RankSync API
+   * Turns an internally used role into a role that is supported by the RankSync API
    *
    * @param internalRole the Rank object used by the platform API, not the RankSync API
    * @return the RankSync representation of the Role
@@ -22,7 +22,7 @@ public interface RankFactory<R> {
   Rank getRankFromRole(R internalRole);
 
   /**
-   * Turn internally used roles into roles that are supported by the RankSync API
+   * Turns internally used roles into roles that are supported by the RankSync API
    *
    * @param internalRoles the Rank objects used by the platform API, not the RankSync API
    * @return the RankSync representations of the Roles
@@ -30,7 +30,7 @@ public interface RankFactory<R> {
   Collection<Rank> getRanksFromRoles(Collection<R> internalRoles);
 
   /**
-   * Get the internally used role by its name
+   * Returns the internally used role by its name
    *
    * @param string the name of the role
    * @return the Rank object used by the platform API, not the RankSync API
@@ -38,7 +38,7 @@ public interface RankFactory<R> {
   R getRoleFromName(String string);
 
   /**
-   * Get the internally used roles by their names
+   * Returns the internally used roles by their names
    *
    * @param strings the names of the roles
    * @return the Rank objects used by the platform API, not the RankSync API
@@ -46,7 +46,7 @@ public interface RankFactory<R> {
   Collection<R> getRolesFromNames(Collection<String> strings);
 
   /**
-   * Turn the role supported by the RankSync API back into the role that is internally used by the
+   * Turns the role supported by the RankSync API back into the role that is internally used by the
    * used API
    *
    * @param rank the rank that can by used by the RankSync API
@@ -55,7 +55,7 @@ public interface RankFactory<R> {
   R getRoleFromRank(Rank rank);
 
   /**
-   * Turn the roles supported by the RankSync API back into the roles that are internally used by
+   * Turns the roles supported by the RankSync API back into the roles that are internally used by
    * the used API
    *
    * @param ranks the ranks that can by used by the RankSync API
@@ -64,9 +64,7 @@ public interface RankFactory<R> {
   Collection<R> getRolesFromRanks(Collection<Rank> ranks);
 
   /**
-   * Get the {@code Bot} that uses this factory
-   *
-   * @return the {@code Bot} that uses this factory
+   * Returns the Bot that uses this factory
    */
   Bot<?, R> getBot();
 }

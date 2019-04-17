@@ -11,9 +11,7 @@ import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 public interface PlayerEvent extends Event {
 
   /**
-   * Get the player that did something
-   *
-   * @return the player that did something
+   * Returns the player that did something
    */
   Player getPlayer();
 }
