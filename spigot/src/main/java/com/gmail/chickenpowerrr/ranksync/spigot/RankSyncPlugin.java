@@ -1,10 +1,10 @@
 package com.gmail.chickenpowerrr.ranksync.spigot;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
-import com.gmail.chickenpowerrr.ranksync.api.data.BasicProperties;
-import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.data.BasicProperties;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommandExecutor;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncTabCompleter;
@@ -21,6 +21,9 @@ import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.PlayerQuitEventL
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.LuckPermsRankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.VaultRankResource;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 import me.lucko.luckperms.LuckPerms;
 import net.milkbowl.vault.permission.Permission;
@@ -29,14 +32,10 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-
 public final class RankSyncPlugin extends JavaPlugin {
 
   @Getter private LinkHelper linkHelper;
-  private Map<String, Bot> bots = new HashMap<>();
+  private Map<String, Bot<?, ?>> bots = new HashMap<>();
   @Getter private RankHelper rankHelper;
 
   @SuppressWarnings("unchecked")
@@ -104,7 +103,7 @@ public final class RankSyncPlugin extends JavaPlugin {
     Bot discordBot = getBot("discord");
     rankResource.setBot(discordBot);
 
-    Map<String, Map<Bot, String>> syncedRanks = new HashMap<>();
+    Map<String, Map<Bot<?, ?>, String>> syncedRanks = new HashMap<>();
 
     try {
       ConfigurationSection configurationSection = getConfig().getConfigurationSection("ranks");

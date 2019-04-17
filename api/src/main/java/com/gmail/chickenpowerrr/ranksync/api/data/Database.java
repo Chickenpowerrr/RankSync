@@ -59,4 +59,8 @@ public interface Database {
    * true if it exists, false if it doesn't
    */
   CompletableFuture<Boolean> isValidRank(String rankName);
+
+  Collection<String> getAvailableRanks();
+
+  boolean hasCaseSensitiveRanks();
 }

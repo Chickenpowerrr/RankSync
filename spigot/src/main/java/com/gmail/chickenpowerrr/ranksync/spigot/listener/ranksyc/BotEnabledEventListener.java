@@ -17,6 +17,7 @@ public class BotEnabledEventListener implements Listener<BotEnabledEvent> {
 
   @Override
   public void onEvent(BotEnabledEvent event) {
-    rankHelper.validateRanks(event.getBot());
+    System.out.println("Enabled!");
+    this.rankHelper.validateRanks();
   }
 }

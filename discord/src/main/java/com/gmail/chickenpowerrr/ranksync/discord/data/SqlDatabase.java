@@ -192,7 +192,7 @@ public class SqlDatabase implements Database {
               generateDefaultTables();
               break;
             default:
-              log.warn("Your version: \"" + version + "\" isn't known by the database updater");
+              log.error("Your version: \"" + version + "\" isn't known by the database updater");
               break;
           }
         } else {
@@ -250,26 +250,39 @@ public class SqlDatabase implements Database {
 
     private String getVersion() {
       try (Statement statement = this.connection.createStatement();
-          ResultSet versionTable = statement.executeQuery("SHOW TABLES LIKE 'version';");
-          ResultSet botTable = statement.executeQuery("SHOW TABLES LIKE 'bot';");
-          ResultSet version = statement.executeQuery("SELECT version FROM version;")) {
+          ResultSet versionTable = statement.executeQuery("SHOW TABLES LIKE 'version';")) {
 
         if (versionTable.next()) {
-          if (version.next()) {
-            return version.getString("version");
-          } else {
-            return "1.2.0";
+          try(ResultSet version = statement.executeQuery("SELECT version FROM version;")) {
+            if (version.next()) {
+              return version.getString("version");
+            } else {
+              return "1.2.0";
+            }
           }
         } else {
-          if (botTable.next()) {
-            return "1.1.0";
-          } else {
-            return null;
+          try(ResultSet botTable = statement.executeQuery("SHOW TABLES LIKE 'bot';")) {
+            if (botTable.next()) {
+              return "1.1.0";
+            } else {
+              return null;
+            }
           }
         }
       } catch (SQLException e) {
+        e.printStackTrace();
         throw new RuntimeException(e);
       }
     }
+  }
+
+  @Override
+  public Collection<String> getAvailableRanks() {
+    return this.rankResource.getAvailableRanks();
+  }
+
+  @Override
+  public boolean hasCaseSensitiveRanks() {
+    return this.rankResource.hasCaseSensitiveRanks();
   }
 }

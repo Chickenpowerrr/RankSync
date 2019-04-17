@@ -44,7 +44,7 @@ public class DiscordEventListeners implements EventListener {
     } else if (event instanceof MessageReceivedEvent) {
       MessageReceivedEvent messageReceivedEvent = (MessageReceivedEvent) event;
       if (messageReceivedEvent.getGuild() != null && messageReceivedEvent.getGuild()
-          .equals(bot.getGuild())) {
+          .equals(this.bot.getGuild())) {
         if (messageReceivedEvent.getMessage().getContentStripped().startsWith("!")) {
           List<String> commandData = Arrays
               .asList(messageReceivedEvent.getMessage().getContentStripped().split(" "));

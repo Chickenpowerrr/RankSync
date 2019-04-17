@@ -50,4 +50,14 @@ public class VaultRankResource implements RankResource {
   public boolean isValidRank(String name) {
     return Arrays.asList(this.permission.getGroups()).contains(name);
   }
+
+  @Override
+  public Collection<String> getAvailableRanks() {
+    return Arrays.asList(this.permission.getGroups());
+  }
+
+  @Override
+  public boolean hasCaseSensitiveRanks() {
+    return false;
+  }
 }

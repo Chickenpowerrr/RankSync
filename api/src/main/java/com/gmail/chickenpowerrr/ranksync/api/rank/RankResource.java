@@ -35,4 +35,8 @@ public interface RankResource {
    * @return true if the rank is supported, false if it's not
    */
   boolean isValidRank(String name);
+
+  Collection<String> getAvailableRanks();
+
+  boolean hasCaseSensitiveRanks();
 }

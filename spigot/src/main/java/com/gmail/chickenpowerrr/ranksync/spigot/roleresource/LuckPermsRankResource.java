@@ -4,22 +4,20 @@ import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
-import lombok.Setter;
-import me.lucko.luckperms.api.LuckPermsApi;
-import me.lucko.luckperms.api.Node;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import lombok.Setter;
+import me.lucko.luckperms.api.LuckPermsApi;
+import me.lucko.luckperms.api.Node;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class LuckPermsRankResource implements RankResource {
 
   private final LuckPermsApi api;
-  @Setter
-  private Bot bot;
+  @Setter private Bot bot;
   private RankHelper rankHelper = null;
 
   public LuckPermsRankResource(LuckPermsApi luckPermsApi, Bot bot) {
@@ -56,5 +54,16 @@ public class LuckPermsRankResource implements RankResource {
   @Override
   public boolean isValidRank(String name) {
     return this.api.getGroup(name) != null;
+  }
+
+  @Override
+  public Collection<String> getAvailableRanks() {
+    return this.api.getGroups().stream().map(me.lucko.luckperms.api.Group::getName)
+        .collect(Collectors.toSet());
+  }
+
+  @Override
+  public boolean hasCaseSensitiveRanks() {
+    return false;
   }
 }

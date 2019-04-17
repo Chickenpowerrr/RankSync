@@ -6,6 +6,7 @@ import com.gmail.chickenpowerrr.ranksync.api.command.CommandFactory;
 import com.gmail.chickenpowerrr.ranksync.api.data.Database;
 import com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
+import java.util.Collection;
 
 /**
  * This interface is primary used to control all of the factories that can be used to get the data
@@ -67,4 +68,8 @@ public interface Bot<P, R> {
    * @param string the Language that will be used to get the right translations
    */
   void setLanguage(String string);
+
+  Collection<String> getAvailableRanks();
+
+  boolean hasCaseSensitiveRanks();
 }

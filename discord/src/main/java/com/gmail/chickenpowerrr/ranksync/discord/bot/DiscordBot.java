@@ -14,6 +14,8 @@ import com.gmail.chickenpowerrr.ranksync.api.event.BotForceShutdownEvent;
 import com.gmail.chickenpowerrr.ranksync.discord.event.DiscordEventListeners;
 import com.gmail.chickenpowerrr.ranksync.discord.command.LinkCommand;
 import com.gmail.chickenpowerrr.ranksync.discord.language.Translation;
+import java.util.Collection;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.core.JDA;
@@ -37,6 +39,8 @@ public class DiscordBot implements Bot<Member, Role> {
 
   private final Properties properties;
 
+  private JDA jda;
+
   DiscordBot(Properties properties) {
     this.properties = properties;
     Translation.setLanguageHelper((LanguageHelper) properties.getObject("language_helper"));
@@ -51,6 +55,7 @@ public class DiscordBot implements Bot<Member, Role> {
   }
 
   public void enable(JDA jda) {
+    this.jda = jda;
     this.guild = jda.getGuildById(this.properties.getLong("guild_id"));
     if (this.guild != null) {
       this.rankFactory = com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory
@@ -79,5 +84,16 @@ public class DiscordBot implements Bot<Member, Role> {
   @Override
   public void setLanguage(String string) {
     Translation.setLanguage(string);
+  }
+
+  @Override
+  public Collection<String> getAvailableRanks() {
+    return this.jda.getGuilds().stream().map(Guild::getRoles).flatMap(Collection::stream)
+        .map(Role::getName).collect(Collectors.toSet());
+  }
+
+  @Override
+  public boolean hasCaseSensitiveRanks() {
+    return false;
   }
 }

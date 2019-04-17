@@ -48,12 +48,17 @@ public class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.da
     if (credentials.has("type")) {
       switch (credentials.getString("type").toLowerCase()) {
         case "sql":
+        case "sequel":
+        case "mariadb":
+        case "mysql":
           database = new SqlDatabase(this.bot, credentials);
           break;
         case "yaml":
+        case "file":
+        case "yml":
           String basePath = credentials.getString("base_path");
           if (basePath != null) {
-            database = new YamlDatabase(credentials, basePath);
+            database = new YamlDatabase(this.bot, credentials, basePath);
           } else {
             throw new IllegalStateException("The Yaml resource needs a path");
           }
