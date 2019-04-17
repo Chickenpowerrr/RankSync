@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.data;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import lombok.Getter;
  * @author Chickenpowerrr
  * @since 1.2.0
  */
-class YamlField {
+public class YamlField {
 
   @Getter private final String key;
   private final Collection<Object> lastLayer;
@@ -46,7 +46,7 @@ class YamlField {
    *
    * @return the Objects that don't have sub-values
    */
-  Collection<Object> getLastLayer() {
+  public Collection<Object> getLastLayer() {
     return this.lastLayer != null ? Collections.unmodifiableCollection(this.lastLayer) : null;
   }
 
@@ -55,7 +55,7 @@ class YamlField {
    *
    * @return the child Fields of this Field
    */
-  Collection<Map<String, Object>> getNextLayer() {
+  public Collection<Map<String, Object>> getNextLayer() {
     return this.nextLayer != null ? Collections.unmodifiableCollection(this.nextLayer) : null;
   }
 }

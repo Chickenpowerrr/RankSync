@@ -1,9 +1,9 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.language;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import lombok.Setter;
 
-enum Translation {
+public enum Translation {
 
     LINK_COMMAND_ALREADY_LINKED,
     LINK_COMMAND_RIGHTTHERE,

@@ -1,9 +1,10 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.command;
 
 import com.gmail.chickenpowerrr.ranksync.api.command.Command;
 import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.event.PlayerLinkCodeCreateEvent;
+import com.gmail.chickenpowerrr.ranksync.discord.language.Translation;
 import lombok.Getter;
 
 import java.util.*;
@@ -18,7 +19,7 @@ public class LinkCommand implements Command {
 
     private final Map<String, Long> timeOuts = new HashMap<>();
 
-    LinkCommand(String label, Collection<String> aliases) {
+    public LinkCommand(String label, Collection<String> aliases) {
         this.label = label;
         this.aliases = aliases;
 
@@ -40,7 +41,8 @@ public class LinkCommand implements Command {
                 String secretKey = randomString(10 + random.nextInt(2));
                 RankSyncApi.getApi().execute(new PlayerLinkCodeCreateEvent(invoker, secretKey));
 
-                invoker.sendPrivateMessage(Translation.LINK_COMMAND_PRIVATE.getTranslation("name", invoker.getFancyName(), "key", secretKey));
+                invoker.sendPrivateMessage(
+                    Translation.LINK_COMMAND_PRIVATE.getTranslation("name", invoker.getFancyName(), "key", secretKey));
                 return Translation.LINK_COMMAND_PUBLIC.getTranslation("name", invoker.getFancyName());
             } else {
                 invoker.sendPrivateMessage(Translation.LINK_COMMAND_RIGHTTHERE.getTranslation());

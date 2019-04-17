@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.data;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.data.Database;
@@ -9,7 +9,7 @@ import net.dv8tion.jda.core.entities.Guild;
 import java.util.HashMap;
 import java.util.Map;
 
-class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory {
+public class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory {
 
     @Getter private static final Map<Guild, DatabaseFactory> instances = new HashMap<>();
 
@@ -22,7 +22,7 @@ class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.data.Data
         this.guild = guild;
     }
 
-    static DatabaseFactory getInstance(Bot bot, Guild guild) {
+    public static DatabaseFactory getInstance(Bot bot, Guild guild) {
         if(!instances.containsKey(guild)) {
             instances.put(guild, new DatabaseFactory(bot, guild));
         }

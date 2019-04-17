@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.rank;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory<Role> {
+public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory<Role> {
 
     private static final Map<Guild, RankFactory> instances = new HashMap<>();
 
@@ -26,7 +26,7 @@ class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.RankFact
         this.guild = guild;
     }
 
-    static RankFactory getInstance(Bot<?, Role> bot, Guild guild) {
+    public static RankFactory getInstance(Bot<?, Role> bot, Guild guild) {
         if(!instances.containsKey(guild)) {
             if(guild != null) {
                 instances.put(guild, new RankFactory(bot, guild));
@@ -35,7 +35,7 @@ class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.RankFact
         return instances.get(guild);
     }
 
-    static RankFactory getInstance(Guild guild) {
+    public static RankFactory getInstance(Guild guild) {
         return getInstance(null, guild);
     }
 
@@ -43,7 +43,7 @@ class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.RankFact
     public Rank getRankFromRole(Role role) {
         if(role != null) {
             if(!this.ranks.containsKey(role)) {
-                this.ranks.put(role, new com.gmail.chickenpowerrr.ranksync.discord.Rank(role));
+                this.ranks.put(role, new com.gmail.chickenpowerrr.ranksync.discord.rank.Rank(role));
             }
             return this.ranks.get(role);
         } else {
@@ -80,8 +80,8 @@ class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.RankFact
 
     @Override
     public Role getRoleFromRank(Rank rank) {
-        if(rank instanceof com.gmail.chickenpowerrr.ranksync.discord.Rank) {
-            return ((com.gmail.chickenpowerrr.ranksync.discord.Rank) rank).getRole();
+        if(rank instanceof com.gmail.chickenpowerrr.ranksync.discord.rank.Rank) {
+            return ((com.gmail.chickenpowerrr.ranksync.discord.rank.Rank) rank).getRole();
         } else {
             return getRoleFromName(rank.getName());
         }

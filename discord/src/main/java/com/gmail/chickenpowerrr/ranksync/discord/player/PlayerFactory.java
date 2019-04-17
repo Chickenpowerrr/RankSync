@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.player;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.player.Player;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-class PlayerFactory implements com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory<Member> {
+public class PlayerFactory implements com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory<Member> {
 
     private static final Map<Guild, PlayerFactory> instances = new HashMap<>();
 
@@ -24,7 +24,7 @@ class PlayerFactory implements com.gmail.chickenpowerrr.ranksync.api.player.Play
         this.guild = guild;
     }
 
-    static PlayerFactory getInstance(Bot<Member, ?> bot, Guild guild) {
+    public static PlayerFactory getInstance(Bot<Member, ?> bot, Guild guild) {
         if(!instances.containsKey(guild)) {
             instances.put(guild, new PlayerFactory(bot, guild));
         }
@@ -57,7 +57,7 @@ class PlayerFactory implements com.gmail.chickenpowerrr.ranksync.api.player.Play
             if(this.players.containsKey(uuid)) {
                 player = this.players.get(uuid);
             } else {
-                player = new com.gmail.chickenpowerrr.ranksync.discord.Player(uuid, member, this.bot);
+                player = new com.gmail.chickenpowerrr.ranksync.discord.player.Player(uuid, member, this.bot);
                 if(uuid != null) {
                     this.players.put(uuid, player);
                 }
@@ -79,7 +79,7 @@ class PlayerFactory implements com.gmail.chickenpowerrr.ranksync.api.player.Play
 
         this.bot.getEffectiveDatabase().getPlayerId(uuid).thenAccept(identifier -> {
             if(identifier != null) {
-                completableFuture.complete(new com.gmail.chickenpowerrr.ranksync.discord.Player(uuid, this.guild.getMemberById(identifier), this.bot));
+                completableFuture.complete(new com.gmail.chickenpowerrr.ranksync.discord.player.Player(uuid, this.guild.getMemberById(identifier), this.bot));
             } else {
                 completableFuture.complete(null);
             }

@@ -1,10 +1,11 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.event;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.command.Command;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.player.Status;
 import com.gmail.chickenpowerrr.ranksync.api.event.PlayerUpdateOnlineStatusEvent;
+import com.gmail.chickenpowerrr.ranksync.discord.bot.DiscordBot;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
@@ -18,11 +19,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class DiscordEventListeners implements EventListener {
+public class DiscordEventListeners implements EventListener {
 
     private final DiscordBot bot;
 
-    DiscordEventListeners(Bot<Member, Role> bot) {
+    public DiscordEventListeners(Bot<Member, Role> bot) {
         this.bot = (DiscordBot) bot;
     }
 

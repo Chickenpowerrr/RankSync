@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.command;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.command.Command;
@@ -21,7 +21,7 @@ public class CommandFactory implements
         this.guild = guild;
     }
 
-    static CommandFactory getInstance(Bot bot, Guild guild) {
+    public static CommandFactory getInstance(Bot bot, Guild guild) {
         if(!instances.containsKey(guild)) {
             instances.put(guild, new CommandFactory(bot, guild));
         }

@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.bot;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import com.gmail.chickenpowerrr.ranksync.api.*;
@@ -11,6 +11,9 @@ import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotEnabledEvent;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotForceShutdownEvent;
+import com.gmail.chickenpowerrr.ranksync.discord.event.DiscordEventListeners;
+import com.gmail.chickenpowerrr.ranksync.discord.command.LinkCommand;
+import com.gmail.chickenpowerrr.ranksync.discord.language.Translation;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.core.JDA;
@@ -22,7 +25,7 @@ import net.dv8tion.jda.core.entities.Role;
 import javax.security.auth.login.LoginException;
 import java.util.HashSet;
 
-class DiscordBot implements Bot<Member, Role> {
+public class DiscordBot implements Bot<Member, Role> {
 
     @Getter private Guild guild;
     @Getter private final String name;
@@ -48,13 +51,17 @@ class DiscordBot implements Bot<Member, Role> {
         }
     }
 
-    void enable(JDA jda) {
+    public void enable(JDA jda) {
         this.guild = jda.getGuildById(this.properties.getLong("guild_id"));
         if(this.guild != null) {
-            this.rankFactory = com.gmail.chickenpowerrr.ranksync.discord.RankFactory.getInstance(this, guild);
-            this.playerFactory = com.gmail.chickenpowerrr.ranksync.discord.PlayerFactory.getInstance(this, guild);
-            this.databaseFactory = com.gmail.chickenpowerrr.ranksync.discord.DatabaseFactory.getInstance(this, guild);
-            this.commandFactory = com.gmail.chickenpowerrr.ranksync.discord.CommandFactory.getInstance(this, guild);
+            this.rankFactory = com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory
+                .getInstance(this, guild);
+            this.playerFactory = com.gmail.chickenpowerrr.ranksync.discord.player.PlayerFactory
+                .getInstance(this, guild);
+            this.databaseFactory = com.gmail.chickenpowerrr.ranksync.discord.data.DatabaseFactory
+                .getInstance(this, guild);
+            this.commandFactory = com.gmail.chickenpowerrr.ranksync.discord.command.CommandFactory
+                .getInstance(this, guild);
             this.effectiveDatabase = this.databaseFactory.getDatabase("type", this.properties);
             this.commandFactory.addCommand(new LinkCommand("link", new HashSet<>()));
             RankSyncApi.getApi().execute(new BotEnabledEvent(this));

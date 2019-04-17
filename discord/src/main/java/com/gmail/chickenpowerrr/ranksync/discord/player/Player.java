@@ -1,9 +1,10 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.player;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotPlayerRanksUpdateEvent;
+import com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.core.entities.Member;
@@ -14,7 +15,7 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Player {
+public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Player {
 
     @Getter @Setter private UUID uuid;
     private final Member member;

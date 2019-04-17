@@ -1,7 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.manager;
 
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
-import com.gmail.chickenpowerrr.ranksync.discord.BotFactory;
+import com.gmail.chickenpowerrr.ranksync.discord.bot.BotFactory;
 import lombok.Getter;
 
 public class RankSyncManager {

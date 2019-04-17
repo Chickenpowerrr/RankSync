@@ -1,4 +1,4 @@
-package com.gmail.chickenpowerrr.ranksync.discord;
+package com.gmail.chickenpowerrr.ranksync.discord.data;
 
 import com.gmail.chickenpowerrr.ranksync.api.data.AbstractFileDatabase;
 import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
