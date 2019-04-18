@@ -16,12 +16,21 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+/**
+ * This class uses Vault to get a Player's ranks
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public class VaultRankResource implements RankResource {
 
   private final Permission permission;
   @Setter private Bot bot;
   private RankHelper rankHelper = null;
 
+  /**
+   * @param permission the Vault object used for permissions
+   */
   public VaultRankResource(Permission permission) {
     this.permission = permission;
   }
@@ -56,6 +65,11 @@ public class VaultRankResource implements RankResource {
     return Arrays.asList(this.permission.getGroups());
   }
 
+  /**
+   * Returns if the ranks are case sensitive when they are requested by their name
+   *
+   * @return false
+   */
   @Override
   public boolean hasCaseSensitiveRanks() {
     return false;

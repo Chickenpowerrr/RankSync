@@ -13,6 +13,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.stream.Collectors;
 
+/**
+ * This class handles any incoming /unsync command
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public class UnSyncCommandExecutor implements CommandExecutor {
 
   private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
@@ -21,6 +27,15 @@ public class UnSyncCommandExecutor implements CommandExecutor {
       .getLinkInfos().stream().sorted().map(LinkInfo::getName)
       .collect(Collectors.joining("/", "<", ">"));
 
+  /**
+   * Unlinks a Minecraft account if the account has been linked
+   *
+   * @param sender the player who whats to sync its account
+   * @param command the command the player executed
+   * @param label the command label the player used
+   * @param args the arguments the player gave with the execution of the command
+   * @return true
+   */
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (sender instanceof Player) {

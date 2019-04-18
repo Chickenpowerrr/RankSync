@@ -5,6 +5,12 @@ import com.gmail.chickenpowerrr.ranksync.api.event.Listener;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.RankHelper;
 import lombok.AllArgsConstructor;
 
+/**
+ * This class validates all ranks when the Bot enables
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 @AllArgsConstructor
 public class BotEnabledEventListener implements Listener<BotEnabledEvent> {
 
@@ -15,9 +21,13 @@ public class BotEnabledEventListener implements Listener<BotEnabledEvent> {
     return BotEnabledEvent.class;
   }
 
+  /**
+   * Validates the ranks used by this Bot
+   *
+   * @param event the event that triggered the method
+   */
   @Override
   public void onEvent(BotEnabledEvent event) {
-    System.out.println("Enabled!");
     this.rankHelper.validateRanks();
   }
 }

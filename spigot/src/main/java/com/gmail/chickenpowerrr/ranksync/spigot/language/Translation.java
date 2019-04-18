@@ -4,6 +4,12 @@ import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import lombok.Setter;
 import org.bukkit.ChatColor;
 
+/**
+ * This enum contains the translations that can get used by the plugin
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public enum Translation {
 
   STARTUP_TRANSLATIONS,
@@ -34,6 +40,12 @@ public enum Translation {
     this.key = key;
   }
 
+  /**
+   * Returns a translation based on the placeholders
+   *
+   * @param replacements the placeholders (placeholder, replacement, placeholder, replacement, etc.)
+   * @return a translation based on the placeholders
+   */
   public String getTranslation(String... replacements) {
     String message = languageHelper.getMessage(language, this.key);
 

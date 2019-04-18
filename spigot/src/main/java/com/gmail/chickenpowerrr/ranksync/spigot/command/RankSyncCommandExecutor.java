@@ -14,6 +14,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * This class handles any incoming /sync command
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public class RankSyncCommandExecutor implements CommandExecutor {
 
   private final RankSyncPlugin rankSyncPlugin = JavaPlugin.getPlugin(RankSyncPlugin.class);
@@ -22,6 +28,15 @@ public class RankSyncCommandExecutor implements CommandExecutor {
       .getLinkInfos().stream().sorted().map(LinkInfo::getName)
       .collect(Collectors.joining("/", "<", ">"));
 
+  /**
+   * Links a Minecraft account if the player has a valid code
+   *
+   * @param sender the player who whats to sync its account
+   * @param command the command the player executed
+   * @param label the command label the player used
+   * @param args the arguments the player gave with the execution of the command
+   * @return true
+   */
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (sender instanceof Player) {

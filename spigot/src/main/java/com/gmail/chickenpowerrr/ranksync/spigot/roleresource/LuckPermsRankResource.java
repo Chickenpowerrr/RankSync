@@ -14,17 +14,30 @@ import me.lucko.luckperms.api.LuckPermsApi;
 import me.lucko.luckperms.api.Node;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * This class uses LuckPerms to get a Player's ranks
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public class LuckPermsRankResource implements RankResource {
 
   private final LuckPermsApi api;
   @Setter private Bot bot;
   private RankHelper rankHelper = null;
 
+  /**
+   * @param luckPermsApi the LuckPermsApi instance that is currently used on the server
+   * @param bot the Bot that is giving the ranks to players
+   */
   public LuckPermsRankResource(LuckPermsApi luckPermsApi, Bot bot) {
     this.api = luckPermsApi;
     this.bot = bot;
   }
 
+  /**
+   * @param luckPermsApi the LuckPermsApi instance that is currently used on the server
+   */
   public LuckPermsRankResource(LuckPermsApi luckPermsApi) {
     this(luckPermsApi, null);
   }
@@ -62,6 +75,11 @@ public class LuckPermsRankResource implements RankResource {
         .collect(Collectors.toSet());
   }
 
+  /**
+   * Returns if the ranks are case sensitive when they are requested by their name
+   *
+   * @return false
+   */
   @Override
   public boolean hasCaseSensitiveRanks() {
     return false;

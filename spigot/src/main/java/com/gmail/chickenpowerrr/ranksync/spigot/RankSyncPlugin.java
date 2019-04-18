@@ -32,12 +32,21 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * This class starts all of the parts needed to sync Ranks with the given platforms
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public final class RankSyncPlugin extends JavaPlugin {
 
   @Getter private LinkHelper linkHelper;
   private Map<String, Bot<?, ?>> bots = new HashMap<>();
   @Getter private RankHelper rankHelper;
 
+  /**
+   * Reads the plugin.yml and starts the Objects required to synchronize the ranks
+   */
   @SuppressWarnings("unchecked")
   @Override
   public void onEnable() {
@@ -144,6 +153,12 @@ public final class RankSyncPlugin extends JavaPlugin {
         .getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
   }
 
+  /**
+   * Returns a Bot by its name
+   *
+   * @param name the name of the Bot
+   * @return the Bot that goes by the given name
+   */
   public Bot<?, ?> getBot(String name) {
     return this.bots.get(name.toLowerCase());
   }
