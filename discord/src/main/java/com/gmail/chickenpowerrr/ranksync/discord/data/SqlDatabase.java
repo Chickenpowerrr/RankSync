@@ -5,6 +5,7 @@ import com.gmail.chickenpowerrr.ranksync.api.data.Database;
 import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
+import com.gmail.chickenpowerrr.ranksync.discord.language.Translation;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.*;
@@ -248,7 +249,7 @@ public class SqlDatabase implements Database {
               generateDefaultTables();
               break;
             default:
-              log.error("Your version: \"" + version + "\" isn't known by the database updater");
+              log.error(Translation.DATABASE_VERSION_UNKNOWN.getTranslation("version", version));
               break;
           }
         } else {

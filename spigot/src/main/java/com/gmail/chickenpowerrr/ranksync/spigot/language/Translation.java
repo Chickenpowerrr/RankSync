@@ -25,7 +25,8 @@ public enum Translation {
   UNSYNC_COMMAND_NOT_LINKED,
   UNSYNC_COMMAND_INVALID_SERVICE,
   UNSYNC_COMMAND_USAGE,
-  DISCORD_LINKINFO;
+  DISCORD_LINKINFO,
+  INVALID_RANK;
 
   @Setter private static LanguageHelper languageHelper;
   @Setter private static String language;

@@ -2,6 +2,7 @@ package com.gmail.chickenpowerrr.ranksync.spigot.roleresource;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
@@ -57,20 +58,24 @@ public class RankHelper {
 
       syncedRanks.forEach((bot, syncedRank) -> {
         if (bot.hasCaseSensitiveRanks() && !bot.getAvailableRanks().contains(syncedRank)) {
-          log.error(syncedRank + " is not a valid rank on " + bot.getPlatform());
+          log.error(Translation.INVALID_RANK
+              .getTranslation("rank", syncedRank, "platform", bot.getPlatform()));
         } else if (bot.getAvailableRanks().stream()
             .noneMatch(ranks -> ranks.equalsIgnoreCase(syncedRank))) {
-          log.error(syncedRank + " is not a valid rank on " + bot.getPlatform());
+          log.error(Translation.INVALID_RANK
+              .getTranslation("rank", syncedRank, "platform", bot.getPlatform()));
         }
 
         if (!minecraftChecked.get()) {
           minecraftChecked.set(true);
           if (bot.getEffectiveDatabase().hasCaseSensitiveRanks() && !bot.getEffectiveDatabase()
               .getAvailableRanks().contains(minecraftRank)) {
-            log.error(minecraftRank + " is not a valid rank on Minecraft");
+            log.error(Translation.INVALID_RANK
+                .getTranslation("rank", syncedRank, "platform", "Minecraft"));
           } else if (bot.getEffectiveDatabase().getAvailableRanks().stream()
               .noneMatch(ranks -> ranks.equalsIgnoreCase(minecraftRank))) {
-            log.error(minecraftRank + " is not a valid rank on Minecraft");
+            log.error(Translation.INVALID_RANK
+                .getTranslation("rank", syncedRank, "platform", "Minecraft"));
           }
         }
       });

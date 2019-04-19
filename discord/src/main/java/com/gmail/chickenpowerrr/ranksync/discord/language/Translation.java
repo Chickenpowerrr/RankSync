@@ -15,7 +15,8 @@ public enum Translation {
   LINK_COMMAND_RIGHTTHERE,
   LINK_COMMAND_REQUEST_LIMIT,
   LINK_COMMAND_PUBLIC,
-  LINK_COMMAND_PRIVATE;
+  LINK_COMMAND_PRIVATE,
+  DATABASE_VERSION_UNKNOWN;
 
   @Setter private static LanguageHelper languageHelper;
   @Setter private static String language;
