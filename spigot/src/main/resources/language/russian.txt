@@ -1,7 +1,7 @@
 minecraft-startup-translations = Переводы были загружены. (took %time%ms)
 minecraft-startup-ranks = Ранги были загружены. (took %time%ms)
 minecraft-invalid-code = &4Введенный вами код недействителен или истек (коды истекают в течение 5 минут). Обратите внимание, что коды чувствительны к регистру!
-minecraft-ranksync-command-usage = &4Используйте эту команду следующим образом: &c/ranksync %services% <code>
+minecraft-ranksync-command-usage = &4Используйте эту команду следующим образом: &c/%command% %services% <code>
 minecraft-ranksync-command-request-limit = &4Воу-воу, полегче! Вам разрешено делать это только раз в &c2 &4секунды.
 minecraft-ranksync-command-linked = &aВы успешно привязали учётную запись!
 minecraft-ranksync-command-already-linked =&4Ваша учетная запись уже была привязана к &c%service%.
@@ -10,7 +10,7 @@ minecraft-command-playeronly = &4Выполнять эту команду раз
 minecraft-unsync-command-unlinked = &aВы отвязали учётную запись.
 minecraft-unsync-command-not-linked = &4Ваша учетная запись не была привязана к: &c%service%
 minecraft-unsync-command-invalid-service = &c%service% &4не является действительным сервисом. Пожалуйста, используйте один из следующих: &c%services%
-minecraft-unsync-command-usage = &4Используйте эту команду следующим образом: &c/unsync %services%
+minecraft-unsync-command-usage = &4Используйте эту команду следующим образом: &c/%command% %services%
 minecraft-discord-linkinfo = Используйте !link в канале Discord.
 minecraft-invalid-rank = %rank% не является действительным рангом на платформе %platform%
 discord-link-command-already-linked = Ваша учётная запись уже привязана, %name%!

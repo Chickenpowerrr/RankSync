@@ -63,13 +63,15 @@ public class RankSyncCommandExecutor implements CommandExecutor {
             });
           } else {
             sender.sendMessage(
-                Translation.RANKSYNC_COMMAND_USAGE.getTranslation("services", this.services));
+                Translation.RANKSYNC_COMMAND_USAGE
+                    .getTranslation("command", label.toLowerCase(), "services", this.services));
           }
           break;
         case 1:
           if (linkInfo == null) {
             sender.sendMessage(
-                Translation.RANKSYNC_COMMAND_USAGE.getTranslation("services", this.services));
+                Translation.RANKSYNC_COMMAND_USAGE
+                    .getTranslation("command", label.toLowerCase(), "services", this.services));
           } else {
             sender.sendMessage(Translation.RANKSYNC_COMMAND_GET_CODE
                 .getTranslation("explanation", linkInfo.getLinkExplanation(), "service",
@@ -78,7 +80,8 @@ public class RankSyncCommandExecutor implements CommandExecutor {
           break;
         default:
           sender.sendMessage(
-              Translation.RANKSYNC_COMMAND_USAGE.getTranslation("services", this.services));
+              Translation.RANKSYNC_COMMAND_USAGE
+                  .getTranslation("command", label.toLowerCase(), "services", this.services));
           break;
       }
     } else {

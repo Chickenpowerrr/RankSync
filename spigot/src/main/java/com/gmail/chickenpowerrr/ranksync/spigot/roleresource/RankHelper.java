@@ -71,11 +71,11 @@ public class RankHelper {
           if (bot.getEffectiveDatabase().hasCaseSensitiveRanks() && !bot.getEffectiveDatabase()
               .getAvailableRanks().contains(minecraftRank)) {
             log.error(Translation.INVALID_RANK
-                .getTranslation("rank", syncedRank, "platform", "Minecraft"));
+                .getTranslation("rank", minecraftRank, "platform", "Minecraft"));
           } else if (bot.getEffectiveDatabase().getAvailableRanks().stream()
               .noneMatch(ranks -> ranks.equalsIgnoreCase(minecraftRank))) {
             log.error(Translation.INVALID_RANK
-                .getTranslation("rank", syncedRank, "platform", "Minecraft"));
+                .getTranslation("rank", minecraftRank, "platform", "Minecraft"));
           }
         }
       });

@@ -1,7 +1,7 @@
 minecraft-startup-translations = De vertaling zijn ingeladen (duurde %time%ms)
 minecraft-startup-ranks = De rollen zijn ingeladen (duurde %time%ms)
 minecraft-invalid-code = &4Dit is geen valide code. Let erop dat deze codes hoofdlettergevoelig zijn. Hij kan ook verlopen zijn (codes verlopen na 5 minuten).
-minecraft-ranksync-command-usage = &4Gebruik dit commando alsjeblieft op de volgende manier: &c/ranksync %services% <code>
+minecraft-ranksync-command-usage = &4Gebruik dit commando alsjeblieft op de volgende manier: &c/%command% %services% <code>
 minecraft-ranksync-command-request-limit = &4Neem even je tijd, je mag dit elke &c2 &4seconden doen
 minecraft-ranksync-command-linked = &aJe account wordt nu gesynchroniseerd!
 minecraft-ranksync-command-already-linked =&4Je account is al gesynchroniseerd met &c%service%
@@ -10,7 +10,7 @@ minecraft-command-playeronly = &4Alleen spelers mogen dit commando uitvoeren!
 minecraft-unsync-command-unlinked = &aJe account wordt niet meer gesynchroniseerd!
 minecraft-unsync-command-not-linked = &4Je account is niet gesynchroniseerd met: &c%service%
 minecraft-unsync-command-invalid-service = &c%service% &4is geen valide service, gebruik alsjeblieft een van de volgende: &c%services%
-minecraft-unsync-command-usage = &4Gebruik dit commando alsjeblieft op de volgende manier: &c/unsync %services%
+minecraft-unsync-command-usage = &4Gebruik dit commando alsjeblieft op de volgende manier: &c/%command% %services%
 minecraft-discord-linkinfo = typ !link in het bot kanaal op Discord
 minecraft-invalid-rank = %rank% is geen valide rank op %platform%
 discord-link-command-already-linked = Jouw account is al gesynchroniseerd %name%

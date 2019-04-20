@@ -61,7 +61,7 @@ public class UnSyncCommandExecutor implements CommandExecutor {
         }
       } else {
         sender.sendMessage(
-            Translation.UNSYNC_COMMAND_USAGE.getTranslation("services", this.services));
+            Translation.UNSYNC_COMMAND_USAGE.getTranslation("command", label.toLowerCase(), "services", this.services));
       }
     } else {
       sender.sendMessage(Translation.COMMAND_PLAYERONLY.getTranslation());
