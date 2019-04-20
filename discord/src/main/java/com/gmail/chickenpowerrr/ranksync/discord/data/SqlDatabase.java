@@ -12,6 +12,7 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,13 +42,16 @@ public class SqlDatabase implements Database {
       this.dataSource = new HikariDataSource();
 
       this.dataSource.setMaximumPoolSize(properties.getInt("max_pool_size"));
-      this.dataSource.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+      this.dataSource.setDataSourceClassName("com.mysql.cj.jdbc.MysqlDataSource");
       this.dataSource.addDataSourceProperty("serverName", properties.getString("host"));
       this.dataSource.addDataSourceProperty("port", properties.getInt("port"));
       this.dataSource.addDataSourceProperty("databaseName", properties.getString("database"));
       this.dataSource.addDataSourceProperty("user", properties.getString("username"));
       this.dataSource.addDataSourceProperty("password", properties.getString("password"));
       this.dataSource.addDataSourceProperty("useSSL", false);
+      this.dataSource.addDataSourceProperty("serverTimezone", "UTC");
+
+      this.dataSource.setConnectionTimeout(TimeUnit.SECONDS.toMillis(10));
     } else {
       throw new IllegalStateException(
           "Not all of the required properties for an SQL database have been entered");

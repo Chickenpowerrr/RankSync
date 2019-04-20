@@ -33,9 +33,10 @@ public class YamlFile extends AutoCreatingFile {
     super(basePath, fileName);
 
     DumperOptions options = new DumperOptions();
-    options.setIndent(2);
-    options.setPrettyFlow(true);
-    options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+    // Pretty print for debugging purposes
+    //    options.setIndent(2);
+    //    options.setPrettyFlow(true);
+    //    options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
     this.yaml = new Yaml(options);
 
     try (InputStream inputStream = new FileInputStream(this)) {
