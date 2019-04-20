@@ -5,7 +5,7 @@
     <parent>
         <artifactId>ranksync</artifactId>
         <groupId>com.gmail.chickenpowerrr</groupId>
-        <version>1.1.0</version>
+        <version>1.2.0-alpha</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -35,11 +35,6 @@
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>net.sf.trove4j</groupId>
-                    <artifactId>trove4j</artifactId>
-                </exclusion>
-
-                <exclusion>
                     <groupId>club.minnced</groupId>
                     <artifactId>opus-java</artifactId>
                 </exclusion>
@@ -56,14 +51,14 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>2.7.8</version>
+            <version>3.3.1</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.44</version>
+            <version>8.0.15</version>
             <scope>compile</scope>
         </dependency>
 
@@ -78,6 +73,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.5</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.21</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

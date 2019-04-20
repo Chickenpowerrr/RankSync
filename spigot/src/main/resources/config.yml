@@ -2,13 +2,7 @@
 # For a more detailed explanation, please see https://github.com/Chickenpowerrr/RankSync/wiki/Language
 language: english
 
-# The basic setup for Discord
 discord:
-# This is NOT the name that will be displayed in Discord. This is a name that should
-# be unique because the Database will use it to identify which ranks should be linked.
-# if you set it equal to a bot that runs on another place, it will use the exact same
-# UUID's to link the accounts
-  name: "Your Bot"
 # The Discord token of your bot. More information on how you can create this token,
 # please use this tutorial on how to create a token:
 # https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token
@@ -18,18 +12,19 @@ discord:
   guild-id: 444222000
 # The basic setup where all of the data should be saved
 database:
-# The way the data should be saved, right now SQL is the only supported way of saving data
-  type: "SQL"
+# The way the data should be saved
+# There are two options: SQL and yaml
+  type: "yaml"
 
-# The basic SQL setup
+# The basic SQL setup, only relevant if you're going to use the SQL feature
   sql:
 # The maximum pool size for SQL
     max-pool-size: 10
-# The host that runs the SQL server
+# The host the SQL server is running on
     host: "127.0.0.1"
-# The port the SQL server runs on, it is 3306 by default
+# The SQL server port, it is 3306 by default
     port: 3306
-# The database that will contain all of the data
+# The target database in the SQL server
     database: "ranksync"
 # The username to login into the SQL server
     user: "root"

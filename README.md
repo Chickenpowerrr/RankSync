@@ -16,14 +16,15 @@ they will be detected automatically when your server runs one of these two plugi
 
 To store the data, right now we support the following ways of store:
 - MySQL
+- Yaml
 
 more ways to store data might get added in the future.
 
 ## Prerequisites
 Those are the things you'll need if you want to compile this project for yourself
-* Maven
-* Git
-* JDK 8+
+- Maven
+- Git
+- JDK 8+
 
 
 ## License

@@ -1,8 +1,8 @@
 package com.gmail.chickenpowerrr.ranksync.spigot.roleresource;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.Rank;
-import com.gmail.chickenpowerrr.ranksync.api.RankResource;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
 import lombok.Setter;
 import net.milkbowl.vault.permission.Permission;
@@ -16,34 +16,62 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+/**
+ * This class uses Vault to get a Player's ranks
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
 public class VaultRankResource implements RankResource {
 
-    private final Permission permission;
-    @Setter private Bot bot;
-    private RankHelper rankHelper = null;
+  private final Permission permission;
+  @Setter private Bot bot;
+  private RankHelper rankHelper = null;
 
-    public VaultRankResource(Permission permission) {
-        this.permission = permission;
+  /**
+   * @param permission the Vault object used for permissions
+   */
+  public VaultRankResource(Permission permission) {
+    this.permission = permission;
+  }
+
+  @Override
+  public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
+    if (this.rankHelper == null) {
+      this.rankHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getRankHelper();
     }
 
-    @Override
-    public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
-        if(this.rankHelper == null) {
-            this.rankHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getRankHelper();
-        }
+    CompletableFuture<Collection<Rank>> completableFuture = CompletableFuture.supplyAsync(
+        () -> Arrays.stream(this.permission
+            .getPlayerGroups(Bukkit.getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(uuid)))
+            .map(groupName -> this.rankHelper.getRank(this.bot, groupName)).filter(Objects::nonNull)
+            .collect(Collectors.toSet()));
 
-        CompletableFuture<Collection<Rank>> completableFuture = CompletableFuture.supplyAsync(() -> Arrays.stream(this.permission.getPlayerGroups(Bukkit.getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(uuid))).map(groupName -> this.rankHelper.getRank(this.bot, groupName)).filter(Objects::nonNull).collect(Collectors.toSet()));
+    completableFuture.exceptionally(throwable -> {
+      throwable.printStackTrace();
+      return null;
+    });
 
-        completableFuture.exceptionally(throwable -> {
-            throwable.printStackTrace();
-            return null;
-        });
+    return completableFuture;
+  }
 
-        return completableFuture;
-    }
+  @Override
+  public boolean isValidRank(String name) {
+    return Arrays.asList(this.permission.getGroups()).contains(name);
+  }
 
-    @Override
-    public boolean isValidRank(String name) {
-        return Arrays.asList(this.permission.getGroups()).contains(name);
-    }
+  @Override
+  public Collection<String> getAvailableRanks() {
+    return Arrays.asList(this.permission.getGroups());
+  }
+
+  /**
+   * Returns if the ranks are case sensitive when they are requested by their name
+   *
+   * @return false
+   */
+  @Override
+  public boolean hasCaseSensitiveRanks() {
+    return false;
+  }
 }

@@ -1,42 +1,84 @@
 package com.gmail.chickenpowerrr.ranksync.spigot.roleresource;
 
-import com.gmail.chickenpowerrr.ranksync.api.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.Rank;
-import lombok.AllArgsConstructor;
-
-import java.util.Collection;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 
-@AllArgsConstructor
+/**
+ * This class can be used to save the data from the config.yml and use it to sync the ranks
+ *
+ * @author Chickenpowerrr
+ * @since 1.0.0
+ */
+@Slf4j
 public class RankHelper {
 
-    private static final Logger LOGGER = Logger.getLogger(RankHelper.class.getSimpleName());
+  private static final Logger LOGGER = Logger.getLogger(RankHelper.class.getSimpleName());
 
-    private final Map<String, Map<Bot, String>> ranks;
+  private final Map<String, Map<Bot<?, ?>, String>> ranks;
 
-    public void validateRanks(Bot bot) {
-        this.ranks.values().stream().map(Map::entrySet).flatMap(Collection::stream).filter(entry -> entry.getKey().equals(bot)).map(Map.Entry::getValue).forEach(rank -> {
-            if(bot.getRankFactory().getRoleFromName(rank) == null) {
-                LOGGER.severe("The '" + bot.getName() + "' rank '" + rank + "' couldn't be found");
-            }
-        });
+  /**
+   * @param ranks a map with the synced ranks, with the key: Minecraft Rank and the value is a map
+   * with the Bot that syncs a rank and the value is the synced Rank
+   */
+  public RankHelper(Map<String, Map<Bot<?, ?>, String>> ranks) {
+    this.ranks = ranks;
+  }
 
-        for(String rank : this.ranks.keySet()) {
-            bot.getEffectiveDatabase().isValidRank(rank).thenAccept(valid -> {
-                if(!valid) {
-                    LOGGER.severe("The 'Minecraft' rank '" + rank + "' couldn't be found");
-                }
-            });
-        }
+  /**
+   * Returns a Rank based on the Bot that is able to give to users and the name of the Minecraft
+   * Rank
+   *
+   * @param bot the running Bot
+   * @param minecraftGroupName the name of the Minecraft Rank
+   * @return a Rank based on the Bot that is able to give to users and the name of the Rank
+   */
+  @SuppressWarnings("unchecked")
+  Rank getRank(Bot bot, String minecraftGroupName) {
+    if (this.ranks.containsKey(minecraftGroupName) && this.ranks.get(minecraftGroupName)
+        .containsKey(bot)) {
+      return bot.getRankFactory().getRankFromRole(
+          bot.getRankFactory().getRoleFromName(this.ranks.get(minecraftGroupName).get(bot)));
+    } else {
+      return null;
     }
+  }
 
-    @SuppressWarnings("unchecked")
-    Rank getRank(Bot bot, String minecraftGroupName) {
-        if(this.ranks.containsKey(minecraftGroupName) && this.ranks.get(minecraftGroupName).containsKey(bot)) {
-            return bot.getRankFactory().getRankFromRole(bot.getRankFactory().getRoleFromName(this.ranks.get(minecraftGroupName).get(bot)));
-        } else {
-            return null;
+  /**
+   * Validates all cached and if they don't exist in the given Bot or Minecraft server, a message
+   * will be send to the console
+   */
+  public void validateRanks() {
+    this.ranks.forEach((minecraftRank, syncedRanks) -> {
+      AtomicBoolean minecraftChecked = new AtomicBoolean(false);
+
+      syncedRanks.forEach((bot, syncedRank) -> {
+        if (bot.hasCaseSensitiveRanks() && !bot.getAvailableRanks().contains(syncedRank)) {
+          log.error(Translation.INVALID_RANK
+              .getTranslation("rank", syncedRank, "platform", bot.getPlatform()));
+        } else if (bot.getAvailableRanks().stream()
+            .noneMatch(ranks -> ranks.equalsIgnoreCase(syncedRank))) {
+          log.error(Translation.INVALID_RANK
+              .getTranslation("rank", syncedRank, "platform", bot.getPlatform()));
         }
-    }
+
+        if (!minecraftChecked.get()) {
+          minecraftChecked.set(true);
+          if (bot.getEffectiveDatabase().hasCaseSensitiveRanks() && !bot.getEffectiveDatabase()
+              .getAvailableRanks().contains(minecraftRank)) {
+            log.error(Translation.INVALID_RANK
+                .getTranslation("rank", minecraftRank, "platform", "Minecraft"));
+          } else if (bot.getEffectiveDatabase().getAvailableRanks().stream()
+              .noneMatch(ranks -> ranks.equalsIgnoreCase(minecraftRank))) {
+            log.error(Translation.INVALID_RANK
+                .getTranslation("rank", minecraftRank, "platform", "Minecraft"));
+          }
+        }
+      });
+    });
+  }
 }
