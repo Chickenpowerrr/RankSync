@@ -118,7 +118,7 @@ public final class RankSyncPlugin extends JavaPlugin {
         Map<String, Map<Bot<?, ?>, String>> syncedRanks = new HashMap<>();
 
         this.bots.forEach((botName, bot) -> {
-            Map<String, Object> ranks = getConfig().getConfigurationSection("ranks").getConfigurationSection(botName).getValues(false);
+            Map<String, Object> ranks = getConfig().getConfigurationSection("ranks." + botName).getValues(false);
             ranks.values().forEach(object -> {
                 ConfigurationSection rankInfo = (ConfigurationSection) object;
                 String minecraftRank = rankInfo.getString("minecraft");
