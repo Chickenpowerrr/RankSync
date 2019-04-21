@@ -78,4 +78,9 @@ public interface Bot<P, R> {
    * Returns if the ranks are case sensitive when they are requested by their name
    */
   boolean hasCaseSensitiveRanks();
+
+  /**
+   * Returns if the Bot has been enabled
+   */
+  boolean isEnabled();
 }

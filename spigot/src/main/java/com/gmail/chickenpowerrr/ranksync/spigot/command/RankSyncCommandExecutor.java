@@ -44,7 +44,7 @@ public class RankSyncCommandExecutor implements CommandExecutor {
       switch (args.length) {
         case 2:
           Bot<?, ?> bot = this.rankSyncPlugin.getBot(args[0]);
-          if (bot != null) {
+          if (bot != null && bot.isEnabled()) {
             bot.getPlayerFactory().getPlayer(((Player) sender).getUniqueId()).thenAccept(player -> {
               if (player == null) {
                 if (this.linkHelper
