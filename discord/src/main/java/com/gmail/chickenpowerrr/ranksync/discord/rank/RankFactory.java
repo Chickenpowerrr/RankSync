@@ -2,15 +2,16 @@ package com.gmail.chickenpowerrr.ranksync.discord.rank;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
-import lombok.Getter;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Role;
-
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Role;
 
 /**
  * This class contains the functionalities to get a representation of a Discord role
@@ -25,7 +26,9 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   private final Map<Role, Rank> ranks = new HashMap<>();
   private final Map<String, Role> roles = new HashMap<>();
   private final Guild guild;
-  @Getter private final Bot<?, Role> bot;
+  @Getter
+  private final Bot<?, Role> bot;
+  private final Collection<RankHelper> rankHelpers = new HashSet<>();
 
   /**
    * @param bot the Bot that is running
@@ -149,5 +152,27 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   @Override
   public Collection<Role> getRolesFromRanks(Collection<Rank> ranks) {
     return ranks.stream().map(this::getRoleFromRank).collect(Collectors.toSet());
+  }
+
+  /**
+   * Adds a RankHelper to validate all ranks
+   *
+   * @param rankHelper the helper that validates if the given ranks exist
+   */
+  @Override
+  public void addRankHelper(RankHelper rankHelper) {
+    this.rankHelpers.add(rankHelper);
+  }
+
+  /**
+   * Returns if the given rank is a valid platform rank according to the RankHelpers
+   *
+   * @param rank the rank that could be synchronized
+   * @return if the given rank is a valid platform rank according to the RankHelpers
+   */
+  @Override
+  public boolean isValidRank(Rank rank) {
+    return this.rankHelpers.stream()
+        .anyMatch(rankHelper -> rankHelper.isSynchronized(this.bot, rank));
   }
 }

@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0.0
  */
 @Slf4j
-public class RankHelper {
+public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper {
 
   private static final Logger LOGGER = Logger.getLogger(RankHelper.class.getSimpleName());
 
@@ -30,6 +30,19 @@ public class RankHelper {
   }
 
   /**
+   * Returns if the given rank has been synchronized over the platforms
+   *
+   * @param bot the bot that could synchronize the rank
+   * @param rank the rank that could be synchronized
+   * @return if the given rank has been synchronized over the platforms
+   */
+  @Override
+  public boolean isSynchronized(Bot bot, Rank rank) {
+    return this.ranks.values().stream()
+        .anyMatch((map) -> map.containsKey(bot) && map.get(bot).equalsIgnoreCase(rank.getName()));
+  }
+
+  /**
    * Returns a Rank based on the Bot that is able to give to users and the name of the Minecraft
    * Rank
    *
@@ -38,7 +51,7 @@ public class RankHelper {
    * @return a Rank based on the Bot that is able to give to users and the name of the Rank
    */
   @SuppressWarnings("unchecked")
-  Rank getRank(Bot bot, String minecraftGroupName) {
+  public Rank getRank(Bot bot, String minecraftGroupName) {
     if (this.ranks.containsKey(minecraftGroupName) && this.ranks.get(minecraftGroupName)
         .containsKey(bot)) {
       return bot.getRankFactory().getRankFromRole(
@@ -49,9 +62,10 @@ public class RankHelper {
   }
 
   /**
-   * Validates all cached and if they don't exist in the given Bot or Minecraft server, a message
-   * will be send to the console
+   * Validates all cached ranks and if they don't exist in the given Bot or Minecraft server, a
+   * message will be send to the console
    */
+  @Override
   public void validateRanks() {
     this.ranks.forEach((minecraftRank, syncedRanks) -> {
       AtomicBoolean minecraftChecked = new AtomicBoolean(false);

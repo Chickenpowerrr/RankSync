@@ -22,12 +22,13 @@ public class BotEnabledEventListener implements Listener<BotEnabledEvent> {
   }
 
   /**
-   * Validates the ranks used by this Bot
+   * Validates the ranks used by this Bot and adds the validator to the RankFactory
    *
    * @param event the event that triggered the method
    */
   @Override
   public void onEvent(BotEnabledEvent event) {
     this.rankHelper.validateRanks();
+    event.getBot().getRankFactory().addRankHelper(this.rankHelper);
   }
 }

@@ -67,4 +67,19 @@ public interface RankFactory<R> {
    * Returns the Bot that uses this factory
    */
   Bot<?, R> getBot();
+
+  /**
+   * Adds a RankHelper to validate all ranks
+   *
+   * @param rankHelper the helper that validates if the given ranks exist
+   */
+  void addRankHelper(RankHelper rankHelper);
+
+  /**
+   * Returns if the given rank is a valid platform rank according to the RankHelpers
+   *
+   * @param rank the rank that could be synchronized
+   * @return if the given rank is a valid platform rank according to the RankHelpers
+   */
+  boolean isValidRank(Rank rank);
 }

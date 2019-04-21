@@ -97,7 +97,10 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
     Collection<Role> roles = this.member.getRoles();
 
     Collection<Role> toRemove = new HashSet<>(roles);
-    toRemove.removeIf(role -> ranks.contains(this.rankFactory.getRankFromRole(role)));
+    toRemove.removeIf(role -> {
+      Rank rank = this.rankFactory.getRankFromRole(role);
+      return ranks.contains(rank) || !this.rankFactory.isValidRank(rank);
+    });
 
     Collection<Role> toAdd = this.rankFactory.getRolesFromRanks(ranks);
     toAdd.removeIf(roles::contains);
