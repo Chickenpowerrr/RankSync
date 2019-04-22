@@ -274,9 +274,9 @@ public class SqlDatabase implements Database {
             "(" +
             "  id   int unsigned auto_increment" +
             "    primary key," +
-            "  name varchar(64) not null," +
+            "  platform varchar(64) not null," +
             "  constraint bot_name_uindex" +
-            "  unique (name)" +
+            "  unique (platform)" +
             ");");
 
         statement.execute("create table if not exists player" +
