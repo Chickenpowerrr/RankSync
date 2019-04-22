@@ -37,11 +37,14 @@ public class DiscordBot implements Bot<Member, Role> {
   @Getter private DatabaseFactory databaseFactory;
   @Getter private CommandFactory commandFactory;
 
+  @Getter @Setter private boolean enabled;
+
   private final Properties properties;
 
   private JDA jda;
 
   DiscordBot(Properties properties) {
+    this.enabled = false;
     this.properties = properties;
     Translation.setLanguageHelper((LanguageHelper) properties.getObject("language_helper"));
     Translation.setLanguage(properties.getString("language"));
@@ -70,6 +73,7 @@ public class DiscordBot implements Bot<Member, Role> {
           .getDatabase(this.properties.getString("type"), this.properties);
       this.commandFactory.addCommand(new LinkCommand("link", new HashSet<>()));
       RankSyncApi.getApi().execute(new BotEnabledEvent(this));
+      this.enabled = true;
     } else {
       RankSyncApi.getApi()
           .execute(new BotForceShutdownEvent(this, "The given guild id is invalid"));
