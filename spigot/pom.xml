@@ -43,6 +43,12 @@
                 <version>3.1.0</version>
                 <configuration>
                     <finalName>RankSync-Spigot-${version}</finalName>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.json</pattern>
+                            <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.json</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
 
                 <executions>

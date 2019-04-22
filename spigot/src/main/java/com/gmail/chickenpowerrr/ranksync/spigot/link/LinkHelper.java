@@ -137,10 +137,12 @@ public class LinkHelper {
    * @param uuid the UUID that represents the Player
    */
   public void updateRanks(UUID uuid) {
-    this.rankSyncPlugin.getBot("discord").getPlayerFactory().getPlayer(uuid).thenAccept(player -> {
-      if (player != null) {
-        player.updateRanks();
-      }
-    });
+    if(this.rankSyncPlugin.getBot("discord").isEnabled()) {
+      this.rankSyncPlugin.getBot("discord").getPlayerFactory().getPlayer(uuid).thenAccept(player -> {
+        if (player != null) {
+          player.updateRanks();
+        }
+      });
+    }
   }
 }
