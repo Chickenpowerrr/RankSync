@@ -3,9 +3,11 @@ package com.gmail.chickenpowerrr.ranksync.spigot.roleresource;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -19,13 +21,13 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
 
   private static final Logger LOGGER = Logger.getLogger(RankHelper.class.getSimpleName());
 
-  private final Map<String, Map<Bot<?, ?>, String>> ranks;
+  private final Map<String, Map<Bot<?, ?>, Collection<String>>> ranks;
 
   /**
    * @param ranks a map with the synced ranks, with the key: Minecraft Rank and the value is a map
    * with the Bot that syncs a rank and the value is the synced Rank
    */
-  public RankHelper(Map<String, Map<Bot<?, ?>, String>> ranks) {
+  public RankHelper(Map<String, Map<Bot<?, ?>, Collection<String>>> ranks) {
     this.ranks = ranks;
   }
 
@@ -39,23 +41,26 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
   @Override
   public boolean isSynchronized(Bot bot, Rank rank) {
     return this.ranks.values().stream()
-        .anyMatch((map) -> map.containsKey(bot) && map.get(bot).equalsIgnoreCase(rank.getName()));
+        .anyMatch((map) -> map.containsKey(bot) && map.get(bot).stream()
+            .anyMatch(entry -> entry.equalsIgnoreCase(rank.getName())));
   }
 
   /**
-   * Returns a Rank based on the Bot that is able to give to users and the name of the Minecraft
+   * Returns the Ranks based on the Bot that is able to give to users and the name of the Minecraft
    * Rank
    *
    * @param bot the running Bot
    * @param minecraftGroupName the name of the Minecraft Rank
-   * @return a Rank based on the Bot that is able to give to users and the name of the Rank
+   * @return the Ranks based on the Bot that is able to give to users and the name of the Rank
    */
   @SuppressWarnings("unchecked")
-  public Rank getRank(Bot bot, String minecraftGroupName) {
+  @Override
+  public Collection<Rank> getRanks(Bot bot, String minecraftGroupName) {
     if (this.ranks.containsKey(minecraftGroupName) && this.ranks.get(minecraftGroupName)
         .containsKey(bot)) {
-      return bot.getRankFactory().getRankFromRole(
-          bot.getRankFactory().getRoleFromName(this.ranks.get(minecraftGroupName).get(bot)));
+      return this.ranks.get(minecraftGroupName).get(bot).stream()
+          .map(roleName -> bot.getRankFactory().getRankFromRole(
+              bot.getRankFactory().getRoleFromName(roleName))).collect(Collectors.toSet());
     } else {
       return null;
     }
@@ -70,29 +75,30 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
     this.ranks.forEach((minecraftRank, syncedRanks) -> {
       AtomicBoolean minecraftChecked = new AtomicBoolean(false);
 
-      syncedRanks.forEach((bot, syncedRank) -> {
-        if (bot.hasCaseSensitiveRanks() && !bot.getAvailableRanks().contains(syncedRank)) {
-          log.error(Translation.INVALID_RANK
-              .getTranslation("rank", syncedRank, "platform", bot.getPlatform()));
-        } else if (bot.getAvailableRanks().stream()
-            .noneMatch(ranks -> ranks.equalsIgnoreCase(syncedRank))) {
-          log.error(Translation.INVALID_RANK
-              .getTranslation("rank", syncedRank, "platform", bot.getPlatform()));
-        }
+      syncedRanks.forEach((bot, syncedRankNames) ->
+          syncedRankNames.forEach(syncedRank -> {
+            if (bot.hasCaseSensitiveRanks() && !bot.getAvailableRanks().contains(syncedRank)) {
+              log.error(Translation.INVALID_RANK
+                  .getTranslation("rank", syncedRank, "platform", bot.getPlatform()));
+            } else if (bot.getAvailableRanks().stream()
+                .noneMatch(ranks -> ranks.equalsIgnoreCase(syncedRank))) {
+              log.error(Translation.INVALID_RANK
+                  .getTranslation("rank", syncedRank, "platform", bot.getPlatform()));
+            }
 
-        if (!minecraftChecked.get()) {
-          minecraftChecked.set(true);
-          if (bot.getEffectiveDatabase().hasCaseSensitiveRanks() && !bot.getEffectiveDatabase()
-              .getAvailableRanks().contains(minecraftRank)) {
-            log.error(Translation.INVALID_RANK
-                .getTranslation("rank", minecraftRank, "platform", "Minecraft"));
-          } else if (bot.getEffectiveDatabase().getAvailableRanks().stream()
-              .noneMatch(ranks -> ranks.equalsIgnoreCase(minecraftRank))) {
-            log.error(Translation.INVALID_RANK
-                .getTranslation("rank", minecraftRank, "platform", "Minecraft"));
-          }
-        }
-      });
+            if (!minecraftChecked.get()) {
+              minecraftChecked.set(true);
+              if (bot.getEffectiveDatabase().hasCaseSensitiveRanks() && !bot.getEffectiveDatabase()
+                  .getAvailableRanks().contains(minecraftRank)) {
+                log.error(Translation.INVALID_RANK
+                    .getTranslation("rank", minecraftRank, "platform", "Minecraft"));
+              } else if (bot.getEffectiveDatabase().getAvailableRanks().stream()
+                  .noneMatch(ranks -> ranks.equalsIgnoreCase(minecraftRank))) {
+                log.error(Translation.INVALID_RANK
+                    .getTranslation("rank", minecraftRank, "platform", "Minecraft"));
+              }
+            }
+          }));
     });
   }
 }

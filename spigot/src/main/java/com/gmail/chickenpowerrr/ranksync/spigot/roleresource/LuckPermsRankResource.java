@@ -53,7 +53,8 @@ public class LuckPermsRankResource implements RankResource {
     this.api.getUserManager().loadUser(uuid).thenAcceptAsync(user ->
         completableFuture.complete(
             user.getOwnNodes().stream().filter(Node::isGroupNode).map(Node::getGroupName)
-                .map(groupName -> this.rankHelper.getRank(this.bot, groupName))
+                .map(groupName -> this.rankHelper.getRanks(this.bot, groupName))
+                .flatMap(Collection::stream)
                 .filter(Objects::nonNull).collect(Collectors.toSet())));
 
     completableFuture.exceptionally(throwable -> {

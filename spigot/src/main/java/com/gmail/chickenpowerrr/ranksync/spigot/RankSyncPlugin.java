@@ -22,6 +22,7 @@ import com.gmail.chickenpowerrr.ranksync.spigot.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.LuckPermsRankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.VaultRankResource;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
@@ -116,7 +117,7 @@ public final class RankSyncPlugin extends JavaPlugin {
     Bot discordBot = getBot("discord");
     rankResource.setBot(discordBot);
 
-    Map<String, Map<Bot<?, ?>, String>> syncedRanks = new HashMap<>();
+    Map<String, Map<Bot<?, ?>, Collection<String>>> syncedRanks = new HashMap<>();
 
     this.bots.forEach((botName, bot) -> {
       Map<String, Object> ranks = getConfig().getConfigurationSection("ranks." + botName)
@@ -124,11 +125,16 @@ public final class RankSyncPlugin extends JavaPlugin {
       ranks.values().forEach(object -> {
         ConfigurationSection rankInfo = (ConfigurationSection) object;
         String minecraftRank = rankInfo.getString("minecraft");
-        String platformRank = rankInfo.getString(botName);
+        Collection<String> platformRanks = rankInfo.getStringList(botName);
+
+        if (platformRanks.isEmpty()) {
+          platformRanks.add(rankInfo.getString(botName));
+        }
+
         if (!syncedRanks.containsKey(minecraftRank)) {
           syncedRanks.put(minecraftRank, new HashMap<>());
         }
-        syncedRanks.get(minecraftRank).put(bot, platformRank);
+        syncedRanks.get(minecraftRank).put(bot, platformRanks);
       });
     });
 

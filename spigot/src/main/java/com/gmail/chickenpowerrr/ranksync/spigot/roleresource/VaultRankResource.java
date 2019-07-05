@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 public class VaultRankResource implements RankResource {
 
   private final Permission permission;
-  @Setter private Bot bot;
+  @Setter
+  private Bot bot;
   private RankHelper rankHelper = null;
 
   /**
@@ -44,7 +45,9 @@ public class VaultRankResource implements RankResource {
     CompletableFuture<Collection<Rank>> completableFuture = CompletableFuture.supplyAsync(
         () -> Arrays.stream(this.permission
             .getPlayerGroups(Bukkit.getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(uuid)))
-            .map(groupName -> this.rankHelper.getRank(this.bot, groupName)).filter(Objects::nonNull)
+            .map(groupName -> this.rankHelper.getRanks(this.bot, groupName))
+            .filter(Objects::nonNull)
+            .flatMap(Collection::stream)
             .collect(Collectors.toSet()));
 
     completableFuture.exceptionally(throwable -> {

@@ -1,6 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.api.rank;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import java.util.Collection;
 
 /**
  * This interface contains the methods needed to validate all given ranks
@@ -20,14 +21,14 @@ public interface RankHelper {
   boolean isSynchronized(Bot bot, Rank rank);
 
   /**
-   * Returns a Rank based on the Bot that is able to give to users and the name of the service's
+   * Returns the Ranks based on the Bot that is able to give to users and the name of the service's
    * Rank
    *
    * @param bot the running Bot
    * @param serviceGroupName the name of the Minecraft Rank
-   * @return a Rank based on the Bot that is able to give to users and the name of the Rank
+   * @return the Ranks based on the Bot that is able to give to users and the name of the Rank
    */
-  Rank getRank(Bot bot, String serviceGroupName);
+  Collection<Rank> getRanks(Bot bot, String serviceGroupName);
 
   /**
    * Validates all cached ranks and if they don't exist in the given Bot or service, a message will
