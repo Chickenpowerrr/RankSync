@@ -54,9 +54,8 @@ public class YamlFile extends AutoCreatingFile {
   public void save() {
     Map<String, Object> yaml = new HashMap<>();
 
-    this.values.forEach((path, value) -> {
-      try (FileWriter fileWriter = new FileWriter(this)) {
-
+    try (FileWriter fileWriter = new FileWriter(this)) {
+      this.values.forEach((path, value) -> {
         List<String> stringPath = Arrays.asList(path.split("\\."));
 
         Map<String, Object> currentMap = yaml;
@@ -73,11 +72,11 @@ public class YamlFile extends AutoCreatingFile {
             }
           }
         }
-        this.yaml.dump(yaml, fileWriter);
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    });
+      });
+      this.yaml.dump(yaml, fileWriter);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**

@@ -140,7 +140,7 @@ public class LinkHelper {
     if(this.rankSyncPlugin.getBot("discord").isEnabled()) {
       this.rankSyncPlugin.getBot("discord").getPlayerFactory().getPlayer(uuid).thenAccept(player -> {
         if (player != null) {
-          player.updateRanks();
+          player.update();
         }
       });
     }

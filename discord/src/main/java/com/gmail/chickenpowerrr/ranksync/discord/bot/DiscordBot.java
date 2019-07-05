@@ -6,6 +6,7 @@ import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.command.CommandFactory;
 import com.gmail.chickenpowerrr.ranksync.api.data.Database;
 import com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory;
+import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
 import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
@@ -36,10 +37,11 @@ public class DiscordBot implements Bot<Member, Role> {
   @Getter private RankFactory<Role> rankFactory;
   @Getter private DatabaseFactory databaseFactory;
   @Getter private CommandFactory commandFactory;
+  @Getter private NameResource nameResource;
 
   @Getter @Setter private boolean enabled;
 
-  private final Properties properties;
+  private Properties properties;
 
   private JDA jda;
 
@@ -48,12 +50,22 @@ public class DiscordBot implements Bot<Member, Role> {
     this.properties = properties;
     Translation.setLanguageHelper((LanguageHelper) properties.getObject("language_helper"));
     Translation.setLanguage(properties.getString("language"));
+    this.nameResource = (NameResource) properties.getObject("name_resource");
 
     try {
       new JDABuilder(properties.getString("token"))
           .addEventListener(new DiscordEventListeners(this)).build();
     } catch (LoginException e) {
-      throw new RuntimeException(e);
+      if (e.toString().contains("The provided token is invalid!")) {
+        System.out.println("===================================");
+        System.out.println("RankSync Error:");
+        System.out.println("The Discord token provided in the config.yml is invalid.");
+        System.out.println("For more information see:");
+        System.out.println("https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token");
+        System.out.println("===================================");
+      } else {
+        throw new RuntimeException(e);
+      }
     }
   }
 
@@ -100,5 +112,15 @@ public class DiscordBot implements Bot<Member, Role> {
   @Override
   public boolean hasCaseSensitiveRanks() {
     return false;
+  }
+
+  @Override
+  public boolean doesUpdateNonSynced() {
+    return this.properties.getBoolean("update_non_synced");
+  }
+
+  @Override
+  public boolean doesUpdateNames() {
+    return this.properties.getBoolean("sync_names");
   }
 }

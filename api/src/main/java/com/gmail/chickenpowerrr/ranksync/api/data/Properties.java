@@ -55,6 +55,15 @@ public interface Properties<T extends Properties> extends Cloneable {
   T addProperty(String key, long value);
 
   /**
+   * Adds a property to the cache
+   *
+   * @param key the key that is used to save and request the data
+   * @param value the value that should be saved
+   * @return the current instance
+   */
+  T addProperty(String key, boolean value);
+
+  /**
    * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
@@ -93,6 +102,14 @@ public interface Properties<T extends Properties> extends Cloneable {
    * @return the cached data
    */
   long getLong(String key);
+
+  /**
+   * Returns a property from the cache
+   *
+   * @param key the key that is used to save and request the data
+   * @return the cached data
+   */
+  boolean getBoolean(String key);
 
   /**
    * Returns if the cache contains a given key

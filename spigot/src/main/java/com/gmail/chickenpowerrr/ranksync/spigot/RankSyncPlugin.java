@@ -18,6 +18,7 @@ import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerLinkedEve
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerUpdateOnlineStatusEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.AsyncPlayerPreLoginEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.PlayerQuitEventListener;
+import com.gmail.chickenpowerrr.ranksync.spigot.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.LuckPermsRankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.VaultRankResource;
@@ -39,14 +40,15 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public final class RankSyncPlugin extends JavaPlugin {
 
-  @Getter private LinkHelper linkHelper;
+  @Getter
+  private LinkHelper linkHelper;
   private Map<String, Bot<?, ?>> bots = new HashMap<>();
-  @Getter private RankHelper rankHelper;
+  @Getter
+  private RankHelper rankHelper;
 
   /**
    * Reads the plugin.yml and starts the Objects required to synchronize the ranks
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void onEnable() {
     saveDefaultConfig();
@@ -65,6 +67,7 @@ public final class RankSyncPlugin extends JavaPlugin {
         .getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
     time = System.currentTimeMillis();
 
+    NameResource nameResource = new NameResource();
     RankResource rankResource;
 
     if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
@@ -95,6 +98,8 @@ public final class RankSyncPlugin extends JavaPlugin {
         .put("discord", RankSyncApi.getApi().getBotFactory("Discord").getBot(new BasicProperties()
             .addProperty("token", getConfig().getString("discord.token"))
             .addProperty("guild_id", getConfig().getLong("discord.guild-id"))
+            .addProperty("update_non_synced", getConfig().getBoolean("discord.update-non-synced"))
+            .addProperty("sync_names", getConfig().getBoolean("discord.sync-names"))
             .addProperty("type", getConfig().getString("database.type"))
             .addProperty("max_pool_size", getConfig().getInt("database.sql.max-pool-size"))
             .addProperty("host", getConfig().getString("database.sql.host"))
@@ -103,6 +108,7 @@ public final class RankSyncPlugin extends JavaPlugin {
             .addProperty("username", getConfig().getString("database.sql.user"))
             .addProperty("password", getConfig().getString("database.sql.password"))
             .addProperty("base_path", getDataFolder() + "/data/")
+            .addProperty("name_resource", nameResource)
             .addProperty("rank_resource", rankResource)
             .addProperty("language", language)
             .addProperty("language_helper", languageHelper)));
@@ -148,5 +154,15 @@ public final class RankSyncPlugin extends JavaPlugin {
    */
   public Bot<?, ?> getBot(String name) {
     return this.bots.get(name.toLowerCase());
+  }
+
+  /**
+   * Updates the defaults of the config to make sure everything can still be used when it's not in
+   * the config.yml
+   */
+  private void setConfigDefaults() {
+    getConfig().addDefault("update_non_synced", true);
+    getConfig().addDefault("sync_names", false);
+    getConfig().addDefault("database.type", "yaml");
   }
 }

@@ -3,6 +3,10 @@
 language: english
 
 discord:
+# If the synced ranks should be removed from someone who hasn't synced their account
+  update-non-synced: true
+# If the Discord nickname of a user should be the same as their Minecraft name
+  sync-names: false
 # The Discord token of your bot. More information on how you can create this token,
 # please use this tutorial on how to create a token:
 # https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token

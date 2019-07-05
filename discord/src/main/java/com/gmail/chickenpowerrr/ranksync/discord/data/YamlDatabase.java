@@ -73,7 +73,6 @@ public class YamlDatabase extends AbstractFileDatabase<YamlFile> {
       if (uuid != null) {
         super.players.setValue(playerId, uuid.toString());
         super.players.setValue(uuid.toString() + "." + this.bot.getPlatform(), playerId);
-        super.players.save();
       } else {
         String syncedUuid = super.players.getValue(playerId);
         super.players.removeValue(playerId);
@@ -81,6 +80,7 @@ public class YamlDatabase extends AbstractFileDatabase<YamlFile> {
           super.players.removeValue(syncedUuid + "." + this.bot.getPlatform());
         }
       }
+      super.players.save();
       return null;
     });
 

@@ -25,6 +25,6 @@ public class PlayerUpdateOnlineStatusEventListener implements
   @SuppressWarnings("unchecked")
   @Override
   public void onEvent(PlayerUpdateOnlineStatusEvent event) {
-    event.getPlayer().updateRanks();
+    event.getPlayer().update();
   }
 }

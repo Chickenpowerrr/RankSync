@@ -23,6 +23,6 @@ public class PlayerLinkedEventListener implements Listener<PlayerLinkedEvent> {
    */
   @Override
   public void onEvent(PlayerLinkedEvent event) {
-    event.getPlayer().updateRanks();
+    event.getPlayer().update();
   }
 }
