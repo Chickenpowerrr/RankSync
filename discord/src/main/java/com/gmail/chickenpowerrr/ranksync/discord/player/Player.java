@@ -8,6 +8,7 @@ import com.gmail.chickenpowerrr.ranksync.api.event.BotPlayerRanksUpdateEvent;
 import com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 
@@ -23,16 +24,19 @@ import net.dv8tion.jda.core.exceptions.HierarchyException;
  * @author Chickenpowerrr
  * @since 1.0.0
  */
+@Slf4j
 public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Player {
+
+  private final Member member;
+  private final RankFactory rankFactory;
+  private final NameResource nameResource;
+
+  @Getter
+  private final Bot bot;
 
   @Getter
   @Setter
   private UUID uuid;
-  private final Member member;
-  private final RankFactory rankFactory;
-  private final NameResource nameResource;
-  @Getter
-  private final Bot bot;
 
   Player(UUID uuid, Member member, Bot<Member, ?> bot) {
     this.uuid = uuid;
@@ -118,7 +122,7 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
     try {
       this.member.getGuild().getController().setNickname(this.member, username).queue();
     } catch (HierarchyException e) {
-      System.out.println(
+      log.warn(
           "Can't update the username for Discord user: " + this.member.getEffectiveName()
               + " since their rank is too high");
     }

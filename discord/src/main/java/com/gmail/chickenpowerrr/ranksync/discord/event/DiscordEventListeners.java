@@ -28,6 +28,7 @@ import java.util.List;
 public class DiscordEventListeners implements EventListener {
 
   private final DiscordBot bot;
+
   /**
    * @param bot the running Discord Bot
    */

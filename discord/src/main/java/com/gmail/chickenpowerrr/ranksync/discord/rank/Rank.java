@@ -40,4 +40,9 @@ public class Rank implements com.gmail.chickenpowerrr.ranksync.api.rank.Rank {
   public String getName() {
     return this.role.getName();
   }
+
+  @Override
+  public String toString() {
+    return "{RANK:" + getName() + "}";
+  }
 }

@@ -1,0 +1,6 @@
+name: ${parent.name}
+version: ${project.version}
+main: ${project.groupId}.bungeecord.${parent.name}Plugin
+author: Chickenpowerrr
+description: ${project.description}
+softdepend: [LuckPerms]

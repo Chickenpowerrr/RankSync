@@ -1,9 +1,0 @@
-# Maven
-target/
-dependency-reduced-pom.xml
-
-# IntelliJ
-*.iml
-*.iws
-*.ipr
-.idea/

@@ -100,6 +100,13 @@
 
         <dependency>
             <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
+            <artifactId>server</artifactId>
+            <version>${parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
             <artifactId>api</artifactId>
             <version>${parent.version}</version>
             <scope>compile</scope>

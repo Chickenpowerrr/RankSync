@@ -14,6 +14,8 @@
         <module>discord</module>
         <module>spigot</module>
         <module>manager</module>
+        <module>server</module>
+        <module>bungee</module>
     </modules>
 
     <build>

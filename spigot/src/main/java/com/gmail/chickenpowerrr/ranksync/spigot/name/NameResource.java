@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 /**
  * This class looks up the last known name of a user by their UUID
  *
+ * @author Chickenpowerrr
+ * @since 1.3.0
  */
 public class NameResource implements com.gmail.chickenpowerrr.ranksync.api.name.NameResource {
 
