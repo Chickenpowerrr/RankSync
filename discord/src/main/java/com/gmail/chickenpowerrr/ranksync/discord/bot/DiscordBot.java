@@ -120,8 +120,7 @@ public class DiscordBot implements Bot<Member, Role> {
 
   @Override
   public Collection<String> getAvailableRanks() {
-    return this.jda.getGuilds().stream().map(Guild::getRoles).flatMap(Collection::stream)
-        .map(Role::getName).collect(Collectors.toSet());
+    return getGuild().getRoles().stream().map(Role::getName).collect(Collectors.toSet());
   }
 
   @Override
