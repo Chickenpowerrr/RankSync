@@ -28,6 +28,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import org.bstats.bungeecord.Metrics;
 
 /**
  * This class starts all of the parts needed to sync Ranks with the given platforms
@@ -56,6 +57,7 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   @Override
   public void onEnable() {
     enable();
+    Metrics metrics = new Metrics(this);
   }
 
   /**

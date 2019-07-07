@@ -6,12 +6,12 @@ import com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.server.link.LinkHelper;
 import com.gmail.chickenpowerrr.ranksync.server.plugin.RankSyncServerPlugin;
+import com.gmail.chickenpowerrr.ranksync.server.roleresource.LuckPermsRankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommand;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncTabCompleter;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.UnSyncCommand;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.AsyncPlayerPreLoginEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.PlayerQuitEventListener;
-import com.gmail.chickenpowerrr.ranksync.server.roleresource.LuckPermsRankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.VaultRankResource;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.lucko.luckperms.LuckPerms;
 import net.milkbowl.vault.permission.Permission;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
@@ -51,6 +52,7 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
   @Override
   public void onEnable() {
     enable();
+    Metrics metrics = new Metrics(this);
   }
 
   /**
