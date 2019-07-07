@@ -31,6 +31,14 @@ public interface RankHelper {
   Collection<Rank> getRanks(Bot bot, String serviceGroupName);
 
   /**
+   * Returns all ranks synchronized by the bot
+   *
+   * @param bot the running bot
+   * @return all ranks synchronized by the bot
+   */
+  Collection<Rank> getRanks(Bot bot);
+
+  /**
    * Validates all cached ranks and if they don't exist in the given Bot or service, a message will
    * be send to the console
    */

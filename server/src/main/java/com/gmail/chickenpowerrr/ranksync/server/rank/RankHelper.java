@@ -67,6 +67,21 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
   }
 
   /**
+   * Returns all ranks synchronized by the bot
+   *
+   * @param bot the running bot
+   * @return all ranks synchronized by the bot
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public Collection<Rank> getRanks(Bot bot) {
+    return this.ranks.values().stream().flatMap(map -> map.entrySet().stream())
+        .filter(entry -> entry.getKey().equals(bot)).map(Map.Entry::getValue)
+        .flatMap(Collection::stream).map(roleName -> bot.getRankFactory().getRankFromRole(
+            bot.getRankFactory().getRoleFromName(roleName))).collect(Collectors.toSet());
+  }
+
+  /**
    * Validates all cached ranks and if they don't exist in the given Bot or Minecraft server, a
    * message will be send to the console
    */
