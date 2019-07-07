@@ -30,16 +30,27 @@ import java.util.HashSet;
 
 public class DiscordBot implements Bot<Member, Role> {
 
-  @Getter private Guild guild;
-  @Getter private final String platform = "Discord";
-  @Getter @Setter private Database effectiveDatabase;
-  @Getter private PlayerFactory<Member> playerFactory;
-  @Getter private RankFactory<Role> rankFactory;
-  @Getter private DatabaseFactory databaseFactory;
-  @Getter private CommandFactory commandFactory;
-  @Getter private NameResource nameResource;
+  @Getter
+  private Guild guild;
+  @Getter
+  private final String platform = "Discord";
+  @Getter
+  @Setter
+  private Database effectiveDatabase;
+  @Getter
+  private PlayerFactory<Member> playerFactory;
+  @Getter
+  private RankFactory<Role> rankFactory;
+  @Getter
+  private DatabaseFactory databaseFactory;
+  @Getter
+  private CommandFactory commandFactory;
+  @Getter
+  private NameResource nameResource;
 
-  @Getter @Setter private boolean enabled;
+  @Getter
+  @Setter
+  private boolean enabled;
 
   private Properties properties;
 
@@ -57,12 +68,12 @@ public class DiscordBot implements Bot<Member, Role> {
           .addEventListener(new DiscordEventListeners(this)).build();
     } catch (LoginException e) {
       if (e.toString().contains("The provided token is invalid!")) {
-        System.out.println("===================================");
-        System.out.println("RankSync Error:");
-        System.out.println("The Discord token provided in the config.yml is invalid.");
-        System.out.println("For more information see:");
-        System.out.println("https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token");
-        System.out.println("===================================");
+        RankSyncApi.getApi()
+            .execute(new BotForceShutdownEvent(this, "===================================",
+                "RankSync Error:", "The Discord token provided in the config.yml is invalid.",
+                "For more information see:",
+                "https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token",
+                "==================================="));
       } else {
         throw new RuntimeException(e);
       }
@@ -88,7 +99,11 @@ public class DiscordBot implements Bot<Member, Role> {
       this.enabled = true;
     } else {
       RankSyncApi.getApi()
-          .execute(new BotForceShutdownEvent(this, "The given guild id is invalid"));
+          .execute(new BotForceShutdownEvent(this, "===================================",
+              "RankSync Error:", "The Guild ID provided in the config.yml is invalid.",
+              "For more information see:",
+              "https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Guild-id",
+              "==================================="));
       jda.shutdownNow();
     }
   }

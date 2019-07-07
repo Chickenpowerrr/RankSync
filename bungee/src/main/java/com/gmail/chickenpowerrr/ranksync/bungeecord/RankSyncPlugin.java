@@ -88,8 +88,12 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
    * @param reason the reason why RankSync should stop
    */
   @Override
-  public void shutdown(String reason) {
-    getLogger().warning(reason);
+  public void shutdown(String... reason) {
+    getLogger().severe("Disabling the RankSync plugin: ");
+    for (String reasonString : reason) {
+      getLogger().warning(reasonString);
+    }
+
     onDisable();
 
     getProxy().getPluginManager().unregisterCommands(this);

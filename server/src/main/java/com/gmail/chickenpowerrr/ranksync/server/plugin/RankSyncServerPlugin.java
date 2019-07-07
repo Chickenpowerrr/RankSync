@@ -52,7 +52,7 @@ public interface RankSyncServerPlugin {
    *
    * @param reason the reason why RankSync should stop
    */
-  void shutdown(String reason);
+  void shutdown(String... reason);
 
   /**
    * Returns the data folder of the plugin
@@ -190,6 +190,8 @@ public interface RankSyncServerPlugin {
     RankResource rankResource = validateDependencies();
 
     if (rankResource != null) {
+      RankSyncApi.getApi().registerListener(new BotForceShutdownEventListener(this));
+
       setLinkHelper(new LinkHelper(this));
       RankSyncManager.getInstance().setup();
       RankSyncApi.getApi().getBotFactory("Discord");
@@ -222,7 +224,6 @@ public interface RankSyncServerPlugin {
       RankSyncApi.getApi().registerListener(new PlayerUpdateOnlineStatusEventListener());
       RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener(getLinkHelper()));
       RankSyncApi.getApi().registerListener(new BotEnabledEventListener(getRankHelper()));
-      RankSyncApi.getApi().registerListener(new BotForceShutdownEventListener(this));
       RankSyncApi.getApi().registerListener(new PlayerLinkedEventListener());
 
       registerListeners();

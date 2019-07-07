@@ -82,8 +82,11 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
    * @param reason the reason why RankSync should stop
    */
   @Override
-  public void shutdown(String reason) {
-    Bukkit.getLogger().severe("Disabling the RankSync plugin: " + reason);
+  public void shutdown(String... reason) {
+    getLogger().severe("Disabling the RankSync plugin: " + reason);
+    for (String reasonString : reason) {
+      getLogger().warning(reasonString);
+    }
     Bukkit.getPluginManager().disablePlugin(JavaPlugin.getPlugin(RankSyncPlugin.class));
   }
 
