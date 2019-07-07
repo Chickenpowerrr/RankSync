@@ -15,6 +15,7 @@ import com.gmail.chickenpowerrr.ranksync.server.listener.BotForceShutdownEventLi
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerLinkCodeCreateEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerLinkedEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerUpdateOnlineStatusEventListener;
+import com.gmail.chickenpowerrr.ranksync.server.update.UpdateChecker;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
@@ -171,6 +172,7 @@ public interface RankSyncServerPlugin {
    * Enables the plugin
    */
   default void enable() {
+    new UpdateChecker().check();
     setupConfig();
 
     long time = System.currentTimeMillis();
