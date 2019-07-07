@@ -85,7 +85,7 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
    */
   @Override
   public void shutdown(String... reason) {
-    getLogger().severe("Disabling the RankSync plugin: " + reason);
+    getLogger().severe("Disabling the RankSync plugin: ");
     for (String reasonString : reason) {
       getLogger().warning(reasonString);
     }

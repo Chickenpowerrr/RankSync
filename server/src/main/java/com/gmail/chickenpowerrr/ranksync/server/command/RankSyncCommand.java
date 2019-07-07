@@ -29,14 +29,15 @@ public abstract class RankSyncCommand extends AbstractCommand {
    * @param rankSyncPlugin the ranksync plugin
    */
   public RankSyncCommand(RankSyncServerPlugin rankSyncPlugin) {
-    super("ranksync", "Link your account to another service", "ranksync.command.ranksync", new ArrayList<String>() {{
-      add("link");
-      add("sync");
-      add("synchronize");
-      add("syncrank");
-      add("synchronizerank");
-      add("giverank");
-    }});
+    super("ranksync", "Link your account to another service", "ranksync.command.ranksync",
+        new ArrayList<String>() {{
+          add("link");
+          add("sync");
+          add("synchronize");
+          add("syncrank");
+          add("synchronizerank");
+          add("giverank");
+        }});
     this.rankSyncPlugin = rankSyncPlugin;
     this.linkHelper = rankSyncPlugin.getLinkHelper();
     this.services = this.linkHelper.getLinkInfos().stream().sorted().map(LinkInfo::getName)
@@ -66,9 +67,8 @@ public abstract class RankSyncCommand extends AbstractCommand {
                   this.linkHelper.link(user.getUuid(), args[0], args[1]);
                   user.sendMessage(Translation.RANKSYNC_COMMAND_LINKED.getTranslation());
                   bot.getPlayerFactory().getPlayer(user.getUuid())
-                      .thenAccept(linkedPlayer -> {
-                        RankSyncApi.getApi().execute(new PlayerLinkedEvent(linkedPlayer));
-                      });
+                      .thenAccept(linkedPlayer -> RankSyncApi.getApi()
+                          .execute(new PlayerLinkedEvent(linkedPlayer)));
                 }
               } else {
                 user.sendMessage(

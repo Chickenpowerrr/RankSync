@@ -91,12 +91,10 @@ public class LinkHelper {
    * Starts the cleanup that deletes a key after five minutes
    */
   private void startAuthCleanup() {
-    this.rankSyncPlugin.runTaskTimer(() -> {
-      this.authenticationKeys.entrySet().stream()
-          .filter(entry -> entry.getValue().getKey() + 1000 * 60 * 5 < System.currentTimeMillis())
-          .map(Map.Entry::getKey).collect(Collectors.toSet())
-          .forEach(this.authenticationKeys::remove);
-    }, 20 * 30, 20 * 30);
+    this.rankSyncPlugin.runTaskTimer(() -> this.authenticationKeys.entrySet().stream()
+        .filter(entry -> entry.getValue().getKey() + 1000 * 60 * 5 < System.currentTimeMillis())
+        .map(Map.Entry::getKey).collect(Collectors.toSet())
+        .forEach(this.authenticationKeys::remove), 20 * 30, 20 * 30);
   }
 
   /**

@@ -25,7 +25,6 @@ public class RankSyncTabCompleter extends
    * Completes all of the possible platforms
    *
    * @param event the event that triggered the function
-   * @return all of the possible platforms
    */
   @EventHandler
   public void onTabComplete(TabCompleteEvent event) {

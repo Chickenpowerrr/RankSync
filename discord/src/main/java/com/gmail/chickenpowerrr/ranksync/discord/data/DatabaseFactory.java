@@ -53,11 +53,11 @@ public class DatabaseFactory implements com.gmail.chickenpowerrr.ranksync.api.da
   }
 
   /**
-   * Returns a
+   * Returns the requested database
    *
    * @param name the name of the database
    * @param credentials the information that is needed to establish a connection with the database
-   * @return
+   * @return the requested database
    */
   @Override
   public Database getDatabase(String name, Properties credentials) {

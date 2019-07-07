@@ -229,22 +229,21 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   public Map<String, Map<Bot<?, ?>, Collection<String>>> getSyncedRanks() {
     Map<String, Map<Bot<?, ?>, Collection<String>>> syncedRanks = new HashMap<>();
 
-    getBots().forEach((botName, bot) -> {
-      this.configuration.getSection("ranks.discord").getKeys().stream()
-          .map(section -> this.configuration.getSection("ranks.discord." + section))
-          .forEach(section -> {
-            String minecraftRank = section.getString("minecraft");
-            Collection<String> platformRanks = section.getStringList(botName);
-            if (platformRanks.isEmpty()) {
-              platformRanks.add(section.getString(botName));
-            }
+    getBots()
+        .forEach((botName, bot) -> this.configuration.getSection("ranks.discord").getKeys().stream()
+            .map(section -> this.configuration.getSection("ranks.discord." + section))
+            .forEach(section -> {
+              String minecraftRank = section.getString("minecraft");
+              Collection<String> platformRanks = section.getStringList(botName);
+              if (platformRanks.isEmpty()) {
+                platformRanks.add(section.getString(botName));
+              }
 
-            if (!syncedRanks.containsKey(minecraftRank)) {
-              syncedRanks.put(minecraftRank, new HashMap<>());
-            }
-            syncedRanks.get(minecraftRank).put(bot, platformRanks);
-          });
-    });
+              if (!syncedRanks.containsKey(minecraftRank)) {
+                syncedRanks.put(minecraftRank, new HashMap<>());
+              }
+              syncedRanks.get(minecraftRank).put(bot, platformRanks);
+            }));
 
     return syncedRanks;
   }

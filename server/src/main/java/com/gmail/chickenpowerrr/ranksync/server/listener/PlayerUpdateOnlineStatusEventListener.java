@@ -22,7 +22,6 @@ public class PlayerUpdateOnlineStatusEventListener implements
    *
    * @param event the event that triggered the method
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void onEvent(PlayerUpdateOnlineStatusEvent event) {
     event.getPlayer().update();
