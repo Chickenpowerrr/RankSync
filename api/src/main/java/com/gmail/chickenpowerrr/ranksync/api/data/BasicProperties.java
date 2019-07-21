@@ -95,6 +95,19 @@ public class BasicProperties implements Properties<BasicProperties> {
   }
 
   /**
+   * Adds a property to the cache
+   *
+   * @param key the key that is used to save and request the data
+   * @param value the value that should be saved
+   * @return the current instance
+   */
+  @Override
+  public BasicProperties addProperty(String key, boolean value) {
+    this.properties.put(key, value);
+    return this;
+  }
+
+  /**
    * Returns a property from the cache
    *
    * @param key the key that is used to save and request the data
@@ -147,6 +160,17 @@ public class BasicProperties implements Properties<BasicProperties> {
   @Override
   public long getLong(String key) {
     return (long) this.properties.get(key);
+  }
+
+  /**
+   * Returns a property from the cache
+   *
+   * @param key the key that is used to save and request the data
+   * @return the cached data
+   */
+  @Override
+  public boolean getBoolean(String key) {
+    return (boolean) this.properties.get(key);
   }
 
   /**

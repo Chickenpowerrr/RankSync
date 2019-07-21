@@ -54,9 +54,9 @@ public interface Player {
   String getFancyName();
 
   /**
-   * Synchronizes the current ranks of this Player
+   * Synchronizes the current ranks and the name of this Player
    */
-  void updateRanks();
+  void update();
 
   /**
    * Sets the id that represents this player on the other service
@@ -64,4 +64,16 @@ public interface Player {
    * @param uuid the id that represents this player on the other service
    */
   void setUuid(UUID uuid);
+
+  /**
+   * Returns the name of the user
+   */
+  String getUsername();
+
+  /**
+   * Updates the name of the current player
+   *
+   * @param username the new username
+   */
+  void setUsername(String username);
 }

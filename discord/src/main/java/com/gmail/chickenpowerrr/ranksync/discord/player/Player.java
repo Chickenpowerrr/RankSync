@@ -2,11 +2,13 @@ package com.gmail.chickenpowerrr.ranksync.discord.player;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
+import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotPlayerRanksUpdateEvent;
 import com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 
@@ -14,6 +16,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import net.dv8tion.jda.core.exceptions.HierarchyException;
 
 /**
  * This class represents a Discord user
@@ -21,17 +24,25 @@ import java.util.stream.Collectors;
  * @author Chickenpowerrr
  * @since 1.0.0
  */
+@Slf4j
 public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Player {
 
-  @Getter @Setter private UUID uuid;
   private final Member member;
   private final RankFactory rankFactory;
-  @Getter private final Bot bot;
+  private final NameResource nameResource;
+
+  @Getter
+  private final Bot bot;
+
+  @Getter
+  @Setter
+  private UUID uuid;
 
   Player(UUID uuid, Member member, Bot<Member, ?> bot) {
     this.uuid = uuid;
     this.member = member;
     this.rankFactory = RankFactory.getInstance(member.getGuild());
+    this.nameResource = bot.getNameResource();
     this.bot = bot;
   }
 
@@ -72,18 +83,48 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
   }
 
   /**
-   * Synchronizes the ranks of the Discord user with the other platforms
+   * Synchronizes the ranks and the name of the Discord user with the other platforms
    */
   @Override
-  public void updateRanks() {
+  public void update() {
     if (this.uuid != null) {
       this.bot.getEffectiveDatabase().getRanks(this.uuid).thenAccept(ranks -> {
         if (ranks != null) {
           setRanks(ranks);
         }
       });
+
+      if (this.bot.doesUpdateNames()) {
+        setUsername(this.nameResource.getName(this.uuid));
+      }
     } else {
-      setRanks(new HashSet<>());
+      if (this.bot.doesUpdateNonSynced()) {
+        setRanks(new HashSet<>());
+      }
+    }
+  }
+
+  /**
+   * Returns the name of the user
+   */
+  @Override
+  public String getUsername() {
+    return this.nameResource.getName(this.uuid);
+  }
+
+  /**
+   * Updates the name of the current player
+   *
+   * @param username the new username
+   */
+  @Override
+  public void setUsername(String username) {
+    try {
+      this.member.getGuild().getController().setNickname(this.member, username).queue();
+    } catch (HierarchyException e) {
+      log.warn(
+          "Can't update the username for Discord user: " + this.member.getEffectiveName()
+              + " since their rank is too high");
     }
   }
 

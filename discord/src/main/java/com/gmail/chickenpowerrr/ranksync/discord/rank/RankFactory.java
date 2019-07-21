@@ -8,8 +8,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 
@@ -19,6 +22,7 @@ import net.dv8tion.jda.core.entities.Role;
  * @author Chickenpowerrr
  * @since 1.0.0
  */
+@Slf4j
 public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory<Role> {
 
   private static final Map<Guild, RankFactory> instances = new HashMap<>();
@@ -162,6 +166,31 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   @Override
   public void addRankHelper(RankHelper rankHelper) {
     this.rankHelpers.add(rankHelper);
+    OptionalInt highestRole = this.guild.getJDA().getRoles().stream().mapToInt(Role::getPosition)
+        .max();
+
+    if (highestRole.isPresent()) {
+      String invalidPriorities = rankHelper.getRanks(this.bot).stream().filter(Objects::nonNull)
+          .map(this::getRoleFromRank)
+          .filter(role -> role.getPosition() >= highestRole.getAsInt()).map(Role::getName)
+          .collect(Collectors.joining(", "));
+      if (!invalidPriorities.isEmpty()) {
+        System.out.println("===================================");
+        System.out.println("RankSync Warning:");
+        System.out.println(
+            "The Discord bot doesn't have a high enough rank priority to issue the following ranks:.");
+        System.out.println(invalidPriorities);
+        System.out.println("For more information please follow this guide: ");
+        System.out
+            .println("https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token");
+        System.out.println("===================================");
+      }
+    } else {
+      System.out.println("===================================");
+      System.out.println("RankSync Warning:");
+      System.out.println("The Discord bot doesn't have a rank.");
+      System.out.println("===================================");
+    }
   }
 
   /**

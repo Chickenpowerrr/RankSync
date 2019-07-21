@@ -1,0 +1,64 @@
+# The language that should be used (all supported language can be found in the /plugin/RankSync/language directory.
+# For a more detailed explanation, please see https://github.com/Chickenpowerrr/RankSync/wiki/Language
+language: english
+
+discord:
+# If the synced ranks should be removed from someone who hasn't synced their account
+  update-non-synced: true
+# If the Discord nickname of a user should be the same as their Minecraft name
+  sync-names: false
+# The Discord token of your bot. More information on how you can create this token,
+# please use this tutorial on how to create a token:
+# https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token
+  token: "YOURTOKEN"
+# This defines the server that will use this bot. This token can be found like this:
+# https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Guild-id
+  guild-id: 444222000
+# The basic setup where all of the data should be saved
+database:
+# The way the data should be saved
+# There are two options: SQL and yaml
+  type: "yaml"
+
+# The basic SQL setup, only relevant if you're going to use the SQL feature
+  sql:
+# The maximum pool size for SQL
+    max-pool-size: 10
+# The host the SQL server is running on
+    host: "127.0.0.1"
+# The SQL server port, it is 3306 by default
+    port: 3306
+# The target database in the SQL server
+    database: "ranksync"
+# The username to login into the SQL server
+    user: "root"
+# The password to login into the SQL server
+    password: ""
+
+# The ranks that should be synchronized between Discord and Minecraft.
+# Please note that the Minecraft ranks define which Discord ranks will be given to the Player.
+# Changes to the Discord ranks on the other hand will have no impact on the Minecraft rank.
+# See https://github.com/Chickenpowerrr/RankSync/wiki/Ranks for more information
+ranks:
+# The platform whose ranks should be synced
+  discord:
+# A random UNIQUE prefix that is handy for you. The code doesn't do anything with it as long as it is UNIQUE.
+    administrator:
+# The name of the Minecraft group. It is case sensitive
+      minecraft: "admin"
+# The name of the Discord group. It is case insensitive
+      discord: "Minecraft Administrator"
+# A random UNIQUE prefix that is handy for you. The code doesn't do anything with it as long as it is UNIQUE.
+    moderator:
+# The name of the Minecraft group. It is case sensitive
+      minecraft: "mod"
+# The name of the Discord group. It is case insensitive
+      discord: "Minecraft Moderator"
+# A random UNIQUE prefix that is handy for you. The code doesn't do anything with it as long as it is UNIQUE.
+    vip:
+# The name of the Minecraft group. It is case sensitive
+      minecraft: "VIP"
+# Multiple Discord ranks synced to one Minecraft rank
+      discord:
+        - "VIP"
+        - "Donator"

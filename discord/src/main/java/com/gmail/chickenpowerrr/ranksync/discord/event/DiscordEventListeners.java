@@ -28,6 +28,7 @@ import java.util.List;
 public class DiscordEventListeners implements EventListener {
 
   private final DiscordBot bot;
+
   /**
    * @param bot the running Discord Bot
    */
@@ -35,6 +36,12 @@ public class DiscordEventListeners implements EventListener {
     this.bot = (DiscordBot) bot;
   }
 
+  /**
+   * Updates userdata when they change their Discord status, enables the bot when the ReadyEvent
+   * comes in and handles the incoming Discord commands
+   *
+   * @param event the event that triggers the methods
+   */
   @Override
   public void onEvent(Event event) {
     if (event instanceof UserUpdateOnlineStatusEvent) {

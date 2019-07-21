@@ -1,31 +1,27 @@
 package com.gmail.chickenpowerrr.ranksync.spigot;
 
-import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
-import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
-import com.gmail.chickenpowerrr.ranksync.api.data.BasicProperties;
+import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
-import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
-import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommandExecutor;
+import com.gmail.chickenpowerrr.ranksync.server.link.LinkHelper;
+import com.gmail.chickenpowerrr.ranksync.server.plugin.RankSyncServerPlugin;
+import com.gmail.chickenpowerrr.ranksync.server.roleresource.LuckPermsRankResource;
+import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncCommand;
 import com.gmail.chickenpowerrr.ranksync.spigot.command.RankSyncTabCompleter;
-import com.gmail.chickenpowerrr.ranksync.spigot.command.UnSyncCommandExecutor;
-import com.gmail.chickenpowerrr.ranksync.spigot.language.Translation;
-import com.gmail.chickenpowerrr.ranksync.spigot.link.LinkHelper;
-import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotEnabledEventListener;
-import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.BotForceShutdownEventListener;
-import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerLinkCodeCreateEventListener;
-import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerLinkedEventListener;
-import com.gmail.chickenpowerrr.ranksync.spigot.listener.ranksyc.PlayerUpdateOnlineStatusEventListener;
-import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.AsyncPlayerPreLoginEventListener;
-import com.gmail.chickenpowerrr.ranksync.spigot.listener.spigot.PlayerQuitEventListener;
-import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.LuckPermsRankResource;
-import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.RankHelper;
+import com.gmail.chickenpowerrr.ranksync.spigot.command.UnSyncCommand;
+import com.gmail.chickenpowerrr.ranksync.spigot.listener.AsyncPlayerPreLoginEventListener;
+import com.gmail.chickenpowerrr.ranksync.spigot.listener.PlayerQuitEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.VaultRankResource;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.Getter;
+import lombok.Setter;
 import me.lucko.luckperms.LuckPerms;
 import net.milkbowl.vault.permission.Permission;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
@@ -37,107 +33,26 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Chickenpowerrr
  * @since 1.0.0
  */
-public final class RankSyncPlugin extends JavaPlugin {
+public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPlugin {
 
-  @Getter private LinkHelper linkHelper;
+  @Getter
+  @Setter
+  private LinkHelper linkHelper;
+
+  @Getter
   private Map<String, Bot<?, ?>> bots = new HashMap<>();
-  @Getter private RankHelper rankHelper;
+
+  @Getter
+  @Setter
+  private RankHelper rankHelper;
 
   /**
    * Reads the plugin.yml and starts the Objects required to synchronize the ranks
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void onEnable() {
-    saveDefaultConfig();
-
-    long time = System.currentTimeMillis();
-    LanguageHelper languageHelper = new LanguageHelper(getDataFolder());
-    Translation.setLanguageHelper(languageHelper);
-    String language = getConfig().getString("language");
-    if (language == null) {
-      language = "english";
-      getLogger()
-          .warning("The config.yml doesn't contain a language field, so it's set to English");
-    }
-    Translation.setLanguage(language);
-    getLogger().info(Translation.STARTUP_TRANSLATIONS
-        .getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
-    time = System.currentTimeMillis();
-
-    RankResource rankResource;
-
-    if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
-      rankResource = new LuckPermsRankResource(LuckPerms.getApi());
-    } else if (Bukkit.getPluginManager().getPlugin("Vault") != null
-        && getServer().getServicesManager().getRegistration(Permission.class) != null) {
-      rankResource = new VaultRankResource(
-          getServer().getServicesManager().getRegistration(Permission.class).getProvider());
-    } else {
-      Bukkit.getLogger().severe("You should use either LuckPerms of Vault to work with RankSync");
-      getServer().getPluginManager().disablePlugin(this);
-      return;
-    }
-
-    this.linkHelper = new LinkHelper();
-    RankSyncManager.getInstance().setup();
-    RankSyncApi.getApi().getBotFactory("Discord");
-
-    PluginCommand rankSyncCommand = getCommand("ranksync");
-    rankSyncCommand.setExecutor(new RankSyncCommandExecutor());
-    rankSyncCommand.setTabCompleter(new RankSyncTabCompleter());
-
-    PluginCommand unSyncCommand = getCommand("unsync");
-    unSyncCommand.setExecutor(new UnSyncCommandExecutor());
-    unSyncCommand.setTabCompleter(new RankSyncTabCompleter());
-
-    this.bots
-        .put("discord", RankSyncApi.getApi().getBotFactory("Discord").getBot(new BasicProperties()
-            .addProperty("token", getConfig().getString("discord.token"))
-            .addProperty("guild_id", getConfig().getLong("discord.guild-id"))
-            .addProperty("type", getConfig().getString("database.type"))
-            .addProperty("max_pool_size", getConfig().getInt("database.sql.max-pool-size"))
-            .addProperty("host", getConfig().getString("database.sql.host"))
-            .addProperty("port", getConfig().getInt("database.sql.port"))
-            .addProperty("database", getConfig().getString("database.sql.database"))
-            .addProperty("username", getConfig().getString("database.sql.user"))
-            .addProperty("password", getConfig().getString("database.sql.password"))
-            .addProperty("base_path", getDataFolder() + "/data/")
-            .addProperty("rank_resource", rankResource)
-            .addProperty("language", language)
-            .addProperty("language_helper", languageHelper)));
-
-    Bot discordBot = getBot("discord");
-    rankResource.setBot(discordBot);
-
-    Map<String, Map<Bot<?, ?>, String>> syncedRanks = new HashMap<>();
-
-    this.bots.forEach((botName, bot) -> {
-      Map<String, Object> ranks = getConfig().getConfigurationSection("ranks." + botName)
-          .getValues(false);
-      ranks.values().forEach(object -> {
-        ConfigurationSection rankInfo = (ConfigurationSection) object;
-        String minecraftRank = rankInfo.getString("minecraft");
-        String platformRank = rankInfo.getString(botName);
-        if (!syncedRanks.containsKey(minecraftRank)) {
-          syncedRanks.put(minecraftRank, new HashMap<>());
-        }
-        syncedRanks.get(minecraftRank).put(bot, platformRank);
-      });
-    });
-
-    this.rankHelper = new RankHelper(syncedRanks);
-
-    RankSyncApi.getApi().registerListener(new PlayerUpdateOnlineStatusEventListener());
-    RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener());
-    RankSyncApi.getApi().registerListener(new BotEnabledEventListener(this.rankHelper));
-    RankSyncApi.getApi().registerListener(new BotForceShutdownEventListener());
-    RankSyncApi.getApi().registerListener(new PlayerLinkedEventListener());
-
-    Bukkit.getPluginManager().registerEvents(new AsyncPlayerPreLoginEventListener(), this);
-    Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), this);
-    getLogger().info(Translation.STARTUP_RANKS
-        .getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
+    enable();
+    Metrics metrics = new Metrics(this);
   }
 
   /**
@@ -146,7 +61,206 @@ public final class RankSyncPlugin extends JavaPlugin {
    * @param name the name of the Bot
    * @return the Bot that goes by the given name
    */
+  @Override
   public Bot<?, ?> getBot(String name) {
     return this.bots.get(name.toLowerCase());
+  }
+
+  /**
+   * Runs a timer given its period and delay
+   *
+   * @param runnable what should be done
+   * @param delay when it will start
+   * @param period the delay between every action
+   */
+  @Override
+  public void runTaskTimer(Runnable runnable, long delay, long period) {
+    Bukkit.getScheduler().runTaskTimer(this, runnable, delay, period);
+  }
+
+  /**
+   * Shuts down RankSync
+   *
+   * @param reason the reason why RankSync should stop
+   */
+  @Override
+  public void shutdown(String... reason) {
+    getLogger().severe("Disabling the RankSync plugin: ");
+    for (String reasonString : reason) {
+      getLogger().warning(reasonString);
+    }
+    Bukkit.getPluginManager().disablePlugin(JavaPlugin.getPlugin(RankSyncPlugin.class));
+  }
+
+  /**
+   * Updates the defaults of the config to make sure everything can still be used when it's not in
+   * the config.yml
+   */
+  private void setConfigDefaults() {
+    getConfig().addDefault("update_non_synced", true);
+    getConfig().addDefault("sync_names", false);
+    getConfig().addDefault("database.type", "yaml");
+  }
+
+  /**
+   * Registers the listeners
+   */
+  @Override
+  public void registerListeners() {
+    Bukkit.getPluginManager()
+        .registerEvents(new AsyncPlayerPreLoginEventListener(this.linkHelper), this);
+    Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(this.linkHelper), this);
+  }
+
+  /**
+   * Validates if it's possible to start with the current dependencies
+   */
+  @Override
+  public RankResource validateDependencies() {
+    if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
+      return new LuckPermsRankResource(this, LuckPerms.getApi());
+    } else if (Bukkit.getPluginManager().getPlugin("Vault") != null
+        && getServer().getServicesManager().getRegistration(Permission.class) != null) {
+      return new VaultRankResource(
+          getServer().getServicesManager().getRegistration(Permission.class).getProvider());
+    } else {
+      shutdown("You should use either LuckPerms or Vault to work with RankSync");
+      return null;
+    }
+  }
+
+  /**
+   * Returns a boolean from the config
+   *
+   * @param key the location of the boolean
+   * @return the requested boolean
+   */
+  @Override
+  public boolean getConfigBoolean(String key) {
+    return getConfig().getBoolean(key);
+  }
+
+  /**
+   * Returns a int from the config
+   *
+   * @param key the location of the int
+   * @return the requested int
+   */
+  @Override
+  public int getConfigInt(String key) {
+    return getConfig().getInt(key);
+  }
+
+  /**
+   * Returns a string list from the config
+   *
+   * @param key the location of the string
+   * @return the requested string list
+   */
+  @Override
+  public List<String> getConfigStringList(String key) {
+    return getConfig().getStringList(key);
+  }
+
+  /**
+   * Returns a long from the config
+   *
+   * @param key the location of the long
+   * @return the requested long
+   */
+  @Override
+  public long getConfigLong(String key) {
+    return getConfig().getLong(key);
+  }
+
+  /**
+   * Returns a string from the config
+   *
+   * @param key the location of the string
+   * @return the requested string
+   */
+  @Override
+  public String getConfigString(String key) {
+    return getConfig().getString(key);
+  }
+
+  /**
+   * Logs an info message
+   *
+   * @param message the information
+   */
+  @Override
+  public void logInfo(String message) {
+    getLogger().info(message);
+  }
+
+  /**
+   * Logs a warning message
+   *
+   * @param message the warning
+   */
+  @Override
+  public void logWarning(String message) {
+    getLogger().warning(message);
+  }
+
+  /**
+   * Registers the commands
+   */
+  @Override
+  public void registerCommands() {
+    PluginCommand rankSyncCommand = getCommand("ranksync");
+    rankSyncCommand.setExecutor(new RankSyncCommand(this));
+    rankSyncCommand.setTabCompleter(new RankSyncTabCompleter(this.linkHelper));
+
+    PluginCommand unSyncCommand = getCommand("unsync");
+    unSyncCommand.setExecutor(new UnSyncCommand(this));
+    unSyncCommand.setTabCompleter(new RankSyncTabCompleter(this.linkHelper));
+  }
+
+  /**
+   * Creates a new name resource
+   */
+  @Override
+  public NameResource createNameResource() {
+    return new com.gmail.chickenpowerrr.ranksync.spigot.name.NameResource();
+  }
+
+  /**
+   * Returns all of the links given in the config.yml
+   */
+  @Override
+  public Map<String, Map<Bot<?, ?>, Collection<String>>> getSyncedRanks() {
+    Map<String, Map<Bot<?, ?>, Collection<String>>> syncedRanks = new HashMap<>();
+
+    getBots().forEach((botName, bot) -> {
+      Map<String, Object> ranks = getConfig().getConfigurationSection("ranks." + botName)
+          .getValues(false);
+      ranks.values().forEach(object -> {
+        ConfigurationSection rankInfo = (ConfigurationSection) object;
+        String minecraftRank = rankInfo.getString("minecraft");
+        Collection<String> platformRanks = rankInfo.getStringList(botName);
+
+        if (platformRanks.isEmpty()) {
+          platformRanks.add(rankInfo.getString(botName));
+        }
+
+        if (!syncedRanks.containsKey(minecraftRank)) {
+          syncedRanks.put(minecraftRank, new HashMap<>());
+        }
+        syncedRanks.get(minecraftRank).put(bot, platformRanks);
+      });
+    });
+
+    return syncedRanks;
+  }
+
+  /**
+   * Sets up the config
+   */
+  @Override
+  public void setupConfig() {
+    saveDefaultConfig();
+    setConfigDefaults();
   }
 }
