@@ -54,3 +54,11 @@ ranks:
       minecraft: "mod"
 # The name of the Discord group. It is case insensitive
       discord: "Minecraft Moderator"
+# A random UNIQUE prefix that is handy for you. The code doesn't do anything with it as long as it is UNIQUE.
+    vip:
+# The name of the Minecraft group. It is case sensitive
+      minecraft: "VIP"
+# Multiple Discord ranks synced to one Minecraft rank
+      discord:
+        - "VIP"
+        - "Donator"
