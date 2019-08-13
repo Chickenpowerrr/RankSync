@@ -24,7 +24,7 @@
         <dependency>
             <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
             <artifactId>api</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
 

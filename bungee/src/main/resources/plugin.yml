@@ -1,6 +1,6 @@
-name: ${parent.name}
+name: ${project.parent.name}
 version: ${project.version}
-main: ${project.groupId}.bungeecord.${parent.name}Plugin
+main: ${project.groupId}.bungeecord.${project.parent.name}Plugin
 author: Chickenpowerrr
 description: ${project.description}
 softdepend: [LuckPerms]

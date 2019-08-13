@@ -16,14 +16,14 @@
         <dependency>
             <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
             <artifactId>discord</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
             <artifactId>api</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
 
