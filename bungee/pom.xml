@@ -55,6 +55,41 @@
               <pattern>org.bstats</pattern>
               <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.bstats</shadedPattern>
             </relocation>
+
+            <relocation>
+              <pattern>net.dv8tion</pattern>
+              <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.jda</shadedPattern>
+            </relocation>
+
+            <relocation>
+              <pattern>com.google</pattern>
+              <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.google</shadedPattern>
+            </relocation>
+
+            <relocation>
+              <pattern>com.iwepp</pattern>
+              <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.iwepp</shadedPattern>
+            </relocation>
+
+            <relocation>
+              <pattern>com.neovisionaries.ws</pattern>
+              <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.ws</shadedPattern>
+            </relocation>
+
+            <relocation>
+              <pattern>gnu.trove</pattern>
+              <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.trove</shadedPattern>
+            </relocation>
+
+            <relocation>
+              <pattern>okhttp3</pattern>
+              <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.okhttp</shadedPattern>
+            </relocation>
+
+            <relocation>
+              <pattern>okio</pattern>
+              <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.okio</shadedPattern>
+            </relocation>
           </relocations>
         </configuration>
 
