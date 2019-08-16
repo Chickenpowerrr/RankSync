@@ -219,7 +219,6 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
    */
   @Override
   public boolean shouldThrowPermissionWarnings() {
-    System.out.println("Hey there: " + this.shouldThrowPermissionWarnings);
     return this.shouldThrowPermissionWarnings;
   }
 }
