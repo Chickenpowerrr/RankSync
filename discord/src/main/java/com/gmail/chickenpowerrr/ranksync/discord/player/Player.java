@@ -1,21 +1,19 @@
 package com.gmail.chickenpowerrr.ranksync.discord.player;
 
-import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
+import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.event.BotPlayerRanksUpdateEvent;
 import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
-import com.gmail.chickenpowerrr.ranksync.api.event.BotPlayerRanksUpdateEvent;
 import com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
+import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.exceptions.HierarchyException;
 
 /**
@@ -24,7 +22,6 @@ import net.dv8tion.jda.core.exceptions.HierarchyException;
  * @author Chickenpowerrr
  * @since 1.0.0
  */
-@Slf4j
 public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Player {
 
   private final Member member;
@@ -122,9 +119,11 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
     try {
       this.member.getGuild().getController().setNickname(this.member, username).queue();
     } catch (HierarchyException e) {
-      log.warn(
-          "Can't update the username for Discord user: " + this.member.getEffectiveName()
-              + " since their rank is too high");
+      if (this.rankFactory.shouldThrowPermissionWarnings()) {
+        System.out.println(
+            "Can't update the username for Discord user: " + this.member.getEffectiveName()
+                + " since their rank is too high");
+      }
     }
   }
 

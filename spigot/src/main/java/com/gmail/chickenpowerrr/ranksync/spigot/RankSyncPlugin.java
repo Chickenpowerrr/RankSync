@@ -100,6 +100,7 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
     getConfig().addDefault("update_non_synced", true);
     getConfig().addDefault("sync_names", false);
     getConfig().addDefault("database.type", "yaml");
+    getConfig().addDefault("discord.permission-warnings", true);
   }
 
   /**
@@ -117,12 +118,12 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
    */
   @Override
   public RankResource validateDependencies() {
-    if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
-      return new LuckPermsRankResource(this, LuckPerms.getApi());
-    } else if (Bukkit.getPluginManager().getPlugin("Vault") != null
+    if (Bukkit.getPluginManager().getPlugin("Vault") != null
         && getServer().getServicesManager().getRegistration(Permission.class) != null) {
       return new VaultRankResource(
           getServer().getServicesManager().getRegistration(Permission.class).getProvider());
+    } else if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
+      return new LuckPermsRankResource(this, LuckPerms.getApi());
     } else {
       shutdown("You should use either LuckPerms or Vault to work with RankSync");
       return null;

@@ -14,6 +14,8 @@ discord:
 # This defines the server that will use this bot. This token can be found like this:
 # https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Guild-id
   guild-id: 444222000
+# If the bot should send warnings when the bot doesn't have sufficient permissions
+  permission-warnings: true
 # The basic setup where all of the data should be saved
 database:
 # The way the data should be saved

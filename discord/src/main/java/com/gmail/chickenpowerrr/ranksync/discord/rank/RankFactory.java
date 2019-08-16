@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -34,6 +35,9 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   private final Bot<?, Role> bot;
   private final Collection<RankHelper> rankHelpers = new HashSet<>();
 
+  @Setter
+  private boolean shouldThrowPermissionWarnings;
+
   /**
    * @param bot the Bot that is running
    * @param guild the Guild the Bot is running on
@@ -41,6 +45,7 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   private RankFactory(Bot<?, Role> bot, Guild guild) {
     this.bot = bot;
     this.guild = guild;
+    this.shouldThrowPermissionWarnings = true;
   }
 
   /**
@@ -175,21 +180,25 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
           .filter(role -> role.getPosition() >= highestRole.getAsInt()).map(Role::getName)
           .collect(Collectors.joining(", "));
       if (!invalidPriorities.isEmpty()) {
-        System.out.println("===================================");
-        System.out.println("RankSync Warning:");
-        System.out.println(
-            "The Discord bot doesn't have a high enough rank priority to issue the following ranks:.");
-        System.out.println(invalidPriorities);
-        System.out.println("For more information please follow this guide: ");
-        System.out
-            .println("https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token");
-        System.out.println("===================================");
+        if (shouldThrowPermissionWarnings()) {
+          System.out.println("===================================");
+          System.out.println("RankSync Warning:");
+          System.out.println(
+              "The Discord bot doesn't have a high enough rank priority to issue the following ranks:.");
+          System.out.println(invalidPriorities);
+          System.out.println("For more information please follow this guide: ");
+          System.out
+              .println("https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token");
+          System.out.println("===================================");
+        }
       }
     } else {
-      System.out.println("===================================");
-      System.out.println("RankSync Warning:");
-      System.out.println("The Discord bot doesn't have a rank.");
-      System.out.println("===================================");
+      if (shouldThrowPermissionWarnings()) {
+        System.out.println("===================================");
+        System.out.println("RankSync Warning:");
+        System.out.println("The Discord bot doesn't have a rank.");
+        System.out.println("===================================");
+      }
     }
   }
 
@@ -203,5 +212,13 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   public boolean isValidRank(Rank rank) {
     return this.rankHelpers.stream()
         .anyMatch(rankHelper -> rankHelper.isSynchronized(this.bot, rank));
+  }
+
+  /**
+   * Returns if the helper should give warnings when the bot doesn't have high enough permissions
+   */
+  @Override
+  public boolean shouldThrowPermissionWarnings() {
+    return this.shouldThrowPermissionWarnings;
   }
 }

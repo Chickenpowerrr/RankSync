@@ -111,7 +111,13 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
    */
   @Override
   public String getConfigString(String key) {
-    return this.configuration.getString(key);
+    if (this.configuration.contains(key)) {
+      return this.configuration.getString(key);
+    } else if (key.equals("database.type")) {
+      return "yaml";
+    } else {
+      return "";
+    }
   }
 
   /**
@@ -155,7 +161,18 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
    */
   @Override
   public boolean getConfigBoolean(String key) {
-    return this.configuration.getBoolean(key);
+    if (this.configuration.contains(key)) {
+      return this.configuration.getBoolean(key);
+    } else {
+      switch (key) {
+        case "update_non_synced":
+        case "discord.permission-warnings":
+          return true;
+        case "sync_names":
+        default:
+          return false;
+      }
+    }
   }
 
   /**
