@@ -86,6 +86,8 @@ public class DiscordBot implements Bot<Member, Role> {
     if (this.guild != null) {
       this.rankFactory = com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory
           .getInstance(this, guild);
+      this.rankFactory
+          .setShouldThrowPermissionWarnings(this.properties.getBoolean("permission_warnings"));
       this.playerFactory = com.gmail.chickenpowerrr.ranksync.discord.player.PlayerFactory
           .getInstance(this, guild);
       this.databaseFactory = com.gmail.chickenpowerrr.ranksync.discord.data.DatabaseFactory

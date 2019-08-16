@@ -5,7 +5,7 @@
     <parent>
         <artifactId>ranksync</artifactId>
         <groupId>com.gmail.chickenpowerrr</groupId>
-        <version>1.3.0</version>
+        <version>1.3.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -58,11 +58,6 @@
                         <relocation>
                             <pattern>net.dv8tion</pattern>
                             <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.jda</shadedPattern>
-                        </relocation>
-
-                        <relocation>
-                            <pattern>com.google</pattern>
-                            <shadedPattern>com.gmail.chickenpowerrr.ranksync.lib.google</shadedPattern>
                         </relocation>
 
                         <relocation>

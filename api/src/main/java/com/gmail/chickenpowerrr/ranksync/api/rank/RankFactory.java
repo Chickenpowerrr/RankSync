@@ -82,4 +82,17 @@ public interface RankFactory<R> {
    * @return if the given rank is a valid platform rank according to the RankHelpers
    */
   boolean isValidRank(Rank rank);
+
+  /**
+   * Updates if the factory should throw warnings when the bot's permissions are insufficient
+   *
+   * @param shouldThrow if the factory should throw warnings when the bot's permissions are
+   * insufficient
+   */
+  void setShouldThrowPermissionWarnings(boolean shouldThrow);
+
+  /**
+   * Returns if the helper should give warnings when the bot doesn't have high enough permissions
+   */
+  boolean shouldThrowPermissionWarnings();
 }

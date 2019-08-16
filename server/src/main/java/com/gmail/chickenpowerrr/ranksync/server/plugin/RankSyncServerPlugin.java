@@ -205,6 +205,7 @@ public interface RankSyncServerPlugin {
           .addProperty("guild_id", getConfigLong("discord.guild-id"))
           .addProperty("update_non_synced", getConfigBoolean("discord.update-non-synced"))
           .addProperty("sync_names", getConfigBoolean("discord.sync-names"))
+          .addProperty("permission_warnings", getConfigBoolean("discord.permission-warnings"))
           .addProperty("type", getConfigString("database.type"))
           .addProperty("max_pool_size", getConfigInt("database.sql.max-pool-size"))
           .addProperty("host", getConfigString("database.sql.host"))

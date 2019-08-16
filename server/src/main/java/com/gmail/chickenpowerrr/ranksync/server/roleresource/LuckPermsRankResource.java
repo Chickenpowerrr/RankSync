@@ -34,7 +34,8 @@ public class LuckPermsRankResource implements RankResource {
    * @param luckPermsApi the LuckPermsApi instance that is currently used on the server
    * @param bot the Bot that is giving the ranks to players
    */
-  public LuckPermsRankResource(RankSyncServerPlugin rankSyncPlugin, LuckPermsApi luckPermsApi, Bot bot) {
+  public LuckPermsRankResource(RankSyncServerPlugin rankSyncPlugin, LuckPermsApi luckPermsApi,
+      Bot bot) {
     this.rankSyncPlugin = rankSyncPlugin;
     this.api = luckPermsApi;
     this.bot = bot;
@@ -64,7 +65,9 @@ public class LuckPermsRankResource implements RankResource {
 
     this.api.getUserManager().loadUser(uuid).thenAcceptAsync(user ->
         completableFuture.complete(
-            user.getOwnNodes().stream().filter(Node::isGroupNode).map(Node::getGroupName)
+            user.getOwnNodes().stream()
+                .filter(Node::isGroupNode)
+                .map(Node::getGroupName)
                 .map(groupName -> this.rankHelper.getRanks(this.bot, groupName))
                 .flatMap(Collection::stream)
                 .filter(Objects::nonNull).collect(Collectors.toSet())));
