@@ -1,32 +1,31 @@
 package com.gmail.chickenpowerrr.ranksync.discord.bot;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
-import com.gmail.chickenpowerrr.ranksync.api.*;
+import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.command.CommandFactory;
 import com.gmail.chickenpowerrr.ranksync.api.data.Database;
 import com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory;
-import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
-import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
 import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
-import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotEnabledEvent;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotForceShutdownEvent;
-import com.gmail.chickenpowerrr.ranksync.discord.event.DiscordEventListeners;
+import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
+import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
+import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
 import com.gmail.chickenpowerrr.ranksync.discord.command.LinkCommand;
+import com.gmail.chickenpowerrr.ranksync.discord.event.DiscordEventListeners;
 import com.gmail.chickenpowerrr.ranksync.discord.language.Translation;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
+import javax.security.auth.login.LoginException;
 import lombok.Getter;
 import lombok.Setter;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-
-import javax.security.auth.login.LoginException;
-import java.util.HashSet;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 
 public class DiscordBot implements Bot<Member, Role> {
 
@@ -65,7 +64,7 @@ public class DiscordBot implements Bot<Member, Role> {
 
     try {
       new JDABuilder(properties.getString("token"))
-          .addEventListener(new DiscordEventListeners(this)).build();
+          .addEventListeners(new DiscordEventListeners(this)).build();
     } catch (LoginException e) {
       if (e.toString().contains("The provided token is invalid!")) {
         RankSyncApi.getApi()

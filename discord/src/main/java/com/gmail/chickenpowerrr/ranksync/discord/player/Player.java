@@ -12,9 +12,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.exceptions.HierarchyException;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 
 /**
  * This class represents a Discord user
@@ -117,7 +117,7 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
   @Override
   public void setUsername(String username) {
     try {
-      this.member.getGuild().getController().setNickname(this.member, username).queue();
+      this.member.modifyNickname(username).queue();
     } catch (HierarchyException e) {
       if (this.rankFactory.shouldThrowPermissionWarnings()) {
         System.out.println(
@@ -149,8 +149,10 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
         toRemove.stream().map(this.rankFactory::getRankFromRole).collect(Collectors.toSet()),
         toAdd.stream().map(this.rankFactory::getRankFromRole).collect(Collectors.toSet())))
         .cancelled()) {
-      this.member.getGuild().getController().removeRolesFromMember(this.member, toRemove).submit();
-      this.member.getGuild().getController().addRolesToMember(this.member, toAdd).submit();
+      toRemove
+          .forEach(role -> this.member.getGuild().removeRoleFromMember(this.member, role).queue());
+      toAdd
+          .forEach(role -> this.member.getGuild().addRoleToMember(this.member, role).queue());
     }
   }
 }
