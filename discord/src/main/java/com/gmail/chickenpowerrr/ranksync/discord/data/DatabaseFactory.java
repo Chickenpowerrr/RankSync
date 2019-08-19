@@ -3,11 +3,10 @@ package com.gmail.chickenpowerrr.ranksync.discord.data;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.data.Database;
 import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
-import lombok.Getter;
-import net.dv8tion.jda.core.entities.Guild;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
+import net.dv8tion.jda.api.entities.Guild;
 
 /**
  * This class can be used to get a data storage for the ranks
