@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -59,8 +59,8 @@ public class DiscordEventListeners implements EventListener {
       this.bot.enable(event.getJDA());
     } else if (event instanceof MessageReceivedEvent) {
       MessageReceivedEvent messageReceivedEvent = (MessageReceivedEvent) event;
-      if (messageReceivedEvent.getGuild() != null && messageReceivedEvent.getGuild()
-          .equals(this.bot.getGuild())) {
+      if (messageReceivedEvent.isFromGuild() && messageReceivedEvent.getGuild()
+          .equals(this.bot.getGuild()) && messageReceivedEvent.isFromType(ChannelType.TEXT)) {
         if (messageReceivedEvent.getMessage().getContentStripped().startsWith("!")) {
           List<String> commandData = Arrays
               .asList(messageReceivedEvent.getMessage().getContentStripped().split(" "));
