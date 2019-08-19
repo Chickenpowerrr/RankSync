@@ -14,6 +14,13 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.6</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
       <artifactId>discord</artifactId>
       <version>${project.parent.version}</version>
@@ -25,13 +32,6 @@
       <artifactId>api</artifactId>
       <version>${project.parent.version}</version>
       <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.0</version>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>
