@@ -14,6 +14,83 @@
   <artifactId>bungee</artifactId>
   <description>Sync your ranks Minecraft ranks between services</description>
 
+  <repositories>
+    <repository>
+      <id>sonatype-oss-repo</id>
+      <url>https://oss.sonatype.org/content/groups/public/</url>
+    </repository>
+
+    <repository>
+      <id>CodeMC</id>
+      <url>https://repo.codemc.org/repository/maven-public</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>1.12-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
+      <artifactId>manager</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>compile</scope>
+
+      <exclusions>
+        <exclusion>
+          <groupId>org.yaml</groupId>
+          <artifactId>snakeyaml</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
+      <artifactId>server</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
+      <artifactId>api</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>me.lucko.luckperms</groupId>
+      <artifactId>luckperms-api</artifactId>
+      <version>4.3</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.5</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bungeecord</artifactId>
+      <version>1.5</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+
   <build>
     <defaultGoal>clean package</defaultGoal>
     <plugins>
@@ -105,81 +182,4 @@
       </resource>
     </resources>
   </build>
-
-  <repositories>
-    <repository>
-      <id>sonatype-oss-repo</id>
-      <url>https://oss.sonatype.org/content/groups/public/</url>
-    </repository>
-
-    <repository>
-      <id>CodeMC</id>
-      <url>https://repo.codemc.org/repository/maven-public</url>
-    </repository>
-  </repositories>
-
-  <dependencies>
-    <dependency>
-      <groupId>net.md-5</groupId>
-      <artifactId>bungeecord-api</artifactId>
-      <version>1.12-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
-      <artifactId>manager</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>compile</scope>
-
-      <exclusions>
-        <exclusion>
-          <groupId>org.yaml</groupId>
-          <artifactId>snakeyaml</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
-      <artifactId>server</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
-      <artifactId>api</artifactId>
-      <version>${project.parent.version}</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>me.lucko.luckperms</groupId>
-      <artifactId>luckperms-api</artifactId>
-      <version>4.3</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.0</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.8.5</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.bstats</groupId>
-      <artifactId>bstats-bungeecord</artifactId>
-      <version>1.5</version>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
 </project>
