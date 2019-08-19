@@ -1,8 +1,8 @@
 package com.gmail.chickenpowerrr.ranksync.discord.rank;
 
 import lombok.Getter;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
 
 /**
  * This class represents a Discord role

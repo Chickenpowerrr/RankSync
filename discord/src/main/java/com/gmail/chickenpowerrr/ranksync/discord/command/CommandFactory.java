@@ -2,10 +2,9 @@ package com.gmail.chickenpowerrr.ranksync.discord.command;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.command.Command;
-import net.dv8tion.jda.core.entities.Guild;
-
 import java.util.HashMap;
 import java.util.Map;
+import net.dv8tion.jda.api.entities.Guild;
 
 /**
  * This interface manages all of the things that are needed to easily control the Discord commands
