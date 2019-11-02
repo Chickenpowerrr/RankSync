@@ -136,4 +136,15 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
       );
     });
   }
+
+  /**
+   * Returns all links
+   */
+  @Override
+  public Collection<Link> getLinks() {
+    return this.ranks.values().stream()
+        .flatMap(Collection::stream)
+        .distinct()
+        .collect(Collectors.toList());
+  }
 }

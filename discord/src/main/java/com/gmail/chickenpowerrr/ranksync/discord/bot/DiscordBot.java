@@ -138,4 +138,9 @@ public class DiscordBot implements Bot<Member, Role> {
   public boolean doesUpdateNames() {
     return this.properties.getBoolean("sync_names");
   }
+
+  @Override
+  public String getNameSyncFormat() {
+    return this.properties.getString("name_format");
+  }
 }

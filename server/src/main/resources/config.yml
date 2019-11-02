@@ -7,7 +7,6 @@
 #   sync-names: If the usernames of users should be updated to their ingame name
 #   name-format: The format for the name sync feature
 #                - %discord_rank% The name of the rank in Discord
-#                - %minecraft_rank% The name of the rank in Minecraft
 #                - %name% The Minecraft username
 #   token: The Discord Token, for more information see:
 #          https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token

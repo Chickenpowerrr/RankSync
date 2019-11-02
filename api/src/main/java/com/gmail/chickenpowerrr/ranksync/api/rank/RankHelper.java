@@ -1,6 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.api.rank;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.link.Link;
 import java.util.Collection;
 
 /**
@@ -43,4 +44,9 @@ public interface RankHelper {
    * be send to the console
    */
   void validateRanks();
+
+  /**
+   * Returns all links
+   */
+  Collection<Link> getLinks();
 }
