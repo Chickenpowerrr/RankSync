@@ -5,6 +5,10 @@
 # discord:
 #   update-non-synced: If the ranks from non-synced users should be removed
 #   sync-names: If the usernames of users should be updated to their ingame name
+#   name-format: The format for the name sync feature
+#                - %discord_rank% The name of the rank in Discord
+#                - %minecraft_rank% The name of the rank in Minecraft
+#                - %name% The Minecraft username
 #   token: The Discord Token, for more information see:
 #          https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token
 #   permission-warnings: If the plugin should notify the console when it isn't able to
@@ -24,6 +28,7 @@
 #     discord: Don't touch this
 #       administrator: A random UNIQUE prefix that is handy for you.
 #                      The code doesn't do anything with it as long as it is UNIQUE.
+#         name-format: Overwrites the default name-format for this specific rank
 #         minecraft: The name of the Minecraft group. It is case sensitive
 #         discord: The name of the Discord group. It is case insensitive
 # -
@@ -36,6 +41,7 @@ language: english
 discord:
   update-non-synced: false
   sync-names: false
+  name-format: "%discord_rank% << %name%"
   token: "YOURTOKEN"
   guild-id: 444222000
   permission-warnings: true
@@ -56,9 +62,11 @@ ranks:
       minecraft: "admin"
       discord: "Minecraft Administrator"
     moderator:
+      name-format: "Mod << %name%"
       minecraft: "mod"
       discord: "Minecraft Moderator"
     vip:
+      name-format: "%name%"
       minecraft: "VIP"
       discord:
         - "VIP"
