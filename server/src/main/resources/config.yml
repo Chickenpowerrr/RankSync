@@ -1,7 +1,7 @@
 # language:
 # All available languages are available in the /plugins/RankSync/language/ directory
 # For more information, see: https://github.com/Chickenpowerrr/RankSync/wiki/Language
-#
+# -
 # discord:
 #   update-non-synced: If the ranks from non-synced users should be removed
 #   sync-names: If the usernames of users should be updated to their ingame name
@@ -11,7 +11,7 @@
 #                        perform a certain task
 # database:
 #   type: Yaml or SQL
-#
+# -
 #   sql:
 #     max-pool-size: Don't this if you don't know what it is
 #     host: The host the SQL server is running on
@@ -19,14 +19,14 @@
 #     database: The target database in the SQL server
 #     user: The username to login into the SQL server
 #     password: The password to login into the SQL server
-#
+# -
 #   ranks: For more information see: https://github.com/Chickenpowerrr/RankSync/wiki/Ranks
 #     discord: Don't touch this
 #       administrator: A random UNIQUE prefix that is handy for you.
 #                      The code doesn't do anything with it as long as it is UNIQUE.
 #         minecraft: The name of the Minecraft group. It is case sensitive
 #         discord: The name of the Discord group. It is case insensitive
-#
+# -
 # For more information see:
 # - https://github.com/Chickenpowerrr/RankSync/wiki
 # - https://discord.gg/zDsmRTd
