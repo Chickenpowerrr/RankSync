@@ -45,8 +45,9 @@ public interface Player {
    * Sends a private message to the Player on this service
    *
    * @param message the message the Player should receive
+   * @return true if the message has been send successfully, otherwise false
    */
-  void sendPrivateMessage(String message);
+  boolean sendPrivateMessage(String message);
 
   /**
    * Returns the name the Player wants to hear when you're talking to it

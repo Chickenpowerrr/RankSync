@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 
 /**
@@ -75,9 +76,14 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
    * @param message the message the user should receive
    */
   @Override
-  public void sendPrivateMessage(String message) {
-    this.member.getUser().openPrivateChannel()
-        .queue((privateChannel -> privateChannel.sendMessage(message).queue()));
+  public boolean sendPrivateMessage(String message) {
+    try {
+      this.member.getUser().openPrivateChannel()
+          .complete().sendMessage(message).complete();
+      return true;
+    } catch (ErrorResponseException e) {
+      return false;
+    }
   }
 
   /**
