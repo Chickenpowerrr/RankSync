@@ -55,20 +55,6 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
   public void onEnable() {
     enable();
     Metrics metrics = new Metrics(this);
-
-    Configuration defaults = getConfig().getDefaults();
-    getConfig().setDefaults(new MemoryConfiguration());
-    if (getConfig().contains("ranks.discord")) {
-      if (getConfig().isConfigurationSection("ranks.discord")) {
-        defaults.set("ranks.discord", null);
-      } else {
-        getConfig().set("ranks.discord", null);
-      }
-    }
-    getConfig().setDefaults(defaults);
-
-    getConfig().options().copyDefaults(true);
-    saveConfig();
   }
 
   /**
@@ -279,5 +265,19 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
   public void setupConfig() {
     saveDefaultConfig();
     setConfigDefaults();
+
+    Configuration defaults = getConfig().getDefaults();
+    getConfig().setDefaults(new MemoryConfiguration());
+    if (getConfig().contains("ranks.discord")) {
+      if (getConfig().isConfigurationSection("ranks.discord")) {
+        defaults.set("ranks.discord", null);
+      } else {
+        getConfig().set("ranks.discord", null);
+      }
+    }
+    getConfig().setDefaults(defaults);
+
+    getConfig().options().copyDefaults(true);
+    saveConfig();
   }
 }

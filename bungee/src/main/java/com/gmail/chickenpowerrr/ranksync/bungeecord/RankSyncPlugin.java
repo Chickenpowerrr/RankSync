@@ -55,26 +55,11 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   /**
    * Enables the important features in order to synchronize ranks
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void onEnable() {
     enable();
     Metrics metrics = new Metrics(this);
-
-    try {
-      Field defaultField = this.configuration.getClass().getDeclaredField("defaults");
-      defaultField.setAccessible(true);
-      Configuration defaults = (Configuration) defaultField.get(this.configuration);
-      defaults.set("ranks.discord", null);
-    } catch (NoSuchFieldException | IllegalAccessException e) {
-      throw new RuntimeException(e);
-    }
-
-    try {
-      ConfigurationProvider.getProvider(YamlConfiguration.class)
-          .save(this.configuration, new File(getDataFolder(), "config.yml"));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
   }
 
   /**
@@ -285,6 +270,7 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   /**
    * Sets up the config
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void setupConfig() {
     if (!getDataFolder().exists()) {
@@ -304,7 +290,29 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
     try {
       this.configuration = ConfigurationProvider
           .getProvider(YamlConfiguration.class)
-          .load(new File(getDataFolder(), "config.yml"));
+          .load(new File(getDataFolder(), "config.yml"),
+              ConfigurationProvider.getProvider(YamlConfiguration.class)
+                  .load(getResourceAsStream("config.yml")));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    try {
+      Field defaultField = this.configuration.getClass().getDeclaredField("defaults");
+      defaultField.setAccessible(true);
+      Configuration defaults = (Configuration) defaultField.get(this.configuration);
+      Field selfField = this.configuration.getClass().getDeclaredField("self");
+      selfField.setAccessible(true);
+      System.out.println(defaults);
+      Map<String, Object> self = (Map<String, Object>) selfField.get(defaults);
+      self.remove("ranks");
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+
+    try {
+      ConfigurationProvider.getProvider(YamlConfiguration.class)
+          .save(this.configuration, new File(getDataFolder(), "config.yml"));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
