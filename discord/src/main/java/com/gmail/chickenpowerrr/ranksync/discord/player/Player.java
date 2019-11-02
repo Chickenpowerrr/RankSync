@@ -8,6 +8,7 @@ import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -89,11 +90,23 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
         if (ranks != null) {
           setRanks(ranks);
         }
-      });
 
-      if (this.bot.doesUpdateNames()) {
-        setUsername(this.nameResource.getName(this.uuid));
-      }
+        if (this.bot.doesUpdateNames()) {
+          String username = this.nameResource.getName(this.uuid);
+          if (ranks != null) {
+            Optional<Rank> rank = ranks.stream().findFirst();
+            if (rank.isPresent()) {
+              setUsername(this.bot.getNameSyncFormat()
+                  .replace("%name%", username)
+                  .replace("%discord_rank%", rank.get().getName()));
+            } else {
+              setUsername(this.bot.getNameSyncFormat().replace("%name%", username));
+            }
+          } else {
+            setUsername(this.bot.getNameSyncFormat().replace("%name%", username));
+          }
+        }
+      });
     } else {
       if (this.bot.doesUpdateNonSynced()) {
         setRanks(new HashSet<>());

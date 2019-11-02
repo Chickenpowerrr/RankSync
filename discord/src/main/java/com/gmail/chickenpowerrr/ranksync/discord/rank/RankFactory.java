@@ -31,9 +31,10 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   private final Map<Role, Rank> ranks = new HashMap<>();
   private final Map<String, Role> roles = new HashMap<>();
   private final Guild guild;
+  private final Collection<RankHelper> rankHelpers = new HashSet<>();
+
   @Getter
   private final Bot<?, Role> bot;
-  private final Collection<RankHelper> rankHelpers = new HashSet<>();
 
   @Setter
   private boolean shouldThrowPermissionWarnings;
@@ -220,5 +221,23 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   @Override
   public boolean shouldThrowPermissionWarnings() {
     return this.shouldThrowPermissionWarnings;
+  }
+
+  /**
+   * Returns the format for the Rank in which an username should be updated
+   * if name sync has been enabled
+   *
+   * @param rank the rank which format should be returned
+   * @return the format for the Rank in which an username should be updated
+   * if name sync has been enabled
+   */
+  @Override
+  public String getNameSyncFormat(Rank rank) {
+    return Objects.requireNonNull(this.rankHelpers.stream()
+        .map(rankHelper -> rankHelper.getLinks().stream()
+            .filter(link -> link.getPlatformRanks().stream()
+                .anyMatch(platFormRank -> platFormRank.equalsIgnoreCase(rank.getName())))
+            .findFirst().orElse(null))
+        .findFirst().orElse(null)).getNameFormat();
   }
 }

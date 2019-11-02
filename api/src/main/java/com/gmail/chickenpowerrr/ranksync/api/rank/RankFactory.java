@@ -95,4 +95,14 @@ public interface RankFactory<R> {
    * Returns if the helper should give warnings when the bot doesn't have high enough permissions
    */
   boolean shouldThrowPermissionWarnings();
+
+  /**
+   * Returns the format for the Rank in which an username should be updated
+   * if name sync has been enabled
+   *
+   * @param rank the rank which format should be returned
+   * @return the format for the Rank in which an username should be updated
+   * if name sync has been enabled
+   */
+  String getNameSyncFormat(Rank rank);
 }

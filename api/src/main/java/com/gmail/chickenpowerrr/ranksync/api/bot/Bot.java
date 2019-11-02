@@ -1,11 +1,11 @@
 package com.gmail.chickenpowerrr.ranksync.api.bot;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
-import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
-import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
 import com.gmail.chickenpowerrr.ranksync.api.command.CommandFactory;
 import com.gmail.chickenpowerrr.ranksync.api.data.Database;
 import com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory;
+import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
+import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
 import java.util.Collection;
 
@@ -99,4 +99,13 @@ public interface Bot<P, R> {
    * Returns if the program should synchronize the usernames
    */
   boolean doesUpdateNames();
+
+  /**
+   * Returns the format for in which an username should be updated
+   * if name sync has been enabled
+   *
+   * @return the format for in which an username should be updated
+   * if name sync has been enabled
+   */
+  String getNameSyncFormat();
 }

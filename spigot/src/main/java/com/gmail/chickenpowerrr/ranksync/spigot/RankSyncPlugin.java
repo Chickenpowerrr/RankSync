@@ -1,6 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.spigot;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.link.Link;
 import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
@@ -13,10 +14,12 @@ import com.gmail.chickenpowerrr.ranksync.spigot.command.UnSyncCommand;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.AsyncPlayerPreLoginEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.PlayerQuitEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.VaultRankResource;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import me.lucko.luckperms.LuckPerms;
@@ -92,17 +95,6 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
       getLogger().warning(reasonString);
     }
     Bukkit.getPluginManager().disablePlugin(JavaPlugin.getPlugin(RankSyncPlugin.class));
-  }
-
-  /**
-   * Updates the defaults of the config to make sure everything can still be used when it's not in
-   * the config.yml
-   */
-  private void setConfigDefaults() {
-    getConfig().addDefault("update_non_synced", true);
-    getConfig().addDefault("sync_names", false);
-    getConfig().addDefault("database.type", "yaml");
-    getConfig().addDefault("discord.permission-warnings", true);
   }
 
   /**
@@ -233,8 +225,8 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
    * Returns all of the links given in the config.yml
    */
   @Override
-  public Map<String, Map<Bot<?, ?>, Collection<String>>> getSyncedRanks() {
-    Map<String, Map<Bot<?, ?>, Collection<String>>> syncedRanks = new HashMap<>();
+  public List<Link> getSyncedRanks() {
+    List<Link> syncedRanks = new ArrayList<>();
 
     getBots().forEach((botName, bot) -> {
       Map<String, Object> ranks = getConfig().getConfigurationSection("ranks." + botName)
@@ -242,16 +234,16 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
       ranks.values().forEach(object -> {
         ConfigurationSection rankInfo = (ConfigurationSection) object;
         String minecraftRank = rankInfo.getString("minecraft");
-        Collection<String> platformRanks = rankInfo.getStringList(botName);
+        List<String> platformRanks = rankInfo.getStringList(botName);
 
         if (platformRanks.isEmpty()) {
           platformRanks.add(rankInfo.getString(botName));
         }
 
-        if (!syncedRanks.containsKey(minecraftRank)) {
-          syncedRanks.put(minecraftRank, new HashMap<>());
-        }
-        syncedRanks.get(minecraftRank).put(bot, platformRanks);
+        syncedRanks.add(new com.gmail.chickenpowerrr.ranksync.server.link.Link(
+            Collections.singletonList(minecraftRank), platformRanks,
+            Optional.ofNullable(rankInfo.getString("name-format"))
+                .orElse(getConfig().getString("discord.name-format")), bot));
       });
     });
 
@@ -264,7 +256,6 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
   @Override
   public void setupConfig() {
     saveDefaultConfig();
-    setConfigDefaults();
 
     Configuration defaults = getConfig().getDefaults();
     getConfig().setDefaults(new MemoryConfiguration());
@@ -279,5 +270,13 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
 
     getConfig().options().copyDefaults(true);
     saveConfig();
+  }
+
+  /**
+   * Returns if the bot is still running
+   */
+  @Override
+  public boolean isRunning() {
+    return Bukkit.getPluginManager().isPluginEnabled(this);
   }
 }

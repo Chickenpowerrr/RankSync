@@ -4,6 +4,7 @@ import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
 import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.data.BasicProperties;
+import com.gmail.chickenpowerrr.ranksync.api.link.Link;
 import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
@@ -17,7 +18,6 @@ import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerLinkedEventListen
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerUpdateOnlineStatusEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.update.UpdateChecker;
 import java.io.File;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +46,9 @@ public interface RankSyncServerPlugin {
    */
   void runTaskTimer(Runnable runnable, long delay, long period);
 
+  /**
+   * Sets up the config
+   */
   void setupConfig();
 
   /**
@@ -166,7 +169,12 @@ public interface RankSyncServerPlugin {
   /**
    * Returns all of the links given in the config.yml
    */
-  Map<String, Map<Bot<?, ?>, Collection<String>>> getSyncedRanks();
+  List<Link> getSyncedRanks();
+
+  /**
+   * Returns if the bot is still running
+   */
+  boolean isRunning();
 
   /**
    * Enables the plugin
@@ -205,6 +213,7 @@ public interface RankSyncServerPlugin {
           .addProperty("guild_id", getConfigLong("discord.guild-id"))
           .addProperty("update_non_synced", getConfigBoolean("discord.update-non-synced"))
           .addProperty("sync_names", getConfigBoolean("discord.sync-names"))
+          .addProperty("name_format", getConfigString("discord.name-format"))
           .addProperty("permission_warnings", getConfigBoolean("discord.permission-warnings"))
           .addProperty("type", getConfigString("database.type"))
           .addProperty("max_pool_size", getConfigInt("database.sql.max-pool-size"))
@@ -224,14 +233,16 @@ public interface RankSyncServerPlugin {
 
       setRankHelper(new com.gmail.chickenpowerrr.ranksync.server.rank.RankHelper(getSyncedRanks()));
 
-      RankSyncApi.getApi().registerListener(new PlayerUpdateOnlineStatusEventListener());
-      RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener(getLinkHelper()));
-      RankSyncApi.getApi().registerListener(new BotEnabledEventListener(getRankHelper()));
-      RankSyncApi.getApi().registerListener(new PlayerLinkedEventListener());
+      if (isRunning()) {
+        RankSyncApi.getApi().registerListener(new PlayerUpdateOnlineStatusEventListener());
+        RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener(getLinkHelper()));
+        RankSyncApi.getApi().registerListener(new BotEnabledEventListener(getRankHelper()));
+        RankSyncApi.getApi().registerListener(new PlayerLinkedEventListener());
 
-      registerListeners();
-      logInfo(Translation.STARTUP_RANKS
-          .getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
+        registerListeners();
+        logInfo(Translation.STARTUP_RANKS
+            .getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
+      }
     }
   }
 }
