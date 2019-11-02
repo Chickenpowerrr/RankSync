@@ -24,7 +24,9 @@ import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -53,6 +55,20 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
   public void onEnable() {
     enable();
     Metrics metrics = new Metrics(this);
+
+    Configuration defaults = getConfig().getDefaults();
+    getConfig().setDefaults(new MemoryConfiguration());
+    if (getConfig().contains("ranks.discord")) {
+      if (getConfig().isConfigurationSection("ranks.discord")) {
+        defaults.set("ranks.discord", null);
+      } else {
+        getConfig().set("ranks.discord", null);
+      }
+    }
+    getConfig().setDefaults(defaults);
+
+    getConfig().options().copyDefaults(true);
+    saveConfig();
   }
 
   /**

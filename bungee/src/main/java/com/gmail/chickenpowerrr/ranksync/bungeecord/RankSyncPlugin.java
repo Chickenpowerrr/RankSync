@@ -15,6 +15,7 @@ import com.gmail.chickenpowerrr.ranksync.server.roleresource.LuckPermsRankResour
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
@@ -58,6 +59,22 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   public void onEnable() {
     enable();
     Metrics metrics = new Metrics(this);
+
+    try {
+      Field defaultField = this.configuration.getClass().getDeclaredField("defaults");
+      defaultField.setAccessible(true);
+      Configuration defaults = (Configuration) defaultField.get(this.configuration);
+      defaults.set("ranks.discord", null);
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+
+    try {
+      ConfigurationProvider.getProvider(YamlConfiguration.class)
+          .save(this.configuration, new File(getDataFolder(), "config.yml"));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
