@@ -98,17 +98,6 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
   }
 
   /**
-   * Updates the defaults of the config to make sure everything can still be used when it's not in
-   * the config.yml
-   */
-  private void setConfigDefaults() {
-    getConfig().addDefault("update_non_synced", true);
-    getConfig().addDefault("sync_names", false);
-    getConfig().addDefault("database.type", "yaml");
-    getConfig().addDefault("discord.permission-warnings", true);
-  }
-
-  /**
    * Registers the listeners
    */
   @Override
@@ -267,7 +256,6 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
   @Override
   public void setupConfig() {
     saveDefaultConfig();
-    setConfigDefaults();
 
     Configuration defaults = getConfig().getDefaults();
     getConfig().setDefaults(new MemoryConfiguration());
