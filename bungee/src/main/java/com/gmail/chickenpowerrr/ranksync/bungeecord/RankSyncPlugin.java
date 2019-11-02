@@ -1,6 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.bungeecord;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.link.Link;
 import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
@@ -17,10 +18,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.Setter;
@@ -245,23 +248,23 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
    * Returns all of the links given in the config.yml
    */
   @Override
-  public Map<String, Map<Bot<?, ?>, Collection<String>>> getSyncedRanks() {
-    Map<String, Map<Bot<?, ?>, Collection<String>>> syncedRanks = new HashMap<>();
+  public List<Link> getSyncedRanks() {
+    List<Link> syncedRanks = new ArrayList<>();
 
     getBots()
         .forEach((botName, bot) -> this.configuration.getSection("ranks.discord").getKeys().stream()
             .map(section -> this.configuration.getSection("ranks.discord." + section))
             .forEach(section -> {
               String minecraftRank = section.getString("minecraft");
-              Collection<String> platformRanks = section.getStringList(botName);
+              List<String> platformRanks = section.getStringList(botName);
               if (platformRanks.isEmpty()) {
                 platformRanks.add(section.getString(botName));
               }
 
-              if (!syncedRanks.containsKey(minecraftRank)) {
-                syncedRanks.put(minecraftRank, new HashMap<>());
-              }
-              syncedRanks.get(minecraftRank).put(bot, platformRanks);
+              syncedRanks.add(new com.gmail.chickenpowerrr.ranksync.server.link.Link(
+                  Collections.singletonList(minecraftRank), platformRanks,
+                  Optional.ofNullable(section.getString("name-format"))
+                      .orElse(this.configuration.getString("discord.name-format")), bot));
             }));
 
     return syncedRanks;

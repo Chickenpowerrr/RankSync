@@ -1,9 +1,13 @@
 package com.gmail.chickenpowerrr.ranksync.server.rank;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.link.Link;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.server.language.Translation;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
@@ -21,14 +25,19 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
 
   private static final Logger LOGGER = Logger.getLogger(RankHelper.class.getSimpleName());
 
-  private final Map<String, Map<Bot<?, ?>, Collection<String>>> ranks;
+  private final Map<String, List<Link>> ranks;
 
   /**
-   * @param ranks a map with the synced ranks, with the key: Minecraft Rank and the value is a map
-   * with the Bot that syncs a rank and the value is the synced Rank
+   * @param ranks all ranks that have been synchronized between the Minecraft and the platform
    */
-  public RankHelper(Map<String, Map<Bot<?, ?>, Collection<String>>> ranks) {
-    this.ranks = ranks;
+  public RankHelper(List<Link> ranks) {
+    this.ranks = new LinkedHashMap<>();
+    ranks.forEach(link -> link.getMinecraftRanks().forEach(minecraftRank -> {
+      if (!this.ranks.containsKey(minecraftRank)) {
+        this.ranks.put(minecraftRank, new ArrayList<>());
+      }
+      this.ranks.get(minecraftRank).add(link);
+    }));
   }
 
   /**
@@ -41,8 +50,9 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
   @Override
   public boolean isSynchronized(Bot bot, Rank rank) {
     return this.ranks.values().stream()
-        .anyMatch((map) -> map.containsKey(bot) && map.get(bot).stream()
-            .anyMatch(entry -> entry.equalsIgnoreCase(rank.getName())));
+        .flatMap(Collection::stream)
+        .anyMatch(link -> link.getBot().equals(bot) && link.getPlatformRanks().stream()
+            .anyMatch(name -> name.equalsIgnoreCase(rank.getName())));
   }
 
   /**
@@ -56,11 +66,15 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
   @SuppressWarnings("unchecked")
   @Override
   public Collection<Rank> getRanks(Bot bot, String minecraftGroupName) {
-    if (this.ranks.containsKey(minecraftGroupName) && this.ranks.get(minecraftGroupName)
-        .containsKey(bot)) {
-      return this.ranks.get(minecraftGroupName).get(bot).stream()
+    if (this.ranks.containsKey(minecraftGroupName)) {
+      return this.ranks.get(minecraftGroupName).stream()
+          .filter(link -> link.getBot().equals(bot))
+          .map(Link::getPlatformRanks)
+          .flatMap(Collection::stream)
           .map(roleName -> bot.getRankFactory().getRankFromRole(
-              bot.getRankFactory().getRoleFromName(roleName))).collect(Collectors.toSet());
+              bot.getRankFactory().getRoleFromName(roleName)))
+          .distinct()
+          .collect(Collectors.toList());
     } else {
       return null;
     }
@@ -75,10 +89,14 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
   @SuppressWarnings("unchecked")
   @Override
   public Collection<Rank> getRanks(Bot bot) {
-    return this.ranks.values().stream().flatMap(map -> map.entrySet().stream())
-        .filter(entry -> entry.getKey().equals(bot)).map(Map.Entry::getValue)
-        .flatMap(Collection::stream).map(roleName -> bot.getRankFactory().getRankFromRole(
-            bot.getRankFactory().getRoleFromName(roleName))).collect(Collectors.toSet());
+    return this.ranks.values().stream()
+        .flatMap(Collection::stream)
+        .filter(link -> link.getBot().equals(bot))
+        .flatMap(link -> link.getPlatformRanks().stream())
+        .map(roleName -> bot.getRankFactory().getRankFromRole(
+            bot.getRankFactory().getRoleFromName(roleName)))
+        .distinct()
+        .collect(Collectors.toList());
   }
 
   /**
@@ -90,8 +108,9 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
     this.ranks.forEach((minecraftRank, syncedRanks) -> {
       AtomicBoolean minecraftChecked = new AtomicBoolean(false);
 
-      syncedRanks.forEach((bot, syncedRankNames) ->
-          syncedRankNames.forEach(syncedRank -> {
+      syncedRanks.forEach(link -> link.getPlatformRanks().forEach(syncedRank -> {
+            Bot<?, ?> bot = link.getBot();
+
             if (bot.hasCaseSensitiveRanks() && !bot.getAvailableRanks().contains(syncedRank)) {
               log.error(Translation.INVALID_RANK
                   .getTranslation("rank", syncedRank, "platform", bot.getPlatform()));
@@ -113,7 +132,8 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
                     .getTranslation("rank", minecraftRank, "platform", "Minecraft"));
               }
             }
-          }));
+          })
+      );
     });
   }
 }
