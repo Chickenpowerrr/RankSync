@@ -283,4 +283,12 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
     getConfig().options().copyDefaults(true);
     saveConfig();
   }
+
+  /**
+   * Returns if the bot is still running
+   */
+  @Override
+  public boolean isRunning() {
+    return Bukkit.getPluginManager().isPluginEnabled(this);
+  }
 }

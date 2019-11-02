@@ -172,6 +172,11 @@ public interface RankSyncServerPlugin {
   List<Link> getSyncedRanks();
 
   /**
+   * Returns if the bot is still running
+   */
+  boolean isRunning();
+
+  /**
    * Enables the plugin
    */
   default void enable() {
@@ -228,14 +233,16 @@ public interface RankSyncServerPlugin {
 
       setRankHelper(new com.gmail.chickenpowerrr.ranksync.server.rank.RankHelper(getSyncedRanks()));
 
-      RankSyncApi.getApi().registerListener(new PlayerUpdateOnlineStatusEventListener());
-      RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener(getLinkHelper()));
-      RankSyncApi.getApi().registerListener(new BotEnabledEventListener(getRankHelper()));
-      RankSyncApi.getApi().registerListener(new PlayerLinkedEventListener());
+      if (isRunning()) {
+        RankSyncApi.getApi().registerListener(new PlayerUpdateOnlineStatusEventListener());
+        RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener(getLinkHelper()));
+        RankSyncApi.getApi().registerListener(new BotEnabledEventListener(getRankHelper()));
+        RankSyncApi.getApi().registerListener(new PlayerLinkedEventListener());
 
-      registerListeners();
-      logInfo(Translation.STARTUP_RANKS
-          .getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
+        registerListeners();
+        logInfo(Translation.STARTUP_RANKS
+            .getTranslation("time", Long.toString(System.currentTimeMillis() - time)));
+      }
     }
   }
 }

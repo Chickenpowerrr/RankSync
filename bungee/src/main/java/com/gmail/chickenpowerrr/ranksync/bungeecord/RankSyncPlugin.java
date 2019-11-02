@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.Setter;
 import me.lucko.luckperms.LuckPerms;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -319,5 +320,13 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Returns if the bot is still running
+   */
+  @Override
+  public boolean isRunning() {
+    return ProxyServer.getInstance().getPluginManager().getPlugin("RankSync") != null;
   }
 }
