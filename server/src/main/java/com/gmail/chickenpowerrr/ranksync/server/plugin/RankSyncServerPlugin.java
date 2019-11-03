@@ -215,6 +215,7 @@ public interface RankSyncServerPlugin {
           .addProperty("sync_names", getConfigBoolean("discord.sync-names"))
           .addProperty("name_format", getConfigString("discord.name-format"))
           .addProperty("permission_warnings", getConfigBoolean("discord.permission-warnings"))
+          .addProperty("delete_timer", getConfigInt("discord.delete-timer"))
           .addProperty("type", getConfigString("database.type"))
           .addProperty("max_pool_size", getConfigInt("database.sql.max-pool-size"))
           .addProperty("host", getConfigString("database.sql.host"))

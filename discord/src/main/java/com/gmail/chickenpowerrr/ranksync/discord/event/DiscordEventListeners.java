@@ -9,9 +9,13 @@ import com.gmail.chickenpowerrr.ranksync.discord.bot.DiscordBot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -29,12 +33,16 @@ import org.jetbrains.annotations.NotNull;
 public class DiscordEventListeners implements EventListener {
 
   private final DiscordBot bot;
+  private final int deleteDelay;
+  private final ScheduledExecutorService executorService;
 
   /**
    * @param bot the running Discord Bot
    */
   public DiscordEventListeners(Bot<Member, Role> bot) {
     this.bot = (DiscordBot) bot;
+    this.deleteDelay = bot.getDeleteTimer();
+    this.executorService = Executors.newSingleThreadScheduledExecutor();
   }
 
   /**
@@ -73,12 +81,29 @@ public class DiscordEventListeners implements EventListener {
                       commandData.size() > 0 ? commandData.subList(1, commandData.size())
                           : new ArrayList<>());
                   if (message != null) {
-                    messageReceivedEvent.getTextChannel().sendMessage(message).queue();
+                    messageReceivedEvent.getTextChannel().sendMessage(message)
+                        .queue(sentMessage -> {
+                          queueDelete(messageReceivedEvent.getMessage());
+                          queueDelete(sentMessage);
+                        });
                   }
                 });
           }
         }
       }
+    }
+  }
+
+  /**
+   * Delete the given message after the in the config.yml specified config-timer, if the value
+   * is greater or equal to 0
+   *
+   * @param message the message that will be deleted
+   */
+  private void queueDelete(Message message) {
+    if (this.deleteDelay >= 0) {
+      this.executorService
+          .schedule(() -> message.delete().queue(), this.deleteDelay, TimeUnit.SECONDS);
     }
   }
 }

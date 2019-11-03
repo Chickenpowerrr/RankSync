@@ -143,4 +143,9 @@ public class DiscordBot implements Bot<Member, Role> {
   public String getNameSyncFormat() {
     return this.properties.getString("name_format");
   }
+
+  @Override
+  public int getDeleteTimer() {
+    return this.properties.getInt("delete_timer");
+  }
 }

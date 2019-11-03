@@ -3,6 +3,8 @@
 # For more information, see: https://github.com/Chickenpowerrr/RankSync/wiki/Language
 # -
 # discord:
+#   delete-timer: The time in seconds a message sent to a public channel should stay there before
+#                 it needs to be deleted, -1 will make sure the message doesn't get deleted
 #   update-non-synced: If the ranks from non-synced users should be removed
 #   sync-names: If the usernames of users should be updated to their ingame name
 #   name-format: The format for the name sync feature
@@ -10,6 +12,8 @@
 #                - %name% The Minecraft username
 #   token: The Discord Token, for more information see:
 #          https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token
+#   guild-id: The ID that represents your Discord Guild (Your Discord Server), for more information
+#             see: https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Guild-id
 #   permission-warnings: If the plugin should notify the console when it isn't able to
 #                        perform a certain task
 # database:
@@ -38,6 +42,7 @@
 language: english
 
 discord:
+  delete-timer: 10
   update-non-synced: false
   sync-names: false
   name-format: "%discord_rank% << %name%"
