@@ -100,8 +100,8 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
    * @return the RankSync representations of the Roles
    */
   @Override
-  public Collection<Rank> getRanksFromRoles(Collection<Role> roles) {
-    return roles.stream().map(this::getRankFromRole).collect(Collectors.toSet());
+  public List<Rank> getRanksFromRoles(Collection<Role> roles) {
+    return roles.stream().map(this::getRankFromRole).collect(Collectors.toList());
   }
 
   /**
@@ -134,8 +134,8 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
    * @return the Roles used by JDA, not the RankSync API
    */
   @Override
-  public Collection<Role> getRolesFromNames(Collection<String> strings) {
-    return strings.stream().map(this::getRoleFromName).collect(Collectors.toSet());
+  public List<Role> getRolesFromNames(Collection<String> strings) {
+    return strings.stream().map(this::getRoleFromName).collect(Collectors.toList());
   }
 
   /**
@@ -160,8 +160,8 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
    * @return the JDA Roles
    */
   @Override
-  public Collection<Role> getRolesFromRanks(Collection<Rank> ranks) {
-    return ranks.stream().map(this::getRoleFromRank).collect(Collectors.toSet());
+  public List<Role> getRolesFromRanks(Collection<Rank> ranks) {
+    return ranks.stream().map(this::getRoleFromRank).collect(Collectors.toList());
   }
 
   /**

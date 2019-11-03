@@ -3,6 +3,7 @@ package com.gmail.chickenpowerrr.ranksync.api.player;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -24,7 +25,7 @@ public interface Player {
    *
    * @param ranks the ranks the Player should have
    */
-  void setRanks(Collection<Rank> ranks);
+  void setRanks(List<Rank> ranks);
 
   /**
    * Returns the id that represents the Player on the other service

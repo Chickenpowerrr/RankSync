@@ -2,6 +2,7 @@ package com.gmail.chickenpowerrr.ranksync.api.rank;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This interface manages all of the data that a Developer will probably need to synchronize the
@@ -27,7 +28,7 @@ public interface RankFactory<R> {
    * @param internalRoles the Rank objects used by the platform API, not the RankSync API
    * @return the RankSync representations of the Roles
    */
-  Collection<Rank> getRanksFromRoles(Collection<R> internalRoles);
+  List<Rank> getRanksFromRoles(Collection<R> internalRoles);
 
   /**
    * Returns the internally used role by its name
@@ -43,7 +44,7 @@ public interface RankFactory<R> {
    * @param strings the names of the roles
    * @return the Rank objects used by the platform API, not the RankSync API
    */
-  Collection<R> getRolesFromNames(Collection<String> strings);
+  List<R> getRolesFromNames(Collection<String> strings);
 
   /**
    * Turns the role supported by the RankSync API back into the role that is internally used by the
@@ -61,7 +62,7 @@ public interface RankFactory<R> {
    * @param ranks the ranks that can by used by the RankSync API
    * @return the internally used roles
    */
-  Collection<R> getRolesFromRanks(Collection<Rank> ranks);
+  List<R> getRolesFromRanks(Collection<Rank> ranks);
 
   /**
    * Returns the Bot that uses this factory

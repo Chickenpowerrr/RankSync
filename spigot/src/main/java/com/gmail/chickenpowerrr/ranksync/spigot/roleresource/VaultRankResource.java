@@ -7,6 +7,7 @@ import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.spigot.RankSyncPlugin;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -38,18 +39,19 @@ public class VaultRankResource implements RankResource {
   }
 
   @Override
-  public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
+  public CompletableFuture<List<Rank>> getRanks(UUID uuid) {
     if (this.rankHelper == null) {
       this.rankHelper = JavaPlugin.getPlugin(RankSyncPlugin.class).getRankHelper();
     }
 
-    CompletableFuture<Collection<Rank>> completableFuture = CompletableFuture.supplyAsync(
+    CompletableFuture<List<Rank>> completableFuture = CompletableFuture.supplyAsync(
         () -> Arrays.stream(this.permission
             .getPlayerGroups(Bukkit.getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(uuid)))
             .map(groupName -> this.rankHelper.getRanks(this.bot, groupName))
             .filter(Objects::nonNull)
             .flatMap(Collection::stream)
-            .collect(Collectors.toSet()));
+            .distinct()
+            .collect(Collectors.toList()));
 
     completableFuture.exceptionally(throwable -> {
       throwable.printStackTrace();
