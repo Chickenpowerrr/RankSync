@@ -32,7 +32,7 @@ public class PlayerLinkedEventListener implements Listener<PlayerLinkedEvent> {
     event.getPlayer().update();
     if (this.rewardAction.isEnabled()
         && event.getPlayer().getTimesSynced() <= this.rewardAction.getMax()) {
-      this.rewardAction.getCommands().forEach(command -> {/*Execute*/});
+      this.rewardAction.executeCommands(event.getPlayer());
     }
   }
 }

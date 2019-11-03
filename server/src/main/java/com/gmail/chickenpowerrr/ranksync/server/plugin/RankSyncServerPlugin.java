@@ -16,6 +16,7 @@ import com.gmail.chickenpowerrr.ranksync.server.listener.BotEnabledEventListener
 import com.gmail.chickenpowerrr.ranksync.server.listener.BotForceShutdownEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerLinkCodeCreateEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerLinkedEventListener;
+import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerUnlinkedEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerUpdateOnlineStatusEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.reward.RewardSettings.RewardAction;
 import com.gmail.chickenpowerrr.ranksync.server.update.UpdateChecker;
@@ -179,16 +180,23 @@ public interface RankSyncServerPlugin {
   boolean isRunning();
 
   /**
+   * Executes a given command on the network as the console
+   *
+   * @param command the command which needs to be executed
+   */
+  void executeCommand(String command);
+
+  /**
    * Returns the reward settings as given in the config.yml
    */
   default RewardSettings getRewardSettings() {
     return new com.gmail.chickenpowerrr.ranksync.server.reward.RewardSettings(
         new RewardAction(getConfigInt("reward.max-sync"),
             getConfigBoolean("reward.enabled-sync"),
-            getConfigStringList("sync-commands")),
+            getConfigStringList("sync-commands"), this::executeCommand),
         new RewardAction(getConfigInt("reward.max-unsync"),
             getConfigBoolean("reward.enabled-unsync"),
-            getConfigStringList("unsync-commands")));
+            getConfigStringList("unsync-commands"), this::executeCommand));
   }
 
   /**
@@ -258,6 +266,8 @@ public interface RankSyncServerPlugin {
         RankSyncApi.getApi().registerListener(new BotEnabledEventListener(getRankHelper()));
         RankSyncApi.getApi()
             .registerListener(new PlayerLinkedEventListener(rewardSettings.getSyncAction()));
+        RankSyncApi.getApi()
+            .registerListener(new PlayerUnlinkedEventListener(rewardSettings.getUnsyncAction()));
 
         registerListeners();
         logInfo(Translation.STARTUP_RANKS

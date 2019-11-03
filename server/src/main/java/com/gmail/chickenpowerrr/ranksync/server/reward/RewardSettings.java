@@ -1,7 +1,9 @@
 package com.gmail.chickenpowerrr.ranksync.server.reward;
 
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -29,16 +31,23 @@ public class RewardSettings implements com.gmail.chickenpowerrr.ranksync.api.rew
   public static class RewardAction implements
       com.gmail.chickenpowerrr.ranksync.api.reward.RewardSettings.RewardAction {
 
-    private final int maxEnabled;
+    private final int max;
     private final boolean enabled;
     private final List<String> commands;
+    private final Consumer<String> commandExecutor;
 
     /**
-     * Returns the commands that should be executed when someone syncs their account, %player%
-     * is the placeholder for the player who synced their account
+     * Returns the commands that should be executed when someone syncs their account, %player% is
+     * the placeholder for the player who synced their account
      */
     public List<String> getCommands() {
       return Collections.unmodifiableList(this.commands);
+    }
+
+    @Override
+    public void executeCommands(Player player) {
+      this.commands.forEach(
+          command -> commandExecutor.accept(command.replace("%name%", player.getUsername())));
     }
   }
 }

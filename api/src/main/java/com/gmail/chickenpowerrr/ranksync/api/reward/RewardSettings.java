@@ -1,6 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.api.reward;
 
-import java.util.List;
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 
 /**
  * This interface contains the settings for a reward system
@@ -43,6 +43,6 @@ public interface RewardSettings {
      * Returns the commands that should be executed when someone syncs their account, %player%
      * is the placeholder for the player who synced their account
      */
-    List<String> getCommands();
+    void executeCommands(Player player);
   }
 }
