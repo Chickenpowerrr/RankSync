@@ -4,6 +4,7 @@ import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.command.Command;
 import com.gmail.chickenpowerrr.ranksync.api.event.PlayerUpdateOnlineStatusEvent;
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import com.gmail.chickenpowerrr.ranksync.api.player.Status;
 import com.gmail.chickenpowerrr.ranksync.discord.bot.DiscordBot;
 import java.util.ArrayList;
@@ -67,8 +68,13 @@ public class DiscordEventListeners implements EventListener {
       this.bot.enable(event.getJDA());
     } else if (event instanceof MessageReceivedEvent) {
       MessageReceivedEvent messageReceivedEvent = (MessageReceivedEvent) event;
-      if (messageReceivedEvent.isFromGuild() && messageReceivedEvent.getGuild()
-          .equals(this.bot.getGuild()) && messageReceivedEvent.isFromType(ChannelType.TEXT)) {
+      if (messageReceivedEvent.isFromGuild()
+          && !messageReceivedEvent.getAuthor().isBot()
+          && messageReceivedEvent.getGuild().equals(this.bot.getGuild())
+          && messageReceivedEvent.isFromType(ChannelType.TEXT)) {
+        this.bot.getPlayerFactory().getPlayer(messageReceivedEvent.getMember())
+            .thenAccept(Player::update);
+
         if (messageReceivedEvent.getMessage().getContentStripped().startsWith("!")) {
           List<String> commandData = Arrays
               .asList(messageReceivedEvent.getMessage().getContentStripped().split(" "));
@@ -95,8 +101,8 @@ public class DiscordEventListeners implements EventListener {
   }
 
   /**
-   * Delete the given message after the in the config.yml specified config-timer, if the value
-   * is greater or equal to 0
+   * Delete the given message after the in the config.yml specified config-timer, if the value is
+   * greater or equal to 0
    *
    * @param message the message that will be deleted
    */
