@@ -15,7 +15,6 @@ import com.gmail.chickenpowerrr.ranksync.spigot.listener.AsyncPlayerPreLoginEven
 import com.gmail.chickenpowerrr.ranksync.spigot.listener.PlayerQuitEventListener;
 import com.gmail.chickenpowerrr.ranksync.spigot.roleresource.VaultRankResource;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -233,7 +232,12 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
           .getValues(false);
       ranks.values().forEach(object -> {
         ConfigurationSection rankInfo = (ConfigurationSection) object;
-        String minecraftRank = rankInfo.getString("minecraft");
+        List<String> minecraftRanks = rankInfo.getStringList("minecraft");
+
+        if (minecraftRanks.isEmpty()) {
+          minecraftRanks.add(rankInfo.getString("minecraft"));
+        }
+
         List<String> platformRanks = rankInfo.getStringList(botName);
 
         if (platformRanks.isEmpty()) {
@@ -241,7 +245,7 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
         }
 
         syncedRanks.add(new com.gmail.chickenpowerrr.ranksync.server.link.Link(
-            Collections.singletonList(minecraftRank), platformRanks,
+            minecraftRanks, platformRanks,
             Optional.ofNullable(rankInfo.getString("name-format"))
                 .orElse(getConfig().getString("discord.name-format")), bot));
       });
