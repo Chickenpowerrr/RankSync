@@ -12,6 +12,7 @@ import java.util.List;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -73,12 +74,20 @@ public class DiscordEventListeners implements EventListener {
                       commandData.size() > 0 ? commandData.subList(1, commandData.size())
                           : new ArrayList<>());
                   if (message != null) {
-                    messageReceivedEvent.getTextChannel().sendMessage(message).queue();
+                    messageReceivedEvent.getTextChannel().sendMessage(message)
+                        .queue(sentMessage -> {
+                          queueDelete(messageReceivedEvent.getMessage());
+                          queueDelete(sentMessage);
+                        });
                   }
                 });
           }
         }
       }
     }
+  }
+
+  private void queueDelete(Message message) {
+
   }
 }
