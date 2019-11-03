@@ -108,4 +108,10 @@ public interface Bot<P, R> {
    * if name sync has been enabled
    */
   String getNameSyncFormat();
+
+  /**
+   * Returns the time in seconds a message sent to a public channel should stay there before
+   * it needs to be deleted, -1 will make sure the message doesn't get deleted
+   */
+  int getDeleteTimer();
 }
