@@ -6,6 +6,7 @@ import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import lombok.Getter;
@@ -110,7 +111,7 @@ public class YamlDatabase extends AbstractFileDatabase<YamlFile> {
    * @return the ranks of the rank resource
    */
   @Override
-  public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
+  public CompletableFuture<List<Rank>> getRanks(UUID uuid) {
     return this.rankResource.getRanks(uuid);
   }
 

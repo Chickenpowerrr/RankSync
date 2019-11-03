@@ -7,9 +7,13 @@ import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.discord.language.Translation;
 import com.zaxxer.hikari.HikariDataSource;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -83,7 +87,7 @@ public class SqlDatabase implements Database {
    * @return the ranks of the rank resource
    */
   @Override
-  public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
+  public CompletableFuture<List<Rank>> getRanks(UUID uuid) {
     return this.rankResource.getRanks(uuid);
   }
 

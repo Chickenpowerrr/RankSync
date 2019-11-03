@@ -2,6 +2,7 @@ package com.gmail.chickenpowerrr.ranksync.api.data;
 
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -49,7 +50,7 @@ public interface Database {
    * @return a CompletableFuture that will be completed whenever the ranks of this service has been
    * found
    */
-  CompletableFuture<Collection<Rank>> getRanks(UUID uuid);
+  CompletableFuture<List<Rank>> getRanks(UUID uuid);
 
   /**
    * Returns the if a rank with the given name exists

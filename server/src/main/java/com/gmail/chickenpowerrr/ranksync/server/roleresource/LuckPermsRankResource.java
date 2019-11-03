@@ -6,6 +6,7 @@ import com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.server.plugin.RankSyncServerPlugin;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -56,8 +57,8 @@ public class LuckPermsRankResource implements RankResource {
    * @return a {@code CompletableFuture} that will be completed whenever the ranks have been found
    */
   @Override
-  public CompletableFuture<Collection<Rank>> getRanks(UUID uuid) {
-    CompletableFuture<Collection<Rank>> completableFuture = new CompletableFuture<>();
+  public CompletableFuture<List<Rank>> getRanks(UUID uuid) {
+    CompletableFuture<List<Rank>> completableFuture = new CompletableFuture<>();
 
     if (this.rankHelper == null) {
       this.rankHelper = this.rankSyncPlugin.getRankHelper();
@@ -70,7 +71,7 @@ public class LuckPermsRankResource implements RankResource {
                 .map(Node::getGroupName)
                 .map(groupName -> this.rankHelper.getRanks(this.bot, groupName))
                 .flatMap(Collection::stream)
-                .filter(Objects::nonNull).collect(Collectors.toSet())));
+                .filter(Objects::nonNull).collect(Collectors.toList())));
 
     completableFuture.exceptionally(throwable -> {
       throwable.printStackTrace();

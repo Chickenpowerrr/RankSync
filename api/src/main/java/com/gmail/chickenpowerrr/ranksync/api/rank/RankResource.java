@@ -2,6 +2,7 @@ package com.gmail.chickenpowerrr.ranksync.api.rank;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -19,7 +20,7 @@ public interface RankResource {
    * @param uuid the UUID that represents the Player
    * @return a {@code CompletableFuture} that will be completed whenever the ranks have been found
    */
-  CompletableFuture<Collection<Rank>> getRanks(UUID uuid);
+  CompletableFuture<List<Rank>> getRanks(UUID uuid);
 
   /**
    * Sets the {@code Bot} that uses this Resource
