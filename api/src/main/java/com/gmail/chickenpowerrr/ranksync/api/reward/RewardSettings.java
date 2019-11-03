@@ -32,7 +32,7 @@ public interface RewardSettings {
      * Returns the maximum times a user can receive the action commands can be executed for the
      * given player, -1 if it should be executed every time
      */
-    int getMaxEnabled();
+    int getMax();
 
     /**
      * Returns if the action commands should be executed

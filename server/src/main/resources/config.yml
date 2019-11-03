@@ -28,12 +28,12 @@
 #     password: The password to login into the SQL server
 # -
 #   reward:
-#     max-enabled: The maximum times a user can receive the sync commands can be executed for the
+#     max-sync: The maximum times a user can receive the sync commands can be executed for the
 #                  given player, -1 if it should be executed every time
 #     enabled-sync: If the sync commands should be executed
 #     sync-commands: The commands that should be executed when someone syncs their account, %player%
 #                    is the placeholder for the player who synced their account
-#     max-disabled: The maximum times a user can receive the unsync commands can be executed for the
+#     max-unsync: The maximum times a user can receive the unsync commands can be executed for the
 #                   given player, -1 if it should be executed every time
 #     enabled-unsync: If the unsync commands should be executed
 #     unsync-commands: The commands that should be executed when someone unsyncs their account,
@@ -61,6 +61,7 @@ discord:
   token: "YOURTOKEN"
   guild-id: 444222000
   permission-warnings: true
+
 database:
   type: "yaml"
 
@@ -73,11 +74,11 @@ database:
     password: ""
 
 reward:
-  max-enabled: 1
+  max-sync: 1
   enabled-sync: false
   sync-commands:
     - "give %player% diamond"
-  max-disabled: -1
+  max-unsync: -1
   enabled-unsync: false
   unsync-commands:
     - "give %player% dirt"
