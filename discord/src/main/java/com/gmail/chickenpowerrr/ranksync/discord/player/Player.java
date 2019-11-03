@@ -157,7 +157,7 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
       return ranks.contains(rank) || !this.rankFactory.isValidRank(rank);
     });
 
-    Collection<Role> nextRoles = this.rankFactory.getRolesFromRanks(ranks);
+    List<Role> nextRoles = this.rankFactory.getRolesFromRanks(ranks);
 
     Collection<Role> toAdd = new ArrayList<>(nextRoles);
     toAdd.removeIf(roles::contains);
@@ -166,7 +166,7 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
         toRemove.stream().map(this.rankFactory::getRankFromRole).collect(Collectors.toSet()),
         toAdd.stream().map(this.rankFactory::getRankFromRole).collect(Collectors.toSet())))
         .cancelled()) {
-      this.member.getGuild().modifyMemberRoles(this.member, toAdd).queue();
+      this.member.getGuild().modifyMemberRoles(this.member, nextRoles).queue();
     }
   }
 }

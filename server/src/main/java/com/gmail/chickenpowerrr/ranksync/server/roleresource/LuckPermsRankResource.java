@@ -71,6 +71,7 @@ public class LuckPermsRankResource implements RankResource {
                 .map(Node::getGroupName)
                 .map(groupName -> this.rankHelper.getRanks(this.bot, groupName))
                 .flatMap(Collection::stream)
+                .distinct()
                 .filter(Objects::nonNull).collect(Collectors.toList())));
 
     completableFuture.exceptionally(throwable -> {

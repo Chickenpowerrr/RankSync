@@ -50,6 +50,7 @@ public class VaultRankResource implements RankResource {
             .map(groupName -> this.rankHelper.getRanks(this.bot, groupName))
             .filter(Objects::nonNull)
             .flatMap(Collection::stream)
+            .distinct()
             .collect(Collectors.toList()));
 
     completableFuture.exceptionally(throwable -> {
