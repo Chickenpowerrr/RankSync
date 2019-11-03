@@ -31,12 +31,12 @@
 #     max-enabled: The maximum times a user can receive the sync commands can be executed for the
 #                  given player, -1 if it should be executed every time
 #     enabled-sync: If the sync commands should be executed
-#     sync-commands: The command that should be executed when someone syncs their account, %player%
+#     sync-commands: The commands that should be executed when someone syncs their account, %player%
 #                    is the placeholder for the player who synced their account
 #     max-disabled: The maximum times a user can receive the unsync commands can be executed for the
 #                   given player, -1 if it should be executed every time
 #     enabled-unsync: If the unsync commands should be executed
-#     unsync-commands: The command that should be executed when someone unsyncs their account,
+#     unsync-commands: The commands that should be executed when someone unsyncs their account,
 #                      %player%  is the placeholder for the player who unsynced their account
 # -
 #   ranks: For more information see: https://github.com/Chickenpowerrr/RankSync/wiki/Ranks
