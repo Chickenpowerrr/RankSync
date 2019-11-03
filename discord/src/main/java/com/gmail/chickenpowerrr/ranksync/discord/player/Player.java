@@ -6,9 +6,10 @@ import com.gmail.chickenpowerrr.ranksync.api.event.BotPlayerRanksUpdateEvent;
 import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -99,15 +100,10 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
 
         if (this.bot.doesUpdateNames()) {
           String username = this.nameResource.getName(this.uuid);
-          if (ranks != null) {
-            Optional<Rank> rank = ranks.stream().findFirst();
-            if (rank.isPresent()) {
-              setUsername(this.bot.getNameSyncFormat()
-                  .replace("%name%", username)
-                  .replace("%discord_rank%", rank.get().getName()));
-            } else {
-              setUsername(this.bot.getNameSyncFormat().replace("%name%", username));
-            }
+          if (ranks != null && !ranks.isEmpty()) {
+            setUsername(this.bot.getNameSyncFormat()
+                .replace("%name%", username)
+                .replace("%discord_rank%", ranks.get(0).getName()));
           } else {
             setUsername(this.bot.getNameSyncFormat().replace("%name%", username));
           }
@@ -115,7 +111,7 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
       });
     } else {
       if (this.bot.doesUpdateNonSynced()) {
-        setRanks(new HashSet<>());
+        setRanks(new ArrayList<>());
       }
     }
   }
@@ -152,8 +148,8 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
    * @param ranks the ranks the Discord user should have
    */
   @Override
-  public void setRanks(Collection<Rank> ranks) {
-    Collection<Role> roles = this.member.getRoles();
+  public void setRanks(List<Rank> ranks) {
+    List<Role> roles = this.member.getRoles();
 
     Collection<Role> toRemove = new HashSet<>(roles);
     toRemove.removeIf(role -> {
@@ -161,17 +157,16 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
       return ranks.contains(rank) || !this.rankFactory.isValidRank(rank);
     });
 
-    Collection<Role> toAdd = this.rankFactory.getRolesFromRanks(ranks);
+    Collection<Role> nextRoles = this.rankFactory.getRolesFromRanks(ranks);
+
+    Collection<Role> toAdd = new ArrayList<>(nextRoles);
     toAdd.removeIf(roles::contains);
 
     if (!RankSyncApi.getApi().execute(new BotPlayerRanksUpdateEvent(this, this.rankFactory.getBot(),
         toRemove.stream().map(this.rankFactory::getRankFromRole).collect(Collectors.toSet()),
         toAdd.stream().map(this.rankFactory::getRankFromRole).collect(Collectors.toSet())))
         .cancelled()) {
-      toRemove
-          .forEach(role -> this.member.getGuild().removeRoleFromMember(this.member, role).queue());
-      toAdd
-          .forEach(role -> this.member.getGuild().addRoleToMember(this.member, role).queue());
+      this.member.getGuild().modifyMemberRoles(this.member, toAdd).queue();
     }
   }
 }
