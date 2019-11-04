@@ -3,6 +3,7 @@ package com.gmail.chickenpowerrr.ranksync.discord.data;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.data.Database;
 import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.discord.language.Translation;
@@ -92,17 +93,18 @@ public class SqlDatabase implements Database {
   }
 
   /**
-   * Returns the Discord identifier linked to the UUID
+   * Returns the Player that represents the link between the two platforms
    *
    * @param uuid the id that represents the player on the other service
-   * @return the Discord identifier linked to the UUID
+   * @param constructor the player constructor based on the retrieved data
+   * @return the Player linked to the UUID
    */
   @Override
-  public CompletableFuture<String> getPlayerId(UUID uuid) {
-    CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
+  public CompletableFuture<Player> getPlayer(UUID uuid, PlayerConstructor<Player> constructor) {
+    return CompletableFuture.supplyAsync(() -> {
       try (Connection connection = this.dataSource.getConnection();
           PreparedStatement preparedStatement = connection.prepareStatement(
-              "SELECT sp.identifier "
+              "SELECT sp.identifier, p.sync_rewards, p.unsync_rewards "
                   + "FROM player p "
                   + "LEFT JOIN synced_players sp ON p.id = sp.player_id "
                   + "JOIN bot b ON sp.bot_id = b.id "
@@ -111,7 +113,8 @@ public class SqlDatabase implements Database {
         preparedStatement.setString(2, this.bot.getPlatform());
         try (ResultSet resultSet = preparedStatement.executeQuery()) {
           if (resultSet.next()) {
-            return resultSet.getString("identifier");
+            return constructor.apply(uuid, resultSet.getString("identifier"),
+                resultSet.getInt("sync_rewards"), resultSet.getInt("unsync_rewards"));
           } else {
             return null;
           }
@@ -119,29 +122,26 @@ public class SqlDatabase implements Database {
       } catch (SQLException e) {
         throw new RuntimeException(e);
       }
-    });
-
-    completableFuture.exceptionally(throwable -> {
+    }).exceptionally(throwable -> {
       throwable.printStackTrace();
       return null;
     });
-
-    return completableFuture;
   }
 
   /**
-   * Returns the id that represents a player on the other service by Discord identifier
+   * Returns the Player that represents the link between the two platforms
    *
    * @param playerId the Discord identifier
-   * @return a CompletableFuture that will be completed whenever the id of the other service has
-   * been found
+   * @param constructor the player constructor based on the retrieved data
+   * @return a CompletableFuture that will be completed whenever the link has been found
    */
   @Override
-  public CompletableFuture<UUID> getUuid(String playerId) {
-    CompletableFuture<UUID> completableFuture = CompletableFuture.supplyAsync(() -> {
+  public CompletableFuture<Player> getPlayer(String playerId,
+      PlayerConstructor<Player> constructor) {
+    return CompletableFuture.supplyAsync(() -> {
       try (Connection connection = this.dataSource.getConnection();
           PreparedStatement preparedStatement = connection.prepareStatement(
-              "SELECT p.uuid "
+              "SELECT p.uuid, p.sync_rewards, p.unsync_rewards "
                   + "FROM player p "
                   + "LEFT JOIN synced_players sp ON p.id = sp.player_id "
                   + "JOIN bot b ON sp.bot_id = b.id "
@@ -151,7 +151,8 @@ public class SqlDatabase implements Database {
         preparedStatement.setString(2, this.bot.getPlatform());
         try (ResultSet resultSet = preparedStatement.executeQuery()) {
           if (resultSet.next()) {
-            return UUID.fromString(resultSet.getString("uuid"));
+            return constructor.apply(UUID.fromString(resultSet.getString("uuid")), playerId,
+                resultSet.getInt("sync_rewards"), resultSet.getInt("unsync_rewards"));
           } else {
             return null;
           }
@@ -159,14 +160,10 @@ public class SqlDatabase implements Database {
       } catch (SQLException e) {
         throw new RuntimeException(e);
       }
-    });
-
-    completableFuture.exceptionally(throwable -> {
+    }).exceptionally(throwable -> {
       throwable.printStackTrace();
       return null;
     });
-
-    return completableFuture;
   }
 
   /**
@@ -260,7 +257,7 @@ public class SqlDatabase implements Database {
             case "1.1.0":
               statement
                   .execute("CREATE TABLE IF NOT EXISTS version (version VARCHAR(10) NOT NULL);");
-              statement.execute("ALTER TABLE bot RENAME COLUMN `name` TO platform;");
+              statement.execute("ALTER TABLE bot RENAME COLUMN name TO platform;");
               statement.execute("UPDATE bot SET platform = 'Discord';");
               // Fall through
             case "1.2.0":

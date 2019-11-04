@@ -48,8 +48,7 @@ public class YamlDatabase extends AbstractFileDatabase<YamlFile> {
    */
   @Override
   public CompletableFuture<UUID> getUuid(String playerId) {
-    CompletableFuture<UUID> completableFuture = CompletableFuture
-        .supplyAsync(() -> {
+    CompletableFuture<UUID> completableFuture = CompletableFuture.supplyAsync(() -> {
           String uuid = super.players.getValue(playerId);
           return uuid == null ? null : UUID.fromString(uuid);
         });

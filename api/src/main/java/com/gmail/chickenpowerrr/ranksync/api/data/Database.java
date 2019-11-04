@@ -1,5 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.api.data;
 
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import java.util.Collection;
 import java.util.List;
@@ -16,13 +17,13 @@ import java.util.concurrent.CompletableFuture;
 public interface Database {
 
   /**
-   * Returns the id that represents a player on the other service by their id on this service
+   * Returns the Player that represents the link between the two platforms
    *
    * @param playerId the id that represents the player on this service
-   * @return a CompletableFuture that will be completed whenever the id of the other service has
-   * been found
+   * @param constructor the player constructor based on the retrieved data
+   * @return a CompletableFuture that will be completed whenever the link has been found
    */
-  CompletableFuture<UUID> getUuid(String playerId);
+  CompletableFuture<Player> getPlayer(String playerId, PlayerConstructor<Player> constructor);
 
   /**
    * Sets the id that represents a player on the other service by their id on this service
@@ -35,13 +36,13 @@ public interface Database {
   CompletableFuture<Void> setUuid(String playerId, UUID uuid);
 
   /**
-   * Returns the id that represents a player on this service by their id on the other service
+   * Returns the Player that represents the link between the two platforms
    *
    * @param uuid the id that represents the player on the other service
-   * @return a CompletableFuture that will be completed whenever the id of this service has been
-   * found
+   * @param constructor the player constructor based on the retrieved data
+   * @return a CompletableFuture that will be completed whenever the link has been found
    */
-  CompletableFuture<String> getPlayerId(UUID uuid);
+  CompletableFuture<Player> getPlayer(UUID uuid, PlayerConstructor<Player> constructor);
 
   /**
    * Returns the ranks based on the id that represents the player on the other service
@@ -70,4 +71,14 @@ public interface Database {
    * Returns if the ranks are case sensitive when they are requested by their name
    */
   boolean hasCaseSensitiveRanks();
+
+  /**
+   * This functional interface makes sure a database can turn data into a player
+   *
+   * @param <P> the player type that should be returned
+   */
+  @FunctionalInterface
+  interface PlayerConstructor<P extends Player> {
+    P apply(UUID uuid, String identifier, int timesSynced, int timesUnsynced);
+  }
 }
