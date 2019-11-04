@@ -283,4 +283,14 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
   public boolean isRunning() {
     return Bukkit.getPluginManager().isPluginEnabled(this);
   }
+
+  /**
+   * Executes a given command on the server as the console
+   *
+   * @param command the command which needs to be executed
+   */
+  @Override
+  public void executeCommand(String command) {
+    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+  }
 }

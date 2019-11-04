@@ -23,7 +23,9 @@ public class PlayerFactory implements
 
   private final Map<UUID, Player> players = new HashMap<>();
   private final Guild guild;
-  @Getter private final Bot<Member, ?> bot;
+
+  @Getter
+  private final Bot<Member, ?> bot;
 
   /**
    * @param bot the Bot that is running
@@ -76,6 +78,9 @@ public class PlayerFactory implements
         this.players.put(uuid, player);
         player.setUuid(uuid);
       }
+    }).exceptionally(throwable -> {
+      throwable.printStackTrace();
+      return null;
     });
   }
 
@@ -87,27 +92,23 @@ public class PlayerFactory implements
    */
   @Override
   public CompletableFuture<Player> getPlayer(Member member) {
-    CompletableFuture<Player> completableFuture = new CompletableFuture<>();
-    this.bot.getEffectiveDatabase().getUuid(member.getUser().getId()).thenAccept(uuid -> {
-      Player player;
-      if (this.players.containsKey(uuid)) {
-        player = this.players.get(uuid);
-      } else {
-        player = new com.gmail.chickenpowerrr.ranksync.discord.player.Player(uuid, member,
-            this.bot);
-        if (uuid != null) {
-          this.players.put(uuid, player);
-        }
-      }
-      completableFuture.complete(player);
+    return this.bot.getEffectiveDatabase().getPlayer(member.getId(),
+        (uuid, identifier, timesSynced, timesUnsynced) -> {
+          Player player;
+          if (this.players.containsKey(uuid)) {
+            player = this.players.get(uuid);
+          } else {
+            player = new com.gmail.chickenpowerrr.ranksync.discord.player.Player(uuid, member,
+                this.bot, timesSynced, timesUnsynced);
+            if (uuid != null) {
+              this.players.put(uuid, player);
+            }
+          }
+          return player;
+        }).exceptionally(throwable -> {
+          throwable.printStackTrace();
+          return null;
     });
-
-    completableFuture.exceptionally(throwable -> {
-      throwable.printStackTrace();
-      return null;
-    });
-
-    return completableFuture;
   }
 
   /**
@@ -118,22 +119,15 @@ public class PlayerFactory implements
    */
   @Override
   public CompletableFuture<Player> getPlayer(UUID uuid) {
-    CompletableFuture<Player> completableFuture = new CompletableFuture<>();
 
-    this.bot.getEffectiveDatabase().getPlayerId(uuid).thenAccept(identifier -> {
-      if (identifier != null) {
-        completableFuture.complete(new com.gmail.chickenpowerrr.ranksync.discord.player.Player(uuid,
-            this.guild.getMemberById(identifier), this.bot));
-      } else {
-        completableFuture.complete(null);
-      }
-    });
-
-    completableFuture.exceptionally(throwable -> {
-      throwable.printStackTrace();
-      return null;
-    });
-
-    return completableFuture;
+    return this.bot.getEffectiveDatabase()
+        .getPlayer(uuid, (uuid1, identifier, timesSynced, timesUnsynced) -> {
+          if (identifier != null) {
+            return new com.gmail.chickenpowerrr.ranksync.discord.player.Player(uuid,
+                this.guild.getMemberById(identifier), this.bot, timesSynced, timesUnsynced);
+          } else {
+            return null;
+          }
+        });
   }
 }

@@ -6,7 +6,7 @@
 #   delete-timer: The time in seconds a message sent to a public channel should stay there before
 #                 it needs to be deleted, -1 will make sure the message doesn't get deleted
 #   update-non-synced: If the ranks from non-synced users should be removed
-#   sync-names: If the usernames of users should be updated to their ingame name
+#   sync-names: If the usernames of users should be updated to their in-game name
 #   name-format: The format for the name sync feature
 #                - %discord_rank% The name of the rank in Discord
 #                - %name% The Minecraft username
@@ -26,6 +26,18 @@
 #     database: The target database in the SQL server
 #     user: The username to login into the SQL server
 #     password: The password to login into the SQL server
+# -
+#   reward:
+#     max-sync: The maximum times a user can receive the sync commands can be executed for the
+#                  given player, -1 if it should be executed every time
+#     enabled-sync: If the sync commands should be executed
+#     sync-commands: The commands that should be executed when someone syncs their account, %player%
+#                    is the placeholder for the player who synced their account
+#     max-unsync: The maximum times a user can receive the unsync commands can be executed for the
+#                   given player, -1 if it should be executed every time
+#     enabled-unsync: If the unsync commands should be executed
+#     unsync-commands: The commands that should be executed when someone unsyncs their account,
+#                      %player%  is the placeholder for the player who unsynced their account
 # -
 #   ranks: For more information see: https://github.com/Chickenpowerrr/RankSync/wiki/Ranks
 #     discord: Don't touch this
@@ -49,6 +61,7 @@ discord:
   token: "YOURTOKEN"
   guild-id: 444222000
   permission-warnings: true
+
 database:
   type: "yaml"
 
@@ -59,6 +72,16 @@ database:
     database: "ranksync"
     user: "root"
     password: ""
+
+reward:
+  max-sync: 1
+  enabled-sync: false
+  sync-commands:
+    - "give %player% diamond"
+  max-unsync: -1
+  enabled-unsync: false
+  unsync-commands:
+    - "give %player% dirt"
 
 ranks:
   discord:

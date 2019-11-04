@@ -38,12 +38,20 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
   @Setter
   private UUID uuid;
 
-  Player(UUID uuid, Member member, Bot<Member, ?> bot) {
+  @Getter
+  private final int timesSynced;
+
+  @Getter
+  private final int timesUnsynced;
+
+  Player(UUID uuid, Member member, Bot<Member, ?> bot, int timesSynced, int timesUnsynced) {
     this.uuid = uuid;
     this.member = member;
     this.rankFactory = RankFactory.getInstance(member.getGuild());
     this.nameResource = bot.getNameResource();
     this.bot = bot;
+    this.timesSynced = timesSynced;
+    this.timesUnsynced = timesUnsynced;
   }
 
   /**

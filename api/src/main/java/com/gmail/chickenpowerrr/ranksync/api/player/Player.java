@@ -78,4 +78,16 @@ public interface Player {
    * @param username the new username
    */
   void setUsername(String username);
+
+  /**
+   * Returns how many times an user synced their account
+   */
+  int getTimesSynced();
+
+  /**
+   * Returns how many times an user unsynced their account
+   */
+  default int getTimesUnsynced() {
+    return getTimesSynced() - (getUuid() != null ? 1 : 0);
+  }
 }

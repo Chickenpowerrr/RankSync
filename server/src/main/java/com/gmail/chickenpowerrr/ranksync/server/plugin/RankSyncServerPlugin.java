@@ -8,6 +8,7 @@ import com.gmail.chickenpowerrr.ranksync.api.link.Link;
 import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
+import com.gmail.chickenpowerrr.ranksync.api.reward.RewardSettings;
 import com.gmail.chickenpowerrr.ranksync.manager.RankSyncManager;
 import com.gmail.chickenpowerrr.ranksync.server.language.Translation;
 import com.gmail.chickenpowerrr.ranksync.server.link.LinkHelper;
@@ -15,7 +16,9 @@ import com.gmail.chickenpowerrr.ranksync.server.listener.BotEnabledEventListener
 import com.gmail.chickenpowerrr.ranksync.server.listener.BotForceShutdownEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerLinkCodeCreateEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerLinkedEventListener;
+import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerUnlinkedEventListener;
 import com.gmail.chickenpowerrr.ranksync.server.listener.PlayerUpdateOnlineStatusEventListener;
+import com.gmail.chickenpowerrr.ranksync.server.reward.RewardSettings.RewardAction;
 import com.gmail.chickenpowerrr.ranksync.server.update.UpdateChecker;
 import java.io.File;
 import java.util.List;
@@ -177,6 +180,26 @@ public interface RankSyncServerPlugin {
   boolean isRunning();
 
   /**
+   * Executes a given command on the network as the console
+   *
+   * @param command the command which needs to be executed
+   */
+  void executeCommand(String command);
+
+  /**
+   * Returns the reward settings as given in the config.yml
+   */
+  default RewardSettings getRewardSettings() {
+    return new com.gmail.chickenpowerrr.ranksync.server.reward.RewardSettings(
+        new RewardAction(getConfigInt("reward.max-sync"),
+            getConfigBoolean("reward.enabled-sync"),
+            getConfigStringList("reward.sync-commands"), this::executeCommand),
+        new RewardAction(getConfigInt("reward.max-unsync"),
+            getConfigBoolean("reward.enabled-unsync"),
+            getConfigStringList("reward.unsync-commands"), this::executeCommand));
+  }
+
+  /**
    * Enables the plugin
    */
   default void enable() {
@@ -208,26 +231,27 @@ public interface RankSyncServerPlugin {
 
       registerCommands();
 
-      getBots().put("discord", RankSyncApi.getApi().getBotFactory("Discord").getBot(new BasicProperties()
-          .addProperty("token", getConfigString("discord.token"))
-          .addProperty("guild_id", getConfigLong("discord.guild-id"))
-          .addProperty("update_non_synced", getConfigBoolean("discord.update-non-synced"))
-          .addProperty("sync_names", getConfigBoolean("discord.sync-names"))
-          .addProperty("name_format", getConfigString("discord.name-format"))
-          .addProperty("permission_warnings", getConfigBoolean("discord.permission-warnings"))
-          .addProperty("delete_timer", getConfigInt("discord.delete-timer"))
-          .addProperty("type", getConfigString("database.type"))
-          .addProperty("max_pool_size", getConfigInt("database.sql.max-pool-size"))
-          .addProperty("host", getConfigString("database.sql.host"))
-          .addProperty("port", getConfigInt("database.sql.port"))
-          .addProperty("database", getConfigString("database.sql.database"))
-          .addProperty("username", getConfigString("database.sql.user"))
-          .addProperty("password", getConfigString("database.sql.password"))
-          .addProperty("base_path", getDataFolder() + "/data/")
-          .addProperty("name_resource", nameResource)
-          .addProperty("rank_resource", rankResource)
-          .addProperty("language", language)
-          .addProperty("language_helper", languageHelper)));
+      getBots()
+          .put("discord", RankSyncApi.getApi().getBotFactory("Discord").getBot(new BasicProperties()
+              .addProperty("token", getConfigString("discord.token"))
+              .addProperty("guild_id", getConfigLong("discord.guild-id"))
+              .addProperty("update_non_synced", getConfigBoolean("discord.update-non-synced"))
+              .addProperty("sync_names", getConfigBoolean("discord.sync-names"))
+              .addProperty("name_format", getConfigString("discord.name-format"))
+              .addProperty("permission_warnings", getConfigBoolean("discord.permission-warnings"))
+              .addProperty("delete_timer", getConfigInt("discord.delete-timer"))
+              .addProperty("type", getConfigString("database.type"))
+              .addProperty("max_pool_size", getConfigInt("database.sql.max-pool-size"))
+              .addProperty("host", getConfigString("database.sql.host"))
+              .addProperty("port", getConfigInt("database.sql.port"))
+              .addProperty("database", getConfigString("database.sql.database"))
+              .addProperty("username", getConfigString("database.sql.user"))
+              .addProperty("password", getConfigString("database.sql.password"))
+              .addProperty("base_path", getDataFolder() + "/data/")
+              .addProperty("name_resource", nameResource)
+              .addProperty("rank_resource", rankResource)
+              .addProperty("language", language)
+              .addProperty("language_helper", languageHelper)));
 
       Bot discordBot = getBot("discord");
       rankResource.setBot(discordBot);
@@ -235,10 +259,15 @@ public interface RankSyncServerPlugin {
       setRankHelper(new com.gmail.chickenpowerrr.ranksync.server.rank.RankHelper(getSyncedRanks()));
 
       if (isRunning()) {
+        RewardSettings rewardSettings = getRewardSettings();
         RankSyncApi.getApi().registerListener(new PlayerUpdateOnlineStatusEventListener());
-        RankSyncApi.getApi().registerListener(new PlayerLinkCodeCreateEventListener(getLinkHelper()));
+        RankSyncApi.getApi()
+            .registerListener(new PlayerLinkCodeCreateEventListener(getLinkHelper()));
         RankSyncApi.getApi().registerListener(new BotEnabledEventListener(getRankHelper()));
-        RankSyncApi.getApi().registerListener(new PlayerLinkedEventListener());
+        RankSyncApi.getApi()
+            .registerListener(new PlayerLinkedEventListener(rewardSettings.getSyncAction()));
+        RankSyncApi.getApi()
+            .registerListener(new PlayerUnlinkedEventListener(rewardSettings.getUnsyncAction()));
 
         registerListeners();
         logInfo(Translation.STARTUP_RANKS

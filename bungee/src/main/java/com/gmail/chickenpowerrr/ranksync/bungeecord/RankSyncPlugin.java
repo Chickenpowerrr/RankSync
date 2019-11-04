@@ -246,6 +246,17 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   }
 
   /**
+   * Executes a given command on the server as the console
+   *
+   * @param command the command which needs to be executed
+   */
+  @Override
+  public void executeCommand(String command) {
+    ProxyServer.getInstance().getPluginManager()
+        .dispatchCommand(ProxyServer.getInstance().getConsole(), command);
+  }
+
+  /**
    * Returns all of the links given in the config.yml
    */
   @Override
