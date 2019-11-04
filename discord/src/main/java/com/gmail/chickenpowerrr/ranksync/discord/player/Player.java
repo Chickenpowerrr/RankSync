@@ -6,6 +6,7 @@ import com.gmail.chickenpowerrr.ranksync.api.event.BotPlayerRanksUpdateEvent;
 import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -88,7 +90,8 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
   public boolean sendPrivateMessage(String message) {
     try {
       this.member.getUser().openPrivateChannel()
-          .complete().sendMessage(message).complete();
+          .complete().sendMessage(new EmbedBuilder().setColor(Color.ORANGE)
+          .appendDescription(message).build()).complete();
       return true;
     } catch (ErrorResponseException e) {
       return false;
