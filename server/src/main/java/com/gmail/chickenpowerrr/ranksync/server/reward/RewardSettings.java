@@ -47,7 +47,7 @@ public class RewardSettings implements com.gmail.chickenpowerrr.ranksync.api.rew
     @Override
     public void executeCommands(Player player) {
       this.commands.forEach(
-          command -> commandExecutor.accept(command.replace("%name%", player.getUsername())));
+          command -> commandExecutor.accept(command.replace("%player%", player.getUsername())));
     }
   }
 }

@@ -29,7 +29,8 @@ public class PlayerUnlinkedEventListener implements Listener<PlayerUnlinkedEvent
   @Override
   public void onEvent(PlayerUnlinkedEvent event) {
     if (this.rewardAction.isEnabled()
-        && event.getPlayer().getTimesSynced() < this.rewardAction.getMax()) {
+        && (this.rewardAction.getMax() < 0
+        || event.getPlayer().getTimesUnsynced() < this.rewardAction.getMax())) {
       this.rewardAction.executeCommands(event.getPlayer());
     }
   }

@@ -6,7 +6,7 @@
 #   delete-timer: The time in seconds a message sent to a public channel should stay there before
 #                 it needs to be deleted, -1 will make sure the message doesn't get deleted
 #   update-non-synced: If the ranks from non-synced users should be removed
-#   sync-names: If the usernames of users should be updated to their ingame name
+#   sync-names: If the usernames of users should be updated to their in-game name
 #   name-format: The format for the name sync feature
 #                - %discord_rank% The name of the rank in Discord
 #                - %name% The Minecraft username

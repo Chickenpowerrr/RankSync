@@ -193,10 +193,10 @@ public interface RankSyncServerPlugin {
     return new com.gmail.chickenpowerrr.ranksync.server.reward.RewardSettings(
         new RewardAction(getConfigInt("reward.max-sync"),
             getConfigBoolean("reward.enabled-sync"),
-            getConfigStringList("sync-commands"), this::executeCommand),
+            getConfigStringList("reward.sync-commands"), this::executeCommand),
         new RewardAction(getConfigInt("reward.max-unsync"),
             getConfigBoolean("reward.enabled-unsync"),
-            getConfigStringList("unsync-commands"), this::executeCommand));
+            getConfigStringList("reward.unsync-commands"), this::executeCommand));
   }
 
   /**
