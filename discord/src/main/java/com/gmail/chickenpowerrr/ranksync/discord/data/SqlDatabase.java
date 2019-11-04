@@ -102,7 +102,11 @@ public class SqlDatabase implements Database {
     CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
       try (Connection connection = this.dataSource.getConnection();
           PreparedStatement preparedStatement = connection.prepareStatement(
-              "SELECT sp.identifier FROM player p LEFT JOIN synced_players sp on p.id = sp.player_id JOIN bot b on sp.bot_id = b.id WHERE p.uuid = ? AND b.platform = ?;")) {
+              "SELECT sp.identifier "
+                  + "FROM player p "
+                  + "LEFT JOIN synced_players sp ON p.id = sp.player_id "
+                  + "JOIN bot b ON sp.bot_id = b.id "
+                  + "WHERE p.uuid = ? AND b.platform = ?;")) {
         preparedStatement.setString(1, uuid.toString());
         preparedStatement.setString(2, this.bot.getPlatform());
         try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -137,7 +141,12 @@ public class SqlDatabase implements Database {
     CompletableFuture<UUID> completableFuture = CompletableFuture.supplyAsync(() -> {
       try (Connection connection = this.dataSource.getConnection();
           PreparedStatement preparedStatement = connection.prepareStatement(
-              "SELECT p.uuid FROM player p LEFT JOIN synced_players sp ON p.id = sp.player_id JOIN bot b ON sp.bot_id = b.id WHERE sp.identifier = ? AND sp.bot_id = (SELECT id FROM bot WHERE b.platform = ?);")) {
+              "SELECT p.uuid "
+                  + "FROM player p "
+                  + "LEFT JOIN synced_players sp ON p.id = sp.player_id "
+                  + "JOIN bot b ON sp.bot_id = b.id "
+                  + "WHERE sp.identifier = ? "
+                  + "AND sp.bot_id = (SELECT id FROM bot WHERE b.platform = ?);")) {
         preparedStatement.setString(1, playerId);
         preparedStatement.setString(2, this.bot.getPlatform());
         try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -176,7 +185,9 @@ public class SqlDatabase implements Database {
             PreparedStatement createPlayer = connection
                 .prepareStatement("INSERT IGNORE player (uuid) VALUES (?);");
             PreparedStatement saveUuid = connection.prepareStatement(
-                "INSERT INTO synced_players (bot_id, identifier, player_id) VALUES ((SELECT id FROM bot WHERE platform = ?), ?, (SELECT id FROM player WHERE uuid = ?));")) {
+                "INSERT INTO synced_players (bot_id, identifier, player_id) "
+                    + "VALUES ((SELECT id FROM bot WHERE platform = ?), ?, "
+                    + "(SELECT id FROM player WHERE uuid = ?));")) {
           createPlayer.setString(1, uuid.toString());
           createPlayer.execute();
 
@@ -190,7 +201,9 @@ public class SqlDatabase implements Database {
       } else {
         try (Connection connection = this.dataSource.getConnection();
             PreparedStatement unLink = connection.prepareStatement(
-                "DELETE FROM synced_players WHERE identifier = ? AND bot_id = (SELECT id FROM bot WHERE platform = ?);")) {
+                "DELETE FROM synced_players "
+                    + "WHERE identifier = ? "
+                    + "AND bot_id = (SELECT id FROM bot WHERE platform = ?);")) {
           unLink.setString(1, playerId);
           unLink.setString(2, this.bot.getPlatform());
 
@@ -246,14 +259,25 @@ public class SqlDatabase implements Database {
           switch (version) {
             case "1.1.0":
               statement
-                  .execute("create table if not exists version (version varchar(10) not null);");
+                  .execute("CREATE TABLE IF NOT EXISTS version (version VARCHAR(10) NOT NULL);");
               statement.execute("ALTER TABLE bot RENAME COLUMN `name` TO platform;");
               statement.execute("UPDATE bot SET platform = 'Discord';");
               // Fall through
             case "1.2.0":
-              statement.execute("DELETE FROM version");
-              statement.execute("INSERT INTO version (version) VALUES ('1.2.0');");
+              statement.execute("ALTER TABLE player "
+                  + "ADD COLUMN sync_rewards INT UNSIGNED NOT NULL DEFAULT 0;");
+              statement.execute("ALTER TABLE player "
+                  + "ADD COLUMN unsync_rewards INT UNSIGNED NOT NULL DEFAULT 0;");
 
+              statement
+                  .execute("create table if not exists version (version varchar(10) not null);");
+              statement.execute("DELETE FROM version");
+              statement.execute("INSERT INTO version (version) VALUES ('1.4.0');");
+
+              generateDefaultTables();
+              break;
+            case "1.4.0":
+              // Up to date!
               generateDefaultTables();
               break;
             default:
@@ -262,7 +286,7 @@ public class SqlDatabase implements Database {
           }
         } else {
           generateDefaultTables();
-          statement.execute("INSERT INTO version (version) VALUES ('1.2.0');");
+          statement.execute("INSERT INTO version (version) VALUES ('1.4.0');");
         }
       } catch (SQLException e) {
         e.printStackTrace();
@@ -287,7 +311,9 @@ public class SqlDatabase implements Database {
             "(" +
             "  id   int unsigned auto_increment" +
             "    primary key," +
-            "  uuid char(36) not null," +
+            "  uuid           char(36) not null," +
+            "  sync_rewards   int unsigned not null default 0," +
+            "  unsync_rewards int unsigned not null default 0," +
             "  constraint player_uuid_uindex" +
             "  unique (uuid)" +
             ");");
@@ -324,7 +350,7 @@ public class SqlDatabase implements Database {
           ResultSet versionTable = statement.executeQuery("SHOW TABLES LIKE 'version';")) {
 
         if (versionTable.next()) {
-          try(ResultSet version = statement.executeQuery("SELECT version FROM version;")) {
+          try (ResultSet version = statement.executeQuery("SELECT version FROM version;")) {
             if (version.next()) {
               return version.getString("version");
             } else {
@@ -332,7 +358,7 @@ public class SqlDatabase implements Database {
             }
           }
         } else {
-          try(ResultSet botTable = statement.executeQuery("SHOW TABLES LIKE 'bot';")) {
+          try (ResultSet botTable = statement.executeQuery("SHOW TABLES LIKE 'bot';")) {
             if (botTable.next()) {
               return "1.1.0";
             } else {
