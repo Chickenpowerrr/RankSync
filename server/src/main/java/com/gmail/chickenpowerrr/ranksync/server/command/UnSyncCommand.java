@@ -63,6 +63,8 @@ public abstract class UnSyncCommand extends AbstractCommand {
               if (this.linkHelper.isAllowedToUnlink(user, user.getUuid(), args[0])) {
                 RankSyncApi.getApi().execute(new PlayerUnlinkedEvent(player));
                 bot.getEffectiveDatabase().setUuid(player.getPersonalId(), null);
+                player.setUuid(null);
+                player.update();
                 user.sendMessage(Translation.UNSYNC_COMMAND_UNLINKED.getTranslation());
               }
             } else {
