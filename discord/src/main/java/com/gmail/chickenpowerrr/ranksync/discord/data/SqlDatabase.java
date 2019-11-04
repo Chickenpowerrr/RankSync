@@ -180,7 +180,8 @@ public class SqlDatabase implements Database {
       if (uuid != null) {
         try (Connection connection = this.dataSource.getConnection();
             PreparedStatement createPlayer = connection
-                .prepareStatement("INSERT IGNORE player (uuid) VALUES (?);");
+                .prepareStatement("INSERT INTO player (uuid, sync_rewards, unsync_rewards) "
+                    + "VALUES (?, 0, 0) ON DUPLICATE KEY UPDATE sync_rewards = sync_rewards + 1;");
             PreparedStatement saveUuid = connection.prepareStatement(
                 "INSERT INTO synced_players (bot_id, identifier, player_id) "
                     + "VALUES ((SELECT id FROM bot WHERE platform = ?), ?, "
@@ -200,10 +201,18 @@ public class SqlDatabase implements Database {
             PreparedStatement unLink = connection.prepareStatement(
                 "DELETE FROM synced_players "
                     + "WHERE identifier = ? "
-                    + "AND bot_id = (SELECT id FROM bot WHERE platform = ?);")) {
+                    + "AND bot_id = (SELECT id FROM bot WHERE platform = ?);");
+            PreparedStatement update = connection.prepareStatement("UPDATE player "
+                + "SET unsync_rewards = unsync_rewards + 1 "
+                + "WHERE id = (SELECT player_id FROM synced_players "
+                + "WHERE identifier = ? "
+                + "AND bot_id = (SELECT id FROM bot WHERE platform = ?));")) {
+          update.setString(1, playerId);
+          update.setString(2, this.bot.getPlatform());
+          update.execute();
+
           unLink.setString(1, playerId);
           unLink.setString(2, this.bot.getPlatform());
-
           unLink.execute();
         } catch (SQLException e) {
           e.printStackTrace();
