@@ -3,6 +3,8 @@
 # For more information, see: https://github.com/Chickenpowerrr/RankSync/wiki/Language
 # -
 # discord:
+#   update-interval: The interval between times in which all users should be checked if their rank
+#                    is still correct, should be greater than 0 if you want to use this feature
 #   delete-timer: The time in seconds a message sent to a public channel should stay there before
 #                 it needs to be deleted, -1 will make sure the message doesn't get deleted
 #   update-non-synced: If the ranks from non-synced users should be removed
@@ -54,6 +56,7 @@
 language: english
 
 discord:
+  update-interval: -1
   delete-timer: 10
   update-non-synced: false
   sync-names: false
