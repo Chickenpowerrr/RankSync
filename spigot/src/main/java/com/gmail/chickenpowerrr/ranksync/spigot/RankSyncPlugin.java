@@ -57,6 +57,10 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
   public void onEnable() {
     enable();
     Metrics metrics = new Metrics(this);
+    metrics.addCustomChart(
+        new Metrics.SimplePie("used_storage", () -> getConfigString("database.type")));
+    metrics.addCustomChart(
+        new Metrics.SimplePie("used_language", () -> getConfigString("language")));
   }
 
   /**

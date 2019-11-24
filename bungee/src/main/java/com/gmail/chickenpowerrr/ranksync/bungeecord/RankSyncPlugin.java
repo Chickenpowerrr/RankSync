@@ -59,11 +59,14 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   /**
    * Enables the important features in order to synchronize ranks
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void onEnable() {
     enable();
     Metrics metrics = new Metrics(this);
+    metrics.addCustomChart(
+        new Metrics.SimplePie("used_storage", () -> getConfigString("database.type")));
+    metrics.addCustomChart(
+        new Metrics.SimplePie("used_language", () -> getConfigString("language")));
   }
 
   /**
