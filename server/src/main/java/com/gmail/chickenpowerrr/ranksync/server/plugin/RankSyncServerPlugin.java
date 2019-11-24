@@ -235,7 +235,7 @@ public interface RankSyncServerPlugin {
           .put("discord", RankSyncApi.getApi().getBotFactory("Discord").getBot(new BasicProperties()
               .addProperty("token", getConfigString("discord.token"))
               .addProperty("guild_id", getConfigLong("discord.guild-id"))
-              .addProperty("update_interval", getConfigString("discord.update-interval"))
+              .addProperty("update_interval", getConfigInt("discord.update-interval"))
               .addProperty("update_non_synced", getConfigBoolean("discord.update-non-synced"))
               .addProperty("sync_names", getConfigBoolean("discord.sync-names"))
               .addProperty("name_format", getConfigString("discord.name-format"))
