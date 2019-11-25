@@ -114,4 +114,10 @@ public interface Bot<P, R> {
    * it needs to be deleted, -1 will make sure the message doesn't get deleted
    */
   int getDeleteTimer();
+
+  /**
+   * Returns the interval between times in which all users should be checked if their rank
+   * is still correct, should be greater than 0 if you want to use this feature
+   */
+  int getUpdateInterval();
 }
