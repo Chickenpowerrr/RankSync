@@ -143,7 +143,13 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
   @Override
   public void setUsername(String username) {
     try {
-      this.member.modifyNickname(username).queue();
+      if (username.length() <= 32) {
+        this.member.modifyNickname(username).queue();
+      } else {
+        this.member.modifyNickname(username.substring(0, 32)).queue();
+        System.out.println(
+            "Can't update username to: \"" + username + "\" since it's longer than 32 characters");
+      }
     } catch (HierarchyException e) {
       if (this.rankFactory.shouldThrowPermissionWarnings()) {
         System.out.println(
