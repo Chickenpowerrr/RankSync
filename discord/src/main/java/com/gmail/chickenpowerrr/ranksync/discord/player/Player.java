@@ -169,6 +169,9 @@ public class Player implements com.gmail.chickenpowerrr.ranksync.api.player.Play
     });
 
     List<Role> nextRoles = this.rankFactory.getRolesFromRanks(ranks);
+    roles.stream()
+        .filter(role -> !this.rankFactory.isValidRank(this.rankFactory.getRankFromRole(role)))
+        .forEach(nextRoles::add);
 
     Collection<Role> toAdd = new ArrayList<>(nextRoles);
     toAdd.removeIf(roles::contains);
