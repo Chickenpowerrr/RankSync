@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import me.lucko.luckperms.LuckPerms;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -120,7 +119,7 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
       return new VaultRankResource(
           getServer().getServicesManager().getRegistration(Permission.class).getProvider());
     } else if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
-      return new LuckPermsRankResource(this, LuckPerms.getApi());
+      return new LuckPermsRankResource(this);
     } else {
       shutdown("You should use either LuckPerms or Vault to work with RankSync");
       return null;

@@ -27,7 +27,6 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.Setter;
-import me.lucko.luckperms.LuckPerms;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -231,7 +230,7 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   @Override
   public RankResource validateDependencies() {
     if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
-      return new LuckPermsRankResource(this, LuckPerms.getApi());
+      return new LuckPermsRankResource(this);
     } else {
       shutdown("You should use LuckPerms to work with RankSync");
       return null;
