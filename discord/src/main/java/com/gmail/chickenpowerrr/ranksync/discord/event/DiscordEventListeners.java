@@ -73,7 +73,10 @@ public class DiscordEventListeners implements EventListener {
           && messageReceivedEvent.getGuild().equals(this.bot.getGuild())
           && messageReceivedEvent.isFromType(ChannelType.TEXT)) {
         this.bot.getPlayerFactory().getPlayer(messageReceivedEvent.getMember())
-            .thenAccept(Player::update);
+            .thenAccept(Player::update).exceptionally(throwable -> {
+          throwable.printStackTrace();
+          return null;
+        });
 
         if (messageReceivedEvent.getMessage().getContentStripped().startsWith("!")) {
           List<String> commandData = Arrays
@@ -93,7 +96,10 @@ public class DiscordEventListeners implements EventListener {
                           queueDelete(sentMessage);
                         });
                   }
-                });
+                }).exceptionally(throwable -> {
+              throwable.printStackTrace();
+              return null;
+            });
           }
         }
       }

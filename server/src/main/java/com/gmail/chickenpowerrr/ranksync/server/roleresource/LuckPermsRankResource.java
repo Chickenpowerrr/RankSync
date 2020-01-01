@@ -10,7 +10,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * This class uses LuckPerms to get a Player's ranks
@@ -26,7 +25,6 @@ public class LuckPermsRankResource implements RankResource {
   private final RankSyncServerPlugin rankSyncPlugin;
 
   @Getter(value = AccessLevel.PROTECTED)
-  @Setter
   private Bot bot;
 
   /**
@@ -61,6 +59,14 @@ public class LuckPermsRankResource implements RankResource {
     this.rankSyncPlugin = rankSyncPlugin;
   }
 
+  @Override
+  public void setBot(Bot bot) {
+    if (this.rankResource != null) {
+      this.rankResource.setBot(bot);
+    }
+    this.bot = bot;
+  }
+
   /**
    * Requests the ranks for a given Player
    *
@@ -88,6 +94,7 @@ public class LuckPermsRankResource implements RankResource {
    */
   @Override
   public Collection<String> getAvailableRanks() {
+    System.out.println("Available: " + this.rankResource.getAvailableRanks());
     return this.rankResource.getAvailableRanks();
   }
 
@@ -98,6 +105,6 @@ public class LuckPermsRankResource implements RankResource {
    */
   @Override
   public boolean hasCaseSensitiveRanks() {
-    return false;
+    return true;
   }
 }

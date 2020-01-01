@@ -116,7 +116,7 @@ public class SqlDatabase implements Database {
             return constructor.apply(uuid, resultSet.getString("identifier"),
                 resultSet.getInt("sync_rewards"), resultSet.getInt("unsync_rewards"));
           } else {
-            return null;
+            return constructor.apply(uuid, null, 0, 0);
           }
         }
       } catch (SQLException e) {
@@ -154,7 +154,7 @@ public class SqlDatabase implements Database {
             return constructor.apply(UUID.fromString(resultSet.getString("uuid")), playerId,
                 resultSet.getInt("sync_rewards"), resultSet.getInt("unsync_rewards"));
           } else {
-            return null;
+            return constructor.apply(null, playerId, 0, 0);
           }
         }
       } catch (SQLException e) {

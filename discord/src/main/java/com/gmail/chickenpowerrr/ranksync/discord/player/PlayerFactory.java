@@ -119,7 +119,6 @@ public class PlayerFactory implements
    */
   @Override
   public CompletableFuture<Player> getPlayer(UUID uuid) {
-
     return this.bot.getEffectiveDatabase()
         .getPlayer(uuid, (uuid1, identifier, timesSynced, timesUnsynced) -> {
           if (identifier != null) {

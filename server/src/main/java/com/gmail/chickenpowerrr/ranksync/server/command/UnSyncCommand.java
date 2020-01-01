@@ -71,6 +71,9 @@ public abstract class UnSyncCommand extends AbstractCommand {
               user.sendMessage(
                   Translation.UNSYNC_COMMAND_NOT_LINKED.getTranslation("service", args[0]));
             }
+          }).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
           });
         } else {
           user.sendMessage(Translation.UNSYNC_COMMAND_INVALID_SERVICE

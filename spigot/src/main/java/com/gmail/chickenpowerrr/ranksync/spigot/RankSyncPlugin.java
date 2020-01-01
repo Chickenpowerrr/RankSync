@@ -114,12 +114,12 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
    */
   @Override
   public RankResource validateDependencies() {
-    if (Bukkit.getPluginManager().getPlugin("Vault") != null
+    if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
+      return new LuckPermsRankResource(this);
+    } else if (Bukkit.getPluginManager().getPlugin("Vault") != null
         && getServer().getServicesManager().getRegistration(Permission.class) != null) {
       return new VaultRankResource(
           getServer().getServicesManager().getRegistration(Permission.class).getProvider());
-    } else if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
-      return new LuckPermsRankResource(this);
     } else {
       shutdown("You should use either LuckPerms or Vault to work with RankSync");
       return null;
@@ -294,6 +294,7 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
    */
   @Override
   public void executeCommand(String command) {
-    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+    Bukkit.getScheduler()
+        .runTask(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
   }
 }

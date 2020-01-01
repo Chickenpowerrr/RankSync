@@ -45,8 +45,10 @@ public class VaultRankResource implements RankResource {
     }
 
     CompletableFuture<List<Rank>> completableFuture = CompletableFuture.supplyAsync(
-        () -> Arrays.stream(this.permission
-            .getPlayerGroups(Bukkit.getWorlds().get(0).getName(), Bukkit.getOfflinePlayer(uuid)))
+        () -> Bukkit.getWorlds().stream().map(world -> this.permission
+            .getPlayerGroups(world.getName(), Bukkit.getOfflinePlayer(uuid)))
+            .flatMap(Arrays::stream)
+            .distinct()
             .map(groupName -> this.rankHelper.getRanks(this.bot, groupName))
             .filter(Objects::nonNull)
             .flatMap(Collection::stream)
@@ -87,6 +89,6 @@ public class VaultRankResource implements RankResource {
    */
   @Override
   public boolean hasCaseSensitiveRanks() {
-    return false;
+    return true;
   }
 }

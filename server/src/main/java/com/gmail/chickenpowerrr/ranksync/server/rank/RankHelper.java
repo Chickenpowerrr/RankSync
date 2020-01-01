@@ -6,6 +6,7 @@ import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.server.language.Translation;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class RankHelper implements com.gmail.chickenpowerrr.ranksync.api.rank.Ra
           .distinct()
           .collect(Collectors.toList());
     } else {
-      return null;
+      return new HashSet<>();
     }
   }
 
