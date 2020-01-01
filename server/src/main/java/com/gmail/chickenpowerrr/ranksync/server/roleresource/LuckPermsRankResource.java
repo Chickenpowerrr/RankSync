@@ -94,7 +94,6 @@ public class LuckPermsRankResource implements RankResource {
    */
   @Override
   public Collection<String> getAvailableRanks() {
-    System.out.println("Available: " + this.rankResource.getAvailableRanks());
     return this.rankResource.getAvailableRanks();
   }
 

@@ -172,8 +172,8 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   @Override
   public void addRankHelper(RankHelper rankHelper) {
     this.rankHelpers.add(rankHelper);
-    OptionalInt highestRole = this.guild.getJDA().getRoles().stream().mapToInt(Role::getPosition)
-        .max();
+    OptionalInt highestRole = this.guild.getSelfMember().getRoles().stream()
+        .mapToInt(Role::getPosition).max();
 
     if (highestRole.isPresent()) {
       String invalidPriorities = rankHelper.getRanks(this.bot).stream().filter(Objects::nonNull)
