@@ -1,11 +1,11 @@
 package com.gmail.chickenpowerrr.ranksync.api.bot;
 
 import com.gmail.chickenpowerrr.languagehelper.LanguageHelper;
-import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
-import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
 import com.gmail.chickenpowerrr.ranksync.api.command.CommandFactory;
 import com.gmail.chickenpowerrr.ranksync.api.data.Database;
 import com.gmail.chickenpowerrr.ranksync.api.data.DatabaseFactory;
+import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
+import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
 import java.util.Collection;
 
@@ -99,4 +99,25 @@ public interface Bot<P, R> {
    * Returns if the program should synchronize the usernames
    */
   boolean doesUpdateNames();
+
+  /**
+   * Returns the format for in which an username should be updated
+   * if name sync has been enabled
+   *
+   * @return the format for in which an username should be updated
+   * if name sync has been enabled
+   */
+  String getNameSyncFormat();
+
+  /**
+   * Returns the time in seconds a message sent to a public channel should stay there before
+   * it needs to be deleted, -1 will make sure the message doesn't get deleted
+   */
+  int getDeleteTimer();
+
+  /**
+   * Returns the interval between times in which all users should be checked if their rank
+   * is still correct, should be greater than 0 if you want to use this feature
+   */
+  int getUpdateInterval();
 }

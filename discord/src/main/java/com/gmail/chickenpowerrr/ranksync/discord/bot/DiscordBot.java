@@ -10,6 +10,7 @@ import com.gmail.chickenpowerrr.ranksync.api.data.Properties;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotEnabledEvent;
 import com.gmail.chickenpowerrr.ranksync.api.event.BotForceShutdownEvent;
 import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
+import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
 import com.gmail.chickenpowerrr.ranksync.discord.command.LinkCommand;
@@ -17,6 +18,9 @@ import com.gmail.chickenpowerrr.ranksync.discord.event.DiscordEventListeners;
 import com.gmail.chickenpowerrr.ranksync.discord.language.Translation;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.security.auth.login.LoginException;
 import lombok.Getter;
@@ -98,6 +102,7 @@ public class DiscordBot implements Bot<Member, Role> {
       this.commandFactory.addCommand(new LinkCommand("link", new HashSet<>()));
       RankSyncApi.getApi().execute(new BotEnabledEvent(this));
       this.enabled = true;
+      updateUsers();
     } else {
       RankSyncApi.getApi()
           .execute(new BotForceShutdownEvent(this, "===================================",
@@ -137,5 +142,34 @@ public class DiscordBot implements Bot<Member, Role> {
   @Override
   public boolean doesUpdateNames() {
     return this.properties.getBoolean("sync_names");
+  }
+
+  @Override
+  public String getNameSyncFormat() {
+    return this.properties.getString("name_format");
+  }
+
+  @Override
+  public int getDeleteTimer() {
+    return this.properties.getInt("delete_timer");
+  }
+
+  @Override
+  public int getUpdateInterval() {
+    return this.properties.getInt("update_interval");
+  }
+
+  private void updateUsers() {
+    if (getUpdateInterval() > 0) {
+      new Timer().scheduleAtFixedRate(
+          new TimerTask() {
+            @Override
+            public void run() {
+              guild.getMembers().stream().map(getPlayerFactory()::getPlayer).forEach(future ->
+                future.thenAccept(Player::update));
+            }
+          }, TimeUnit.MINUTES.toMillis(getUpdateInterval()),
+          TimeUnit.MINUTES.toMillis(getUpdateInterval()));
+    }
   }
 }

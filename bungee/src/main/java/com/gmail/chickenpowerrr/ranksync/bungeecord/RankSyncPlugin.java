@@ -1,6 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.bungeecord;
 
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.link.Link;
 import com.gmail.chickenpowerrr.ranksync.api.name.NameResource;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankHelper;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankResource;
@@ -15,15 +16,18 @@ import com.gmail.chickenpowerrr.ranksync.server.roleresource.LuckPermsRankResour
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.Setter;
-import me.lucko.luckperms.LuckPerms;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -58,6 +62,10 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   public void onEnable() {
     enable();
     Metrics metrics = new Metrics(this);
+    metrics.addCustomChart(
+        new Metrics.SimplePie("used_storage", () -> getConfigString("database.type")));
+    metrics.addCustomChart(
+        new Metrics.SimplePie("used_language", () -> getConfigString("language")));
   }
 
   /**
@@ -222,7 +230,7 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   @Override
   public RankResource validateDependencies() {
     if (getProxy().getPluginManager().getPlugin("LuckPerms") != null) {
-      return new LuckPermsRankResource(this, LuckPerms.getApi());
+      return new LuckPermsRankResource(this);
     } else {
       shutdown("You should use LuckPerms to work with RankSync");
       return null;
@@ -240,26 +248,37 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   }
 
   /**
+   * Executes a given command on the server as the console
+   *
+   * @param command the command which needs to be executed
+   */
+  @Override
+  public void executeCommand(String command) {
+    ProxyServer.getInstance().getPluginManager()
+        .dispatchCommand(ProxyServer.getInstance().getConsole(), command);
+  }
+
+  /**
    * Returns all of the links given in the config.yml
    */
   @Override
-  public Map<String, Map<Bot<?, ?>, Collection<String>>> getSyncedRanks() {
-    Map<String, Map<Bot<?, ?>, Collection<String>>> syncedRanks = new HashMap<>();
+  public List<Link> getSyncedRanks() {
+    List<Link> syncedRanks = new ArrayList<>();
 
     getBots()
         .forEach((botName, bot) -> this.configuration.getSection("ranks.discord").getKeys().stream()
             .map(section -> this.configuration.getSection("ranks.discord." + section))
             .forEach(section -> {
               String minecraftRank = section.getString("minecraft");
-              Collection<String> platformRanks = section.getStringList(botName);
+              List<String> platformRanks = section.getStringList(botName);
               if (platformRanks.isEmpty()) {
                 platformRanks.add(section.getString(botName));
               }
 
-              if (!syncedRanks.containsKey(minecraftRank)) {
-                syncedRanks.put(minecraftRank, new HashMap<>());
-              }
-              syncedRanks.get(minecraftRank).put(bot, platformRanks);
+              syncedRanks.add(new com.gmail.chickenpowerrr.ranksync.server.link.Link(
+                  Collections.singletonList(minecraftRank), platformRanks,
+                  Optional.ofNullable(section.getString("name-format"))
+                      .orElse(this.configuration.getString("discord.name-format")), bot));
             }));
 
     return syncedRanks;
@@ -268,6 +287,7 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
   /**
    * Sets up the config
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void setupConfig() {
     if (!getDataFolder().exists()) {
@@ -287,9 +307,39 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
     try {
       this.configuration = ConfigurationProvider
           .getProvider(YamlConfiguration.class)
-          .load(new File(getDataFolder(), "config.yml"));
+          .load(new File(getDataFolder(), "config.yml"),
+              ConfigurationProvider.getProvider(YamlConfiguration.class)
+                  .load(getResourceAsStream("config.yml")));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
+    try {
+      Field defaultField = this.configuration.getClass().getDeclaredField("defaults");
+      defaultField.setAccessible(true);
+      Configuration defaults = (Configuration) defaultField.get(this.configuration);
+      Field selfField = this.configuration.getClass().getDeclaredField("self");
+      selfField.setAccessible(true);
+      System.out.println(defaults);
+      Map<String, Object> self = (Map<String, Object>) selfField.get(defaults);
+      self.remove("ranks");
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+
+    try {
+      ConfigurationProvider.getProvider(YamlConfiguration.class)
+          .save(this.configuration, new File(getDataFolder(), "config.yml"));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Returns if the bot is still running
+   */
+  @Override
+  public boolean isRunning() {
+    return ProxyServer.getInstance().getPluginManager().getPlugin("RankSync") != null;
   }
 }

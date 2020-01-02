@@ -14,6 +14,7 @@ minecraft-unsync-command-usage = &4Please use that command like this: &c/%comman
 minecraft-discord-linkinfo = Type !link in the Discord channel containing the RankSync bot.
 minecraft-invalid-rank = %rank% is not a valid rank on %platform%
 discord-link-command-already-linked = Your account has already been linked, %name%!
+discord-link-command-enable-private-messages = %name% please enable your private messages
 discord-link-command-rightthere = Your message is right here ^
 discord-link-command-request-limit = You are only allowed to do this every two minutes, %name%!
 discord-link-command-public = Thanks, %name%! You'll find the secret code in your private messages. DON'T share this code!

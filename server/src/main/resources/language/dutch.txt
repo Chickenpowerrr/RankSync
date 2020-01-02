@@ -14,6 +14,7 @@ minecraft-unsync-command-usage = &4Gebruik dit commando alsjeblieft op de volgen
 minecraft-discord-linkinfo = typ !link in het bot kanaal op Discord
 minecraft-invalid-rank = %rank% is geen valide rank op %platform%
 discord-link-command-already-linked = Jouw account is al gesynchroniseerd %name%
+discord-link-command-enable-private-messages = %name% zet alsjeblieft je privé berichten aan
 discord-link-command-rightthere = Je bericht is daar ^
 discord-link-command-request-limit = Je mag dit slechts één keer per twee minuten doen %name%!
 discord-link-command-public = Bedankt %name% je kan de geheime code in jouw privé berichten vinden. Deel deze code NIET!

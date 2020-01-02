@@ -1,6 +1,8 @@
 package com.gmail.chickenpowerrr.ranksync.server.command;
 
+import com.gmail.chickenpowerrr.ranksync.api.RankSyncApi;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
+import com.gmail.chickenpowerrr.ranksync.api.event.PlayerUnlinkedEvent;
 import com.gmail.chickenpowerrr.ranksync.api.player.LinkInfo;
 import com.gmail.chickenpowerrr.ranksync.api.user.User;
 import com.gmail.chickenpowerrr.ranksync.server.language.Translation;
@@ -59,13 +61,19 @@ public abstract class UnSyncCommand extends AbstractCommand {
           bot.getPlayerFactory().getPlayer(user.getUuid()).thenAccept(player -> {
             if (player != null) {
               if (this.linkHelper.isAllowedToUnlink(user, user.getUuid(), args[0])) {
+                RankSyncApi.getApi().execute(new PlayerUnlinkedEvent(player));
                 bot.getEffectiveDatabase().setUuid(player.getPersonalId(), null);
+                player.setUuid(null);
+                player.update();
                 user.sendMessage(Translation.UNSYNC_COMMAND_UNLINKED.getTranslation());
               }
             } else {
               user.sendMessage(
                   Translation.UNSYNC_COMMAND_NOT_LINKED.getTranslation("service", args[0]));
             }
+          }).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
           });
         } else {
           user.sendMessage(Translation.UNSYNC_COMMAND_INVALID_SERVICE

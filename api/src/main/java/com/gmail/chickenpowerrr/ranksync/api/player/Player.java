@@ -3,6 +3,7 @@ package com.gmail.chickenpowerrr.ranksync.api.player;
 import com.gmail.chickenpowerrr.ranksync.api.bot.Bot;
 import com.gmail.chickenpowerrr.ranksync.api.rank.Rank;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -24,7 +25,7 @@ public interface Player {
    *
    * @param ranks the ranks the Player should have
    */
-  void setRanks(Collection<Rank> ranks);
+  void setRanks(List<Rank> ranks);
 
   /**
    * Returns the id that represents the Player on the other service
@@ -45,8 +46,9 @@ public interface Player {
    * Sends a private message to the Player on this service
    *
    * @param message the message the Player should receive
+   * @return true if the message has been send successfully, otherwise false
    */
-  void sendPrivateMessage(String message);
+  boolean sendPrivateMessage(String message);
 
   /**
    * Returns the name the Player wants to hear when you're talking to it
@@ -76,4 +78,16 @@ public interface Player {
    * @param username the new username
    */
   void setUsername(String username);
+
+  /**
+   * Returns how many times an user synced their account
+   */
+  int getTimesSynced();
+
+  /**
+   * Returns how many times an user unsynced their account
+   */
+  default int getTimesUnsynced() {
+    return getTimesSynced() - (getUuid() != null ? 1 : 0);
+  }
 }

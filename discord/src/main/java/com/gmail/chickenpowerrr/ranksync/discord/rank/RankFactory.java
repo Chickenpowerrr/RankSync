@@ -31,9 +31,10 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   private final Map<Role, Rank> ranks = new HashMap<>();
   private final Map<String, Role> roles = new HashMap<>();
   private final Guild guild;
+  private final Collection<RankHelper> rankHelpers = new HashSet<>();
+
   @Getter
   private final Bot<?, Role> bot;
-  private final Collection<RankHelper> rankHelpers = new HashSet<>();
 
   @Setter
   private boolean shouldThrowPermissionWarnings;
@@ -99,8 +100,8 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
    * @return the RankSync representations of the Roles
    */
   @Override
-  public Collection<Rank> getRanksFromRoles(Collection<Role> roles) {
-    return roles.stream().map(this::getRankFromRole).collect(Collectors.toSet());
+  public List<Rank> getRanksFromRoles(Collection<Role> roles) {
+    return roles.stream().map(this::getRankFromRole).collect(Collectors.toList());
   }
 
   /**
@@ -133,8 +134,8 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
    * @return the Roles used by JDA, not the RankSync API
    */
   @Override
-  public Collection<Role> getRolesFromNames(Collection<String> strings) {
-    return strings.stream().map(this::getRoleFromName).collect(Collectors.toSet());
+  public List<Role> getRolesFromNames(Collection<String> strings) {
+    return strings.stream().map(this::getRoleFromName).collect(Collectors.toList());
   }
 
   /**
@@ -159,8 +160,8 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
    * @return the JDA Roles
    */
   @Override
-  public Collection<Role> getRolesFromRanks(Collection<Rank> ranks) {
-    return ranks.stream().map(this::getRoleFromRank).collect(Collectors.toSet());
+  public List<Role> getRolesFromRanks(Collection<Rank> ranks) {
+    return ranks.stream().map(this::getRoleFromRank).collect(Collectors.toList());
   }
 
   /**
@@ -171,8 +172,8 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   @Override
   public void addRankHelper(RankHelper rankHelper) {
     this.rankHelpers.add(rankHelper);
-    OptionalInt highestRole = this.guild.getJDA().getRoles().stream().mapToInt(Role::getPosition)
-        .max();
+    OptionalInt highestRole = this.guild.getSelfMember().getRoles().stream()
+        .mapToInt(Role::getPosition).max();
 
     if (highestRole.isPresent()) {
       String invalidPriorities = rankHelper.getRanks(this.bot).stream().filter(Objects::nonNull)
@@ -220,5 +221,23 @@ public class RankFactory implements com.gmail.chickenpowerrr.ranksync.api.rank.R
   @Override
   public boolean shouldThrowPermissionWarnings() {
     return this.shouldThrowPermissionWarnings;
+  }
+
+  /**
+   * Returns the format for the Rank in which an username should be updated
+   * if name sync has been enabled
+   *
+   * @param rank the rank which format should be returned
+   * @return the format for the Rank in which an username should be updated
+   * if name sync has been enabled
+   */
+  @Override
+  public String getNameSyncFormat(Rank rank) {
+    return Objects.requireNonNull(this.rankHelpers.stream()
+        .map(rankHelper -> rankHelper.getLinks().stream()
+            .filter(link -> link.getPlatformRanks().stream()
+                .anyMatch(platFormRank -> platFormRank.equalsIgnoreCase(rank.getName())))
+            .findFirst().orElse(null))
+        .findFirst().orElse(null)).getNameFormat();
   }
 }
