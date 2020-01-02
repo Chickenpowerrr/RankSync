@@ -115,7 +115,8 @@ public class DiscordEventListeners implements EventListener {
   private void queueDelete(Message message) {
     if (this.deleteDelay >= 0) {
       this.executorService
-          .schedule(() -> message.delete().queue(), this.deleteDelay, TimeUnit.SECONDS);
+          .schedule(() -> message.delete().queue(a -> {}, a -> {}), this.deleteDelay,
+              TimeUnit.SECONDS);
     }
   }
 }
