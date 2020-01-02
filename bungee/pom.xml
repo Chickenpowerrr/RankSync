@@ -7,7 +7,7 @@
   <parent>
     <artifactId>ranksync</artifactId>
     <groupId>com.gmail.chickenpowerrr</groupId>
-    <version>1.4.0-ALPHA</version>
+    <version>1.4.0</version>
   </parent>
 
   <groupId>com.gmail.chickenpowerrr.ranksync</groupId>

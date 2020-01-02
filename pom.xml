@@ -8,7 +8,7 @@
   <artifactId>ranksync</artifactId>
   <name>RankSync</name>
   <packaging>pom</packaging>
-  <version>1.4.0-ALPHA</version>
+  <version>1.4.0</version>
   <modules>
     <module>api</module>
     <module>discord</module>
