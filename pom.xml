@@ -8,13 +8,11 @@
   <artifactId>ranksync</artifactId>
   <name>RankSync</name>
   <packaging>pom</packaging>
-  <version>1.4.0</version>
+  <version>2.0.0-ALPHA</version>
   <modules>
     <module>api</module>
     <module>discord</module>
     <module>spigot</module>
-    <module>manager</module>
-    <module>server</module>
     <module>bungee</module>
   </modules>
 
