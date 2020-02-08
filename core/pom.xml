@@ -10,5 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
-  <artifactId>api</artifactId>
+  <artifactId>core</artifactId>
+
+
 </project>
