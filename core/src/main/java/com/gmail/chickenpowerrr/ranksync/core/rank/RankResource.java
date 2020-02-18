@@ -1,8 +1,13 @@
 package com.gmail.chickenpowerrr.ranksync.core.rank;
 
+import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
+import com.gmail.chickenpowerrr.ranksync.core.user.Account;
+import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-public class RankResource {
+public abstract class RankResource<T extends Platform<T>> {
 
   private final boolean caseSensitive;
 
@@ -14,4 +19,15 @@ public class RankResource {
   public boolean isCaseSensitive() {
     return this.caseSensitive;
   }
+
+  @Contract(pure = true)
+  @NotNull
+  public abstract CompletableFuture<Collection<Rank<T>>> getRanks(@NotNull Account<T> account);
+
+  @Contract(pure = true)
+  @NotNull
+  public abstract CompletableFuture<Collection<Rank<T>>> getRanks();
+
+  @Contract(pure = false)
+  public abstract void applyRanks(@NotNull Account<T> account, @NotNull Collection<Rank<T>> ranks);
 }

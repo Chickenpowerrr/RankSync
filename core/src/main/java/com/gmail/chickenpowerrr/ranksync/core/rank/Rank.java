@@ -11,7 +11,7 @@ public class Rank<T extends Platform<T>> {
   private final int priority;
   private final String name;
 
-  public Rank(@NotNull String identifier, int priority, @NotNull String name) {
+  public Rank(@NotNull String identifier, @NotNull String name, int priority) {
     this.identifier = identifier;
     this.priority = priority;
     this.name = name;

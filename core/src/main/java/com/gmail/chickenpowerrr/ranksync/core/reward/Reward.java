@@ -29,4 +29,10 @@ public abstract class Reward<T extends Platform<T>> {
   }
 
   public abstract void apply(@NotNull Account<T> account);
+
+  @Contract(pure = true)
+  @NotNull
+  protected T getPlatform() {
+    return this.platform;
+  }
 }

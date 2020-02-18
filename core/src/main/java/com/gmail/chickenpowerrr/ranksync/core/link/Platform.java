@@ -3,38 +3,43 @@ package com.gmail.chickenpowerrr.ranksync.core.link;
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.rank.RankResource;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
-public class Platform<T extends Platform<T>> {
+public abstract class Platform<T extends Platform<T>> {
 
   private final String name;
   private final int maxNameLength;
   private final boolean canChangeName;
-  private final Collection<Rank> ranks;
   private final Collection<RankResource> rankResources;
 
-  public Platform(@NotNull String name, int maxNameLength, boolean canChangeName) {
+  public Platform(@NotNull String name, @Range(from = 1, to = Integer.MAX_VALUE) int maxNameLength,
+      boolean canChangeName) {
     this.name = name;
     this.maxNameLength = maxNameLength;
     this.canChangeName = canChangeName;
-    this.ranks = new HashSet<>();
     this.rankResources = new HashSet<>();
   }
 
+  @Contract(pure = true)
   @NotNull
   public String getName() {
     return this.name;
   }
 
+  @Contract(pure = true)
   @NotNull
-  public Collection<Rank> getRanks() {
-    return Collections.unmodifiableCollection(this.ranks);
+  public CompletableFuture<Collection<Rank>> getRanks() {
+    // TODO implement
+    return null;
   }
 
-  public boolean isCanChangeName() {
+  @Contract(pure = true)
+  public boolean canChangeName() {
     return this.canChangeName;
   }
 
@@ -44,19 +49,12 @@ public class Platform<T extends Platform<T>> {
   }
 
   @Contract(pure = true)
-  public void formatName(@NotNull String name, @NotNull String format) {
-    // TODO implement
-  }
+  @Nullable
+  public abstract String formatName(@NotNull String name, @NotNull String format);
 
   @Contract(pure = true)
-  public boolean isValidName(@NotNull String name) {
-    // TODO implement
-    return true;
-  }
+  public abstract boolean isValidName(@NotNull String name);
 
   @Contract(pure = true)
-  public boolean isValidFormat(@NotNull String format) {
-    // TODO implement
-    return true;
-  }
+  public abstract boolean isValidFormat(@NotNull String format);
 }

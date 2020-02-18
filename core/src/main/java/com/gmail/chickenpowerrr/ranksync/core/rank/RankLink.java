@@ -35,4 +35,10 @@ public class RankLink<T extends Platform<T>, U extends Platform<U>> {
   public Rank<U> getDestination() {
     return this.destination;
   }
+
+  @Contract(pure = true)
+  @NotNull
+  public String getNameFormat() {
+    return this.nameFormat;
+  }
 }
