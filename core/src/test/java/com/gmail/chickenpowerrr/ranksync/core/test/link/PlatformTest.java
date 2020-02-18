@@ -1,6 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.core.test.link;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
@@ -71,7 +72,8 @@ public class PlatformTest {
     assertThat((Collection<?>) this.platform.getRanks().get(), hasSize(0));
 
     this.platform.addRankResource(rankResource);
-    assertThat(this.platform.getRanks().get(), is(equalTo(FIRST_RANKS)));
+    assertThat((Collection<Rank>) this.platform.getRanks().get(),
+        containsInAnyOrder(FIRST_RANKS.toArray()));
   }
 
   @Test
@@ -81,7 +83,8 @@ public class PlatformTest {
     assertThat((Collection<?>) this.platform.getRanks().get(), hasSize(0));
 
     this.platform.addRankResource(rankResource1);
-    assertThat(this.platform.getRanks().get(), is(equalTo(FIRST_RANKS)));
+    assertThat((Collection<Rank>) this.platform.getRanks().get(),
+        containsInAnyOrder(FIRST_RANKS.toArray()));
 
     this.platform.addRankResource(rankResource2);
     assertThat((Collection<Rank>) this.platform.getRanks().get(),

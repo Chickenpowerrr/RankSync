@@ -3,6 +3,7 @@ package com.gmail.chickenpowerrr.ranksync.core.test.user;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import com.gmail.chickenpowerrr.ranksync.core.user.User;
@@ -50,7 +51,8 @@ public class UserTest {
     UserLink userLink = new UserLink(this.account1, this.user, this.startDate);
     assertThat(this.user.getAccounts(), hasSize(0));
     
-    this.user.addLink(userLink);
+    assertThat(this.user.addLink(userLink), is(true));
+
     assertThat(this.user.getAccounts(), hasSize(1));
     assertThat(this.user.getAccounts(), hasItem(userLink.getAccount()));
   }
@@ -62,8 +64,8 @@ public class UserTest {
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    this.user.addLink(userLink1);
-    this.user.addLink(userLink2);
+    assertThat(this.user.addLink(userLink1), is(true));
+    assertThat(this.user.addLink(userLink2), is(false));
 
     assertThat(this.user.getAccounts(), hasSize(1));
     assertThat(this.user.getAccounts(), hasItem(userLink1.getAccount()));
@@ -76,8 +78,8 @@ public class UserTest {
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    this.user.addLink(userLink1);
-    this.user.addLink(userLink2);
+    assertThat(this.user.addLink(userLink1), is(true));
+    assertThat(this.user.addLink(userLink2), is(true));
 
     assertThat(this.user.getAccounts(), hasSize(2));
     assertThat(this.user.getAccounts(), hasItem(userLink1.getAccount()));
@@ -90,7 +92,7 @@ public class UserTest {
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    this.user.addLink(userLink);
+    assertThat(this.user.addLink(userLink), is(false));
 
     assertThat(this.user.getAccounts(), hasSize(0));
   }
@@ -102,8 +104,9 @@ public class UserTest {
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    this.user.addLink(userLinkExpired);
-    this.user.addLink(userLinkValid);
+    System.out.println(userLinkExpired.isActive());
+    assertThat(this.user.addLink(userLinkExpired), is(false));
+    assertThat(this.user.addLink(userLinkValid), is(true));
 
     assertThat(this.user.getAccounts(), hasSize(1));
     assertThat(this.user.getAccounts(), hasItem(userLinkValid.getAccount()));

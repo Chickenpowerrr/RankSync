@@ -5,17 +5,17 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
+import com.gmail.chickenpowerrr.ranksync.core.user.UserLink;
 import java.util.Collections;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sun.awt.image.ImageWatched.Link;
 
 public class AccountTest {
 
   private static final String IDENTIFIER = "identifier";
-  private static final List<Link> LINKS = Collections.emptyList();
+  private static final List<UserLink> LINKS = Collections.emptyList();
 
   private Account account;
 

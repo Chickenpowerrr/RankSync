@@ -20,8 +20,7 @@ public class RankLink<T extends Platform<T>, U extends Platform<U>> {
   @Range(from = 0, to = Integer.MAX_VALUE)
   @Contract(pure = true)
   public int getPriority() {
-    // TODO implement
-    return 0;
+    return this.destination.getPriority();
   }
 
   @Contract(pure = true)

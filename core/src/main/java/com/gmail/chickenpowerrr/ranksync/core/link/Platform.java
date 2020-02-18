@@ -2,8 +2,10 @@ package com.gmail.chickenpowerrr.ranksync.core.link;
 
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.rank.RankResource;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -33,9 +35,26 @@ public abstract class Platform<T extends Platform<T>> {
 
   @Contract(pure = true)
   @NotNull
-  public CompletableFuture<Collection<Rank>> getRanks() {
-    // TODO implement
-    return null;
+  @SuppressWarnings("unchecked")
+  public CompletableFuture<Collection<Rank<T>>> getRanks() {
+    Collection<Rank<T>> ranks = new HashSet<>();
+    List<CompletableFuture<Collection<Rank<T>>>> completableFutures = new ArrayList<>();
+
+    for (RankResource<T> rankResource : this.rankResources) {
+      // Register the resource request
+      CompletableFuture<Collection<Rank<T>>> resourceCompletableFuture = rankResource.getRanks();
+      resourceCompletableFuture
+          .thenAccept(ranks::addAll)
+          .exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
+          });
+      completableFutures.add(resourceCompletableFuture);
+    }
+
+    // Complete if all resources have been completed
+    return CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[0]))
+        .thenApply(aVoid -> ranks);
   }
 
   @Contract(pure = true)

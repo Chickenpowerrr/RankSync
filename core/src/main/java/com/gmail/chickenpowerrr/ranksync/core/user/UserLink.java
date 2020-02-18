@@ -14,7 +14,7 @@ public class UserLink<T extends Platform<T>> {
   private final Account<T> account;
   private final User user;
   private final Date start;
-  private final Date end;
+  private Date end;
 
   public UserLink(@NotNull Account<T> account, @NotNull User user, @NotNull Date start,
       @Nullable Date end) {
@@ -34,14 +34,19 @@ public class UserLink<T extends Platform<T>> {
 
   @Contract(pure = true)
   public boolean isActive() {
-    // TODO implement
-    return true;
+    return (this.end == null || this.end.after(Date.from(Instant.now()))
+        && this.start.before(Date.from(Instant.now())));
   }
 
   @Contract(mutates = "this")
   public boolean unlink(@NotNull Collection<Reward<T>> rewards) {
-    // TODO implement
-    return true;
+    if (isActive()) {
+      this.end = Date.from(Instant.now());
+      rewards.forEach(reward -> reward.apply(this.account));
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Contract(pure = true)

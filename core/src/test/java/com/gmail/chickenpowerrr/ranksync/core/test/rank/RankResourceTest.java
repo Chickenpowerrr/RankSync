@@ -3,7 +3,6 @@ package com.gmail.chickenpowerrr.ranksync.core.test.rank;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.rank.RankResource;
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
@@ -18,14 +17,14 @@ public class RankResourceTest {
 
   @Test
   public void testSetup() {
-    MatcherAssert.assertThat(new RankResource<Platform>(true) {
+    MatcherAssert.assertThat(new RankResource(true) {
       @Override
       public @NotNull CompletableFuture<Collection<Rank>> getRanks(@NotNull Account account) {
         return null;
       }
 
       @Override
-      public @NotNull CompletableFuture<Collection<Rank<Platform>>> getRanks() {
+      public @NotNull CompletableFuture<Collection<Rank>> getRanks() {
         return null;
       }
 
@@ -35,14 +34,14 @@ public class RankResourceTest {
       }
     }.isCaseSensitive(), is(true));
 
-    assertThat(new RankResource<Platform>(false) {
+    assertThat(new RankResource(false) {
       @Override
       public @NotNull CompletableFuture<Collection<Rank>> getRanks(@NotNull Account account) {
         return null;
       }
 
       @Override
-      public @NotNull CompletableFuture<Collection<Rank<Platform>>> getRanks() {
+      public @NotNull CompletableFuture<Collection<Rank>> getRanks() {
         return null;
       }
 
