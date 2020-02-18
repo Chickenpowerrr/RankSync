@@ -1,5 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.core.user;
 
+import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
+import com.gmail.chickenpowerrr.ranksync.core.reward.Reward;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -26,10 +28,12 @@ public class User {
   }
 
   @Contract(mutates = "this")
-  public boolean addLink(@NotNull UserLink link) {
+  public <T extends Platform<T>> boolean addLink(@NotNull UserLink<T> link,
+      @NotNull Collection<Reward<T>> rewards) {
     if (link.isActive()) {
       Collection<Account> accounts = getAccounts();
-      if ( !accounts.contains(link.getAccount())) {
+      if (!accounts.contains(link.getAccount())) {
+        rewards.forEach(reward -> reward.apply(link.getAccount()));
         this.links.add(link);
         return true;
       }

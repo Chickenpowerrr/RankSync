@@ -4,12 +4,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
+import com.gmail.chickenpowerrr.ranksync.core.reward.Reward;
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import com.gmail.chickenpowerrr.ranksync.core.user.User;
 import com.gmail.chickenpowerrr.ranksync.core.user.UserLink;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +31,10 @@ public class UserTest {
   private Date startDate;
   private Date endDate;
   private User user;
+  private Collection<Reward> rewards;
+
+  @Mock
+  private Reward reward;
 
   @Mock
   private Account account1, account2;
@@ -38,6 +47,8 @@ public class UserTest {
     this.endDate = new Date();
     this.endDate.setTime(System.currentTimeMillis() - 1000);
 
+    this.rewards = new HashSet<>();
+    this.rewards.add(this.reward);
     this.user = new User(new ArrayList<>());
   }
 
@@ -51,10 +62,11 @@ public class UserTest {
     UserLink userLink = new UserLink(this.account1, this.user, this.startDate);
     assertThat(this.user.getAccounts(), hasSize(0));
     
-    assertThat(this.user.addLink(userLink), is(true));
+    assertThat(this.user.addLink(userLink, (Collection) this.rewards), is(true));
 
     assertThat(this.user.getAccounts(), hasSize(1));
     assertThat(this.user.getAccounts(), hasItem(userLink.getAccount()));
+    verify(this.reward, times(1)).apply(userLink.getAccount());
   }
 
   @Test
@@ -64,11 +76,12 @@ public class UserTest {
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    assertThat(this.user.addLink(userLink1), is(true));
-    assertThat(this.user.addLink(userLink2), is(false));
+    assertThat(this.user.addLink(userLink1, (Collection) this.rewards), is(true));
+    assertThat(this.user.addLink(userLink2, (Collection) this.rewards), is(false));
 
     assertThat(this.user.getAccounts(), hasSize(1));
     assertThat(this.user.getAccounts(), hasItem(userLink1.getAccount()));
+    verify(this.reward, times(1)).apply(userLink1.getAccount());
   }
 
   @Test
@@ -78,12 +91,14 @@ public class UserTest {
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    assertThat(this.user.addLink(userLink1), is(true));
-    assertThat(this.user.addLink(userLink2), is(true));
+    assertThat(this.user.addLink(userLink1, (Collection) this.rewards), is(true));
+    assertThat(this.user.addLink(userLink2, (Collection) this.rewards), is(true));
 
     assertThat(this.user.getAccounts(), hasSize(2));
     assertThat(this.user.getAccounts(), hasItem(userLink1.getAccount()));
     assertThat(this.user.getAccounts(), hasItem(userLink2.getAccount()));
+    verify(this.reward, times(1)).apply(userLink1.getAccount());
+    verify(this.reward, times(1)).apply(userLink2.getAccount());
   }
 
   @Test
@@ -92,23 +107,26 @@ public class UserTest {
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    assertThat(this.user.addLink(userLink), is(false));
+    assertThat(this.user.addLink(userLink, (Collection) this.rewards), is(false));
 
     assertThat(this.user.getAccounts(), hasSize(0));
+    verify(this.reward, times(0)).apply(userLink.getAccount());
   }
 
   @Test
   public void testGetAccountsOverridden() {
     UserLink userLinkExpired = new UserLink(this.account1, this.user, this.startDate, this.endDate);
-    UserLink userLinkValid = new UserLink(this.account1, this.user, this.endDate);
+    UserLink userLinkValid = new UserLink(this.account2, this.user, this.endDate);
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
     System.out.println(userLinkExpired.isActive());
-    assertThat(this.user.addLink(userLinkExpired), is(false));
-    assertThat(this.user.addLink(userLinkValid), is(true));
+    assertThat(this.user.addLink(userLinkExpired, (Collection) this.rewards), is(false));
+    assertThat(this.user.addLink(userLinkValid, (Collection) this.rewards), is(true));
 
     assertThat(this.user.getAccounts(), hasSize(1));
     assertThat(this.user.getAccounts(), hasItem(userLinkValid.getAccount()));
+    verify(this.reward, times(0)).apply(userLinkExpired.getAccount());
+    verify(this.reward, times(1)).apply(userLinkValid.getAccount());
   }
 }
