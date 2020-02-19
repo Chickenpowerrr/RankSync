@@ -12,6 +12,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
+/**
+ * This class represents a {@code Platform} which has
+ * {@code Account}s and {@code Rank}s which can be
+ * synced with other {@code Platform}s.
+ *
+ * @param <T> the type of the {@code Platform}
+ *
+ * @author Mark van Wijk
+ * @since 2.0.0
+ */
 public abstract class Platform<T extends Platform<T>> {
 
   private final String name;
@@ -19,6 +29,21 @@ public abstract class Platform<T extends Platform<T>> {
   private final boolean canChangeName;
   private final Collection<RankResource> rankResources;
 
+  /**
+   * Initializes a new {@code Platform} based on the name
+   * of the {@code Platform}, the maximum length of the
+   * name of an {@code Account} and if the application
+   * is able to change names on this {@code Platform}.
+   *
+   * @param name the name of this {@code Platform}
+   * @param maxNameLength the maximum length of an
+   *                      {@code Account} name on
+   *                      this {@code Platform}
+   * @param canChangeName true if the application is
+   *                      able to change the name of an
+   *                      {@code Account} on the {@code Platform},
+   *                      false otherwise
+   */
   public Platform(@NotNull String name, @Range(from = 1, to = Integer.MAX_VALUE) int maxNameLength,
       boolean canChangeName) {
     this.name = name;
@@ -27,12 +52,21 @@ public abstract class Platform<T extends Platform<T>> {
     this.rankResources = new HashSet<>();
   }
 
+  /**
+   * Returns the name of the {@code Platform}.
+   */
   @Contract(pure = true)
   @NotNull
   public String getName() {
     return this.name;
   }
 
+  /**
+   * Returns a {@code CompletableFuture} which will be completed
+   * once all {@code RankResource}s have submitted which {@code Rank}s
+   * they are syncing. The result will be a {@code Collection} which
+   * contains all {@code Rank}s synced by the {@code RankResource}s.
+   */
   @Contract(pure = true)
   @NotNull
   @SuppressWarnings("unchecked")
@@ -54,26 +88,63 @@ public abstract class Platform<T extends Platform<T>> {
 
     // Complete if all resources have been completed
     return CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[0]))
-        .thenApply(aVoid -> ranks);
+        .thenApply(a -> ranks);
   }
 
+  /**
+   * Returns true if the application is able to change
+   * the name of an {@code Account} on the {@code Platform},
+   * false otherwise.
+   */
   @Contract(pure = true)
   public boolean canChangeName() {
     return this.canChangeName;
   }
 
+  /**
+   * Adds a {@code RankResource} which is able to retrieve
+   * {@code Rank}s or this {@code Platform}.
+   *
+   * @param rankResource the {@code RankResource} which is able
+   *                     to manage certain {@code Rank}s on
+   *                     this {@code Platform}
+   */
   @Contract(mutates = "this")
-  public void addRankResource(@NotNull RankResource rankResource) {
+  public void addRankResource(@NotNull RankResource<T> rankResource) {
     this.rankResources.add(rankResource);
   }
 
+  /**
+   * Format the name for an {@code Account} based on the basic
+   * format.
+   *
+   * @param name the name of the {@code Account}
+   * @param format the name sync format
+   * @return the formatted name of the {@code Account}
+   */
   @Contract(pure = true)
   @Nullable
   public abstract String formatName(@NotNull String name, @NotNull String format);
 
+  /**
+   * Returns if the provided, formatted name is valid on this
+   * {@code Platform}.
+   *
+   * @param name the formatted name which will be validated
+   * @return true if the name is valid on this {@code Platform},
+   *         false otherwise
+   */
   @Contract(pure = true)
   public abstract boolean isValidName(@NotNull String name);
 
+  /**
+   * Returns if the provided, formatt is valid on this
+   * {@code Platform}.
+   *
+   * @param format the format which will be validated
+   * @return true if the format is valid on this {@code Platform},
+   *         false otherwise
+   */
   @Contract(pure = true)
   public abstract boolean isValidFormat(@NotNull String format);
 }

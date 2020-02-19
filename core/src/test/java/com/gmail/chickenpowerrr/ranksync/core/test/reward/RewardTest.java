@@ -33,8 +33,8 @@ public class RewardTest {
   public void setUp() {
     this.reward = new Reward(this.platform, IDENTIFIER, MAX_ISSUES) {
       @Override
-      public void apply(@NotNull Account account) {
-
+      public boolean apply(@NotNull Account account) {
+        return true;
       }
     };
   }
