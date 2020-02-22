@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.rank.RankResource;
+import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -35,15 +37,19 @@ public class PlatformTest {
   private static final int MAX_NAME_LENGTH = 10;
   private static final List<Rank> FIRST_RANKS = Collections.singletonList(mock(Rank.class));
   private static final List<Rank> SECOND_RANKS = Collections.singletonList(mock(Rank.class));
+  private static final List<Rank> ACCOUNT_RANKS = Collections.singletonList(mock(Rank.class));
 
   private Platform platform;
+
+  @Mock
+  private Account account;
 
   @BeforeEach
   public void setUp() {
     this.platform = new Platform(NAME, MAX_NAME_LENGTH, true) {
       @Nullable
       @Override
-      public String formatName(@NotNull String name, @NotNull String format) {
+      public String formatName(@NotNull Account account, @NotNull String format) {
         return null;
       }
 
@@ -70,10 +76,13 @@ public class PlatformTest {
   public void testRankResourceSingle() throws ExecutionException, InterruptedException {
     RankResource rankResource = getResource(FIRST_RANKS);
     assertThat((Collection<?>) this.platform.getRanks().get(), hasSize(0));
+    assertThat((Collection<?>) this.platform.getRanks(this.account).get(), hasSize(0));
 
     this.platform.addRankResource(rankResource);
     assertThat((Collection<Rank>) this.platform.getRanks().get(),
         containsInAnyOrder(FIRST_RANKS.toArray()));
+    assertThat((Collection<Rank>) this.platform.getRanks(this.account).get(),
+        containsInAnyOrder(ACCOUNT_RANKS.toArray()));
   }
 
   @Test
@@ -81,10 +90,13 @@ public class PlatformTest {
     RankResource rankResource1 = getResource(FIRST_RANKS);
     RankResource rankResource2 = getResource(SECOND_RANKS);
     assertThat((Collection<?>) this.platform.getRanks().get(), hasSize(0));
+    assertThat((Collection<?>) this.platform.getRanks(this.account).get(), hasSize(0));
 
     this.platform.addRankResource(rankResource1);
     assertThat((Collection<Rank>) this.platform.getRanks().get(),
         containsInAnyOrder(FIRST_RANKS.toArray()));
+    assertThat((Collection<Rank>) this.platform.getRanks(this.account).get(),
+        containsInAnyOrder(ACCOUNT_RANKS.toArray()));
 
     this.platform.addRankResource(rankResource2);
     assertThat((Collection<Rank>) this.platform.getRanks().get(),
@@ -93,6 +105,8 @@ public class PlatformTest {
         hasItems(SECOND_RANKS.toArray(new Rank[0])));
     assertThat((Collection<Rank>) this.platform.getRanks().get(),
         hasSize(FIRST_RANKS.size() + SECOND_RANKS.size()));
+    assertThat((Collection<Rank>) this.platform.getRanks(this.account).get(),
+        containsInAnyOrder(ACCOUNT_RANKS.toArray()));
   }
 
   private RankResource getResource(@NotNull Collection<Rank> ranks) {
@@ -100,6 +114,11 @@ public class PlatformTest {
     when(rankResource.getRanks()).thenAnswer(invocation -> {
       CompletableFuture<Collection<Rank>> completableFuture = new CompletableFuture<>();
       completableFuture.complete(ranks);
+      return completableFuture;
+    });
+    when(rankResource.getRanks(this.account)).thenAnswer(invocation -> {
+      CompletableFuture<Collection<Rank>> completableFuture = new CompletableFuture<>();
+      completableFuture.complete(ACCOUNT_RANKS);
       return completableFuture;
     });
     return rankResource;

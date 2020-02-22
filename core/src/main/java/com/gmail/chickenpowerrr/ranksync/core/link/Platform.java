@@ -2,11 +2,13 @@ package com.gmail.chickenpowerrr.ranksync.core.link;
 
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.rank.RankResource;
+import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,14 +71,59 @@ public abstract class Platform<T extends Platform<T>> {
    */
   @Contract(pure = true)
   @NotNull
-  @SuppressWarnings("unchecked")
   public CompletableFuture<Collection<Rank<T>>> getRanks() {
+    return getRanks(RankResource::getRanks);
+  }
+
+  /**
+   * Returns a {@code CompletableFuture} which will be completed
+   * once all {@code RankResource}s have submitted which {@code Rank}s
+   * a certain {@code Account} has on this {@code Platform}. The result
+   * will be a {@code Collection} which contains all {@code Rank}s
+   * determined by the {@code RankResource}s.
+   *
+   * @param account the {@code Account} which {@code Rank}s are requested
+   * @return a {@code CompletableFuture} which will be completed
+   *         once all {@code RankResource}s have submitted which
+   *         {@code Rank}s a certain {@code Account} has on this
+   *         {@code Platform}. The result will be a {@code Collection}
+   *         which contains all {@code Rank}s determined by the
+   *         {@code RankResource}s.
+   */
+  @Contract(pure = true)
+  @NotNull
+  public CompletableFuture<Collection<Rank<T>>> getRanks(Account<T> account) {
+    return getRanks(rankResource -> rankResource.getRanks(account));
+  }
+
+  /**
+   * Returns a {@code CompletableFuture} which will be completed
+   * once all {@code RankResource}s have submitted which {@code Rank}s
+   * they are syncing. The result will be a {@code Collection} which
+   * contains all {@code Rank}s synced by the {@code RankResource}s.
+   *
+   * @param function the {@code Function} which retrieves a
+   *                 {@code CompletableFuture} which will be used
+   *                 to determine the {@code Rank}s with which the
+   *                 result will be completed
+   * @return a {@code CompletableFuture} which will be completed
+   *        once all {@code RankResource}s have submitted which
+   *        {@code Rank}s they are syncing. The result will be
+   *        a {@code Collection} which contains all {@code Rank}s
+   *        synced by the {@code RankResource}s.
+   */
+  @Contract(pure = true)
+  @NotNull
+  @SuppressWarnings("unchecked")
+  private CompletableFuture<Collection<Rank<T>>> getRanks(
+      Function<RankResource<T>, CompletableFuture<Collection<Rank<T>>>> function) {
     Collection<Rank<T>> ranks = new HashSet<>();
     List<CompletableFuture<Collection<Rank<T>>>> completableFutures = new ArrayList<>();
 
     for (RankResource<T> rankResource : this.rankResources) {
       // Register the resource request
-      CompletableFuture<Collection<Rank<T>>> resourceCompletableFuture = rankResource.getRanks();
+      CompletableFuture<Collection<Rank<T>>> resourceCompletableFuture = function
+          .apply(rankResource);
       resourceCompletableFuture
           .thenAccept(ranks::addAll)
           .exceptionally(throwable -> {
@@ -115,16 +162,17 @@ public abstract class Platform<T extends Platform<T>> {
   }
 
   /**
-   * Format the name for an {@code Account} based on the basic
-   * format.
+   * Format the name of an {@code Account} based on the format
+   * and the data available to this {@code Platform}.
    *
-   * @param name the name of the {@code Account}
+   * @param account the {@code Account} which wants to update
+   *                their name
    * @param format the name sync format
    * @return the formatted name of the {@code Account}
    */
   @Contract(pure = true)
   @Nullable
-  public abstract String formatName(@NotNull String name, @NotNull String format);
+  public abstract String formatName(@NotNull Account<T> account, @NotNull String format);
 
   /**
    * Returns if the provided, formatted name is valid on this
@@ -138,7 +186,7 @@ public abstract class Platform<T extends Platform<T>> {
   public abstract boolean isValidName(@NotNull String name);
 
   /**
-   * Returns if the provided, formatt is valid on this
+   * Returns if the provided, format is valid on this
    * {@code Platform}.
    *
    * @param format the format which will be validated
