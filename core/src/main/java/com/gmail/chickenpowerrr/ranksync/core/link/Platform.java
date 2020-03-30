@@ -11,8 +11,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 
 /**
  * This class represents a {@code Platform} which has
@@ -27,7 +25,7 @@ import org.jetbrains.annotations.Range;
 public abstract class Platform<T extends Platform<T>> {
 
   private final String name;
-  private final int maxNameLength;
+  private final String baseNameFormat;
   private final boolean canChangeName;
   private final Collection<RankResource> rankResources;
 
@@ -38,18 +36,19 @@ public abstract class Platform<T extends Platform<T>> {
    * is able to change names on this {@code Platform}.
    *
    * @param name the name of this {@code Platform}
-   * @param maxNameLength the maximum length of an
-   *                      {@code Account} name on
-   *                      this {@code Platform}
+   * @param baseNameFormat the default name format for
+   *                       the name sync feature if the
+   *                       {@code Rank} doesn't override
+   *                       it
    * @param canChangeName true if the application is
    *                      able to change the name of an
    *                      {@code Account} on the {@code Platform},
    *                      false otherwise
    */
-  public Platform(@NotNull String name, @Range(from = 1, to = Integer.MAX_VALUE) int maxNameLength,
+  public Platform(@NotNull String name, @NotNull String baseNameFormat,
       boolean canChangeName) {
     this.name = name;
-    this.maxNameLength = maxNameLength;
+    this.baseNameFormat = baseNameFormat;
     this.canChangeName = canChangeName;
     this.rankResources = new HashSet<>();
   }
@@ -162,17 +161,14 @@ public abstract class Platform<T extends Platform<T>> {
   }
 
   /**
-   * Format the name of an {@code Account} based on the format
-   * and the data available to this {@code Platform}.
-   *
-   * @param account the {@code Account} which wants to update
-   *                their name
-   * @param format the name sync format
-   * @return the formatted name of the {@code Account}
+   * Returns the default name format for the name sync
+   * feature if the {@code Rank} doesn't override it.
    */
   @Contract(pure = true)
-  @Nullable
-  public abstract String formatName(@NotNull Account<T> account, @NotNull String format);
+  @NotNull
+  public String getBaseNameFormat() {
+    return this.baseNameFormat;
+  }
 
   /**
    * Returns if the provided, formatted name is valid on this

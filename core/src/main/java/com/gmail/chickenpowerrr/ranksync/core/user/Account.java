@@ -2,6 +2,7 @@ package com.gmail.chickenpowerrr.ranksync.core.user;
 
 import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,8 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Account<T extends Platform<T>> {
 
   private final String identifier;
-  private final List<UserLink> links;
+  private final Platform<T> platform;
+  private final List<UserLink<T>> links;
 
   /**
    * Instantiates an {@code Account} based on
@@ -27,11 +29,15 @@ public abstract class Account<T extends Platform<T>> {
    *
    * @param identifier the unique identifier of the
    *                   {@code Account} on the {@code Platform}
+   * @param platform the {@code Platform} on which this
+   *                 {@code Account} is synced
    * @param links the {@code UserLink}s which connects the
    *              {@code Account} to {@code User}s
    */
-  public Account(@NotNull String identifier, @NotNull List<UserLink> links) {
+  public Account(@NotNull String identifier, @NotNull Platform<T> platform,
+      @NotNull List<UserLink<T>> links) {
     this.identifier = identifier;
+    this.platform = platform;
     this.links = links;
   }
 
@@ -58,10 +64,32 @@ public abstract class Account<T extends Platform<T>> {
    * {@code Platform}, if possible.
    *
    * @param name the name of the {@code Account} on
-   *             the {@code Platorm}
+   *             the {@code Platform}
    * @return true if the update was successful, false
    *         otherwise
    */
   @Contract(pure = false)
   public abstract boolean updateName(@NotNull String name);
+
+  /**
+   * Format the name of an {@code Account} based on the
+   * formats found in the {@code Platform} and the
+   * {@code Rank}s.
+   *
+   * @param account the {@code Account} which wants to update
+   *                their name
+   * @return the formatted name of the {@code Account}
+   */
+  @Contract(pure = true)
+  @NotNull
+  public abstract CompletableFuture<String> formatName(@NotNull Account<T> account);
+
+  /**
+   * Returns the {@code Platform} on which this {@code Account}
+   * is located.
+   */
+  @NotNull
+  protected Platform<T> getPlatform() {
+    return this.platform;
+  }
 }

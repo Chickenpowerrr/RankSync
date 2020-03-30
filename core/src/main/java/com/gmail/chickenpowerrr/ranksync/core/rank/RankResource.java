@@ -47,6 +47,15 @@ public abstract class RankResource<T extends Platform<T>> {
   /**
    * Returns a {@code CompletableFuture} which will be completed
    * once the {@code RankResource} has determined which {@code Rank}s
+   * have been linked on its {@code Platform}.
+   */
+  @Contract(pure = true)
+  @NotNull
+  public abstract CompletableFuture<Collection<Rank<T>>> getRanks();
+
+  /**
+   * Returns a {@code CompletableFuture} which will be completed
+   * once the {@code RankResource} has determined which {@code Rank}s
    * a certain {@code Account} has on a {@code Platform}.
    *
    * @param account the {@code Account} might have {@code Rank}s
@@ -59,15 +68,6 @@ public abstract class RankResource<T extends Platform<T>> {
   @Contract(pure = true)
   @NotNull
   public abstract CompletableFuture<Collection<Rank<T>>> getRanks(@NotNull Account<T> account);
-
-  /**
-   * Returns a {@code CompletableFuture} which will be completed
-   * once the {@code RankResource} has determined which {@code Rank}s
-   * have been linked on its {@code Platform}.
-   */
-  @Contract(pure = true)
-  @NotNull
-  public abstract CompletableFuture<Collection<Rank<T>>> getRanks();
 
   /**
    * Gives all specified {@code Rank}s to the specified
