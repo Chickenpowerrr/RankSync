@@ -12,6 +12,14 @@
   <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
   <artifactId>discord</artifactId>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+
+    <maven.dependency.jda.version>4.1.1_141</maven.dependency.jda.version>
+  </properties>
+
   <repositories>
     <repository>
       <id>jcenter</id>
@@ -24,14 +32,14 @@
     <dependency>
       <groupId>com.gmail.chickenpowerrr.ranksync</groupId>
       <artifactId>core</artifactId>
-      <version>2.0.0-ALPHA</version>
-      <scope>provided</scope>
+      <version>${parent.version}</version>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>4.1.1_108</version>
+      <version>${maven.dependency.jda.version}</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
