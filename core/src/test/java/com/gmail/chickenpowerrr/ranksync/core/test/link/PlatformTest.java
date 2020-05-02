@@ -1,11 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.core.test.link;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -50,46 +45,39 @@ public class PlatformTest {
 
   @Test
   public void testSetup() throws ExecutionException, InterruptedException {
-    assertThat(this.platform.getName(), is(equalTo(NAME)));
-    assertThat(this.platform.getRanks().get(), hasSize(0));
-    assertThat(this.platform.canChangeName(), is(true));
+    assertThat(this.platform.getName()).isEqualTo(NAME);
+    assertThat(this.platform.getRanks().get()).isEmpty();
+    assertThat(this.platform.canChangeName()).isTrue();
   }
 
   @Test
   public void testRankResourceSingle() throws ExecutionException, InterruptedException {
     RankResource<TestPlatform> rankResource = getResource(FIRST_RANKS);
-    assertThat(this.platform.getRanks().get(), hasSize(0));
-    assertThat(this.platform.getRanks(this.account).get(), hasSize(0));
+    assertThat(this.platform.getRanks().get()).isEmpty();
+    assertThat(this.platform.getRanks(this.account).get()).isEmpty();
 
     this.platform.addRankResource(rankResource);
-    assertThat(this.platform.getRanks().get(),
-        containsInAnyOrder(FIRST_RANKS.toArray()));
-    assertThat(this.platform.getRanks(this.account).get(),
-        containsInAnyOrder(ACCOUNT_RANKS.toArray()));
+    assertThat(this.platform.getRanks().get()).containsAll(FIRST_RANKS);
+    assertThat(this.platform.getRanks(this.account).get()).containsAll(ACCOUNT_RANKS);
   }
 
   @Test
   public void testRankResourceMultiple() throws ExecutionException, InterruptedException {
     RankResource<TestPlatform> rankResource1 = getResource(FIRST_RANKS);
     RankResource<TestPlatform> rankResource2 = getResource(SECOND_RANKS);
-    assertThat(this.platform.getRanks().get(), hasSize(0));
-    assertThat(this.platform.getRanks(this.account).get(), hasSize(0));
+
+    assertThat(this.platform.getRanks().get()).isEmpty();
+    assertThat(this.platform.getRanks(this.account).get()).isEmpty();
 
     this.platform.addRankResource(rankResource1);
-    assertThat(this.platform.getRanks().get(),
-        containsInAnyOrder(FIRST_RANKS.toArray()));
-    assertThat(this.platform.getRanks(this.account).get(),
-        containsInAnyOrder(ACCOUNT_RANKS.toArray()));
+    assertThat(this.platform.getRanks().get()).containsAll(FIRST_RANKS);
+    assertThat(this.platform.getRanks(this.account).get()).containsAll(ACCOUNT_RANKS);
 
     this.platform.addRankResource(rankResource2);
-    assertThat(this.platform.getRanks().get(),
-        hasItems(FIRST_RANKS.toArray(new Rank[0])));
-    assertThat(this.platform.getRanks().get(),
-        hasItems(SECOND_RANKS.toArray(new Rank[0])));
-    assertThat(this.platform.getRanks().get(),
-        hasSize(FIRST_RANKS.size() + SECOND_RANKS.size()));
-    assertThat(this.platform.getRanks(this.account).get(),
-        containsInAnyOrder(ACCOUNT_RANKS.toArray()));
+    assertThat(this.platform.getRanks().get()).containsAll(FIRST_RANKS);
+    assertThat(this.platform.getRanks().get()).containsAll(SECOND_RANKS);
+    assertThat(this.platform.getRanks().get()).hasSize(FIRST_RANKS.size() + SECOND_RANKS.size());
+    assertThat(this.platform.getRanks(this.account).get()).containsAll(ACCOUNT_RANKS);
   }
 
   private RankResource<TestPlatform> getResource(@NotNull Collection<Rank<TestPlatform>> ranks) {

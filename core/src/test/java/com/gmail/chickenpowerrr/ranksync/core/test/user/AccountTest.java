@@ -1,8 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.core.test.user;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gmail.chickenpowerrr.ranksync.core.test.util.TestPlatform;
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
@@ -46,6 +44,6 @@ public class AccountTest {
 
   @Test
   public void testSetup() {
-    assertThat(this.account.getIdentifier(), is(equalTo(IDENTIFIER)));
+    assertThat(this.account.getIdentifier()).isEqualTo(IDENTIFIER);
   }
 }

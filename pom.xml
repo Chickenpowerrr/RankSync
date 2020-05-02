@@ -26,7 +26,6 @@
     <maven.dependency.annotations.version>18.0.0</maven.dependency.annotations.version>
     <maven.dependency.junit.version>5.6.2</maven.dependency.junit.version>
     <maven.dependency.mockito.version>3.3.3</maven.dependency.mockito.version>
-    <maven.dependency.hamcrest.version>2.2</maven.dependency.hamcrest.version>
     <maven.dependency.assertj.version>3.15.0</maven.dependency.assertj.version>
   </properties>
 
@@ -66,12 +65,6 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
       <version>${maven.dependency.mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest</artifactId>
-      <version>${maven.dependency.hamcrest.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

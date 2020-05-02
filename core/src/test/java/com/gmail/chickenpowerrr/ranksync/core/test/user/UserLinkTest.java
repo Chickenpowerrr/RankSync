@@ -1,8 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.core.test.user;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -49,20 +47,20 @@ public class UserLinkTest {
   @Test
   public void testSetup() {
     UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user);
-    assertThat(userLink.getUser(), is(equalTo(this.user)));
-    assertThat(userLink.getAccount(), is(equalTo(this.account1)));
+    assertThat(userLink.getUser()).isEqualTo(this.user);
+    assertThat(userLink.getAccount()).isEqualTo(this.account1);
   }
 
   @Test
   public void testActiveInactive() {
     UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate, this.endDate);
-    assertThat(userLink.isActive(), is(false));
+    assertThat(userLink.isActive()).isFalse();
   }
 
   @Test
   public void testActiveActive() {
     UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate);
-    assertThat(userLink.isActive(), is(true));
+    assertThat(userLink.isActive()).isTrue();
   }
 
   @Test
@@ -73,11 +71,11 @@ public class UserLinkTest {
     Collection<Reward<TestPlatform>> rewards = new HashSet<>();
     rewards.add(reward);
 
-    assertThat(userLink.isActive(), is(true));
+    assertThat(userLink.isActive()).isTrue();
 
-    assertThat(userLink.unlink(rewards), is(true));
+    assertThat(userLink.unlink(rewards)).isTrue();
 
-    assertThat(userLink.isActive(), is(false));
+    assertThat(userLink.isActive()).isFalse();
     verify(reward, times(1)).apply(userLink.getAccount());
   }
 
@@ -88,11 +86,11 @@ public class UserLinkTest {
     Collection<Reward<TestPlatform>> rewards = new HashSet<>();
     rewards.add(reward);
 
-    assertThat(userLink.isActive(), is(false));
+    assertThat(userLink.isActive()).isFalse();
 
-    assertThat(userLink.unlink(rewards), is(false));
+    assertThat(userLink.unlink(rewards)).isFalse();
 
-    assertThat(userLink.isActive(), is(false));
+    assertThat(userLink.isActive()).isFalse();
     verify(reward, times(0)).apply(userLink.getAccount());
   }
 }

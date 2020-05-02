@@ -1,8 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.core.test.reward;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gmail.chickenpowerrr.ranksync.core.reward.Reward;
 import com.gmail.chickenpowerrr.ranksync.core.test.util.TestPlatform;
@@ -39,7 +37,7 @@ public class RewardTest {
 
   @Test
   public void testSetup() {
-    assertThat(this.reward.getMaxIssues(), is(equalTo(MAX_ISSUES)));
-    assertThat(this.reward.getIdentifier(), is(equalTo(IDENTIFIER)));
+    assertThat(this.reward.getMaxIssues()).isEqualTo(MAX_ISSUES);
+    assertThat(this.reward.getIdentifier()).isEqualTo(IDENTIFIER);
   }
 }

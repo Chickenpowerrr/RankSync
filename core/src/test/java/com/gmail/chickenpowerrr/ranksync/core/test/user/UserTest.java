@@ -1,9 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.core.test.user;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -24,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-@SuppressWarnings("unchecked")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
 public class UserTest {
@@ -55,18 +51,18 @@ public class UserTest {
 
   @Test
   public void testSetup() {
-    assertThat(this.user.getAccounts(), hasSize(0));
+    assertThat(this.user.getAccounts()).isEmpty();
   }
 
   @Test
   public void testAddLinkNewAccount() {
     UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate);
-    assertThat(this.user.getAccounts(), hasSize(0));
-    
-    assertThat(this.user.addLink(userLink, this.rewards), is(true));
+    assertThat(this.user.getAccounts()).isEmpty();
 
-    assertThat(this.user.getAccounts(), hasSize(1));
-    assertThat(this.user.getAccounts(), hasItem(userLink.getAccount()));
+    assertThat(this.user.addLink(userLink, this.rewards)).isTrue();
+
+    assertThat(this.user.getAccounts()).hasSize(1);
+    assertThat(this.user.getAccounts()).contains(userLink.getAccount());
     verify(this.reward, times(1)).apply(userLink.getAccount());
   }
 
@@ -75,13 +71,13 @@ public class UserTest {
     UserLink<TestPlatform> userLink1 = new UserLink<>(this.account1, this.user, this.startDate);
     UserLink<TestPlatform> userLink2 = new UserLink<>(this.account1, this.user, this.startDate);
 
-    assertThat(this.user.getAccounts(), hasSize(0));
+    assertThat(this.user.getAccounts()).isEmpty();
 
-    assertThat(this.user.addLink(userLink1, this.rewards), is(true));
-    assertThat(this.user.addLink(userLink2, this.rewards), is(false));
+    assertThat(this.user.addLink(userLink1, this.rewards)).isTrue();
+    assertThat(this.user.addLink(userLink2, this.rewards)).isFalse();
 
-    assertThat(this.user.getAccounts(), hasSize(1));
-    assertThat(this.user.getAccounts(), hasItem(userLink1.getAccount()));
+    assertThat(this.user.getAccounts()).hasSize(1);
+    assertThat(this.user.getAccounts()).contains(userLink1.getAccount());
     verify(this.reward, times(1)).apply(userLink1.getAccount());
   }
 
@@ -90,14 +86,15 @@ public class UserTest {
     UserLink<TestPlatform> userLink1 = new UserLink<>(this.account1, this.user, this.startDate);
     UserLink<TestPlatform> userLink2 = new UserLink<>(this.account2, this.user, this.startDate);
 
-    assertThat(this.user.getAccounts(), hasSize(0));
+    assertThat(this.user.getAccounts()).isEmpty();
 
-    assertThat(this.user.addLink(userLink1, this.rewards), is(true));
-    assertThat(this.user.addLink(userLink2, this.rewards), is(true));
+    assertThat(this.user.addLink(userLink1, this.rewards)).isTrue();
+    assertThat(this.user.addLink(userLink2, this.rewards)).isTrue();
 
-    assertThat(this.user.getAccounts(), hasSize(2));
-    assertThat(this.user.getAccounts(), hasItem(userLink1.getAccount()));
-    assertThat(this.user.getAccounts(), hasItem(userLink2.getAccount()));
+    assertThat(this.user.getAccounts()).hasSize(2);
+    assertThat(this.user.getAccounts()).contains(userLink1.getAccount());
+    assertThat(this.user.getAccounts()).contains(userLink2.getAccount());
+
     verify(this.reward, times(1)).apply(userLink1.getAccount());
     verify(this.reward, times(1)).apply(userLink2.getAccount());
   }
@@ -106,11 +103,11 @@ public class UserTest {
   public void testGetAccountsExpired() {
     UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate, this.endDate);
 
-    assertThat(this.user.getAccounts(), hasSize(0));
+    assertThat(this.user.getAccounts()).isEmpty();
 
-    assertThat(this.user.addLink(userLink, this.rewards), is(false));
+    assertThat(this.user.addLink(userLink, this.rewards)).isFalse();
 
-    assertThat(this.user.getAccounts(), hasSize(0));
+    assertThat(this.user.getAccounts()).isEmpty();
     verify(this.reward, times(0)).apply(userLink.getAccount());
   }
 
@@ -119,13 +116,14 @@ public class UserTest {
     UserLink<TestPlatform> userLinkExpired = new UserLink<>(this.account1, this.user, this.startDate, this.endDate);
     UserLink<TestPlatform> userLinkValid = new UserLink<>(this.account2, this.user, this.endDate);
 
-    assertThat(this.user.getAccounts(), hasSize(0));
+    assertThat(this.user.getAccounts()).isEmpty();
 
-    assertThat(this.user.addLink(userLinkExpired, this.rewards), is(false));
-    assertThat(this.user.addLink(userLinkValid, this.rewards), is(true));
+    assertThat(this.user.addLink(userLinkExpired, this.rewards)).isFalse();
+    assertThat(this.user.addLink(userLinkValid, this.rewards)).isTrue();
 
-    assertThat(this.user.getAccounts(), hasSize(1));
-    assertThat(this.user.getAccounts(), hasItem(userLinkValid.getAccount()));
+    assertThat(this.user.getAccounts()).hasSize(1);
+    assertThat(this.user.getAccounts()).contains(userLinkValid.getAccount());
+
     verify(this.reward, times(0)).apply(userLinkExpired.getAccount());
     verify(this.reward, times(1)).apply(userLinkValid.getAccount());
   }

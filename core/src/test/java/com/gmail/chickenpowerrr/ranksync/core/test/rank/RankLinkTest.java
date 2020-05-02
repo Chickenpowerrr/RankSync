@@ -1,12 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.core.test.rank;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.aMapWithSize;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
@@ -57,40 +51,40 @@ public class RankLinkTest {
 
   @Test
   public void testSetUp() {
-    assertThat(this.rankLink.getIdentifier(), is(equalTo(RANK_IDENTIFIER)));
-    assertThat(this.rankLink.getNameFormat(), is(equalTo(NAME_FORMAT)));
+    assertThat(this.rankLink.getIdentifier()).isEqualTo(RANK_IDENTIFIER);
+    assertThat(this.rankLink.getNameFormat()).isEqualTo(NAME_FORMAT);
   }
 
   @Test
   public void testGetRanks() {
     Map<Platform<?>, Collection<Rank<?>>> ranks = this.rankLink.getRanks();
 
-    assertThat(ranks, is(aMapWithSize(2)));
-    assertThat(ranks, hasKey(this.sourcePlatform));
-    assertThat(ranks, hasKey(this.destinationPlatform));
+    assertThat(ranks).hasSize(2);
+    assertThat(ranks).containsKey(this.sourcePlatform);
+    assertThat(ranks).containsKey(this.destinationPlatform);
 
-    assertThat(ranks.get(this.sourcePlatform), hasSize(1));
-    assertThat(ranks.get(this.sourcePlatform), hasItem(this.sourceRank));
-    assertThat(ranks.get(this.destinationPlatform), hasSize(1));
-    assertThat(ranks.get(this.destinationPlatform), hasItem(this.destinationRank));
+    assertThat(ranks.get(this.sourcePlatform)).hasSize(1);
+    assertThat(ranks.get(this.sourcePlatform)).contains(this.sourceRank);
+    assertThat(ranks.get(this.destinationPlatform)).hasSize(1);
+    assertThat(ranks.get(this.destinationPlatform)).contains(this.destinationRank);
   }
 
   @Test
   public void testGetPriorityUnknownPlatform() {
     Platform<?> platform = mock(Platform.class);
-    assertThat(this.rankLink.getPriority(platform), is(-1));
+    assertThat(this.rankLink.getPriority(platform)).isEqualTo(-1);
   }
 
   @Test
   public void testGetPriorityEmptyPlatform() {
-    assertThat(this.rankLink.getPriority(this.uselessPlatform), is(-1));
+    assertThat(this.rankLink.getPriority(this.uselessPlatform)).isEqualTo(-1);
   }
 
   @Test
   public void testGetPriority() {
-    assertThat(this.rankLink.getPriority(this.destinationPlatform),
-        is(this.destinationRank.getPriority()));
-    assertThat(this.rankLink.getPriority(this.sourcePlatform),
-        is(this.sourceRank.getPriority()));
+    assertThat(this.rankLink.getPriority(this.destinationPlatform))
+        .isEqualTo(this.destinationRank.getPriority());
+    assertThat(this.rankLink.getPriority(this.sourcePlatform))
+        .isEqualTo(this.sourceRank.getPriority());
   }
 }
