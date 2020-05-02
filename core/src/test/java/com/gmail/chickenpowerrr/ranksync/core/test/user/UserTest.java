@@ -121,7 +121,6 @@ public class UserTest {
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    System.out.println(userLinkExpired.isActive());
     assertThat(this.user.addLink(userLinkExpired, this.rewards), is(false));
     assertThat(this.user.addLink(userLinkValid, this.rewards), is(true));
 

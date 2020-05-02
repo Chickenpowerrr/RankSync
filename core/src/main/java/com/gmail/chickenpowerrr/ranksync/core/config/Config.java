@@ -1,6 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.core.config;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -22,7 +23,7 @@ public interface Config {
    *         given path, {@code false} otherwise
    */
   @Contract(value = "null -> false", pure = true)
-  boolean contains(String path);
+  boolean contains(@Nullable String path);
 
   /**
    * Returns the {@link Object} stored at the given path.
@@ -31,7 +32,7 @@ public interface Config {
    * @return the {@link Object} stored at the given path
    */
   @Contract(pure = true)
-  Object get(String path);
+  Object get(@NotNull String path);
 
   /**
    * Stores a given {@link Object} at a given path, to make sure
@@ -43,7 +44,7 @@ public interface Config {
    *              the given path
    */
   @Contract(pure = false)
-  void set(String path, @Nullable Object value);
+  void set(@NotNull String path, @Nullable Object value);
 
   /**
    * Returns the {@link String} stored at the given path.
@@ -51,8 +52,8 @@ public interface Config {
    * @param path the unique path to the {@link String}
    * @return the {@link String} stored at the given path
    */
-  @Contract(pure = false)
-  String getString(String path);
+  @Contract(pure = true)
+  String getString(@NotNull String path);
 
   /**
    * Stores a given {@link String} at a given path, to make sure
@@ -64,7 +65,7 @@ public interface Config {
    *              the given path
    */
   @Contract(pure = false)
-  void setString(String path, String value);
+  void setString(@NotNull String path, @Nullable String value);
 
   /**
    * Returns {@code true} if the value stored at the given given
@@ -74,8 +75,8 @@ public interface Config {
    * @return {@code true} if the value stored at the given given
    *         is an {@link Integer}, {@code false} otherwise
    */
-  @Contract(pure = true)
-  boolean isInt(String path);
+  @Contract(value = "null -> false", pure = true)
+  boolean isInt(@Nullable String path);
 
   /**
    * Returns the {@link Integer} stored at the given path.
@@ -84,7 +85,7 @@ public interface Config {
    * @return the {@link Integer} stored at the given path
    */
   @Contract(pure = true)
-  int getInt(String path);
+  int getInt(@NotNull String path);
 
   /**
    * Stores a given {@link Integer} at a given path, to make sure
@@ -96,7 +97,7 @@ public interface Config {
    *              the given path
    */
   @Contract(pure = false)
-  void setInt(String path, int value);
+  void setInt(@NotNull String path, int value);
 
   /**
    * Returns {@code true} if the value stored at the given given
@@ -107,7 +108,7 @@ public interface Config {
    *         is an {@link Double}, {@code false} otherwise
    */
   @Contract(pure = true)
-  boolean isDouble(String path);
+  boolean isDouble(@Nullable String path);
 
   /**
    * Returns the {@link Double} stored at the given path.
@@ -116,7 +117,7 @@ public interface Config {
    * @return the {@link Double} stored at the given path
    */
   @Contract(pure = true)
-  double getDouble(String path);
+  double getDouble(@NotNull String path);
 
   /**
    * Stores a given {@link Double} at a given path, to make sure
@@ -128,7 +129,7 @@ public interface Config {
    *              the given path
    */
   @Contract(pure = false)
-  void setDouble(String path, double value);
+  void setDouble(@NotNull String path, double value);
 
   /**
    * Returns {@code true} if the value stored at the given given
@@ -139,7 +140,7 @@ public interface Config {
    *         is an {@link Long}, {@code false} otherwise
    */
   @Contract(pure = true)
-  boolean isLong(String path);
+  boolean isLong(@Nullable String path);
 
   /**
    * Returns the {@link Long} stored at the given path.
@@ -148,7 +149,7 @@ public interface Config {
    * @return the {@link Long} stored at the given path
    */
   @Contract(pure = true)
-  long getLong(String path);
+  long getLong(@NotNull String path);
 
   /**
    * Stores a given {@link Long} at a given path, to make sure
@@ -160,7 +161,7 @@ public interface Config {
    *              the given path
    */
   @Contract(pure = false)
-  void setLong(String path, long value);
+  void setLong(@NotNull String path, long value);
 
   /**
    * Returns {@code true} if the value stored at the given given
@@ -171,7 +172,7 @@ public interface Config {
    *         is an {@link Boolean}, {@code false} otherwise
    */
   @Contract(pure = true)
-  boolean isBoolean(String path);
+  boolean isBoolean(@Nullable String path);
 
   /**
    * Returns the {@link Boolean} stored at the given path.
@@ -180,7 +181,7 @@ public interface Config {
    * @return the {@link Boolean} stored at the given path
    */
   @Contract(pure = true)
-  boolean getBoolean(String path);
+  boolean getBoolean(@NotNull String path);
 
   /**
    * Stores a given {@link Boolean} at a given path, to make sure
@@ -192,5 +193,5 @@ public interface Config {
    *              the given path
    */
   @Contract(pure = false)
-  void setBoolean(String path, boolean value);
+  void setBoolean(@NotNull String path, boolean value);
 }

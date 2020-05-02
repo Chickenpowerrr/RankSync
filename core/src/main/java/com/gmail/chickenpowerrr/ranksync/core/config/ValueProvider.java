@@ -1,7 +1,7 @@
 package com.gmail.chickenpowerrr.ranksync.core.config;
 
-import jdk.internal.jline.internal.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This interface defines the basic interactions a

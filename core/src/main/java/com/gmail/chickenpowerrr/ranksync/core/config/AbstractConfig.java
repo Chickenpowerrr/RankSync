@@ -4,6 +4,7 @@ import com.gmail.chickenpowerrr.ranksync.core.config.exception.InvalidValueExcep
 import com.gmail.chickenpowerrr.ranksync.core.config.exception.UnknownKeyException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This {@link Config} uses a {@link ValueProvider} to save
@@ -42,7 +43,11 @@ public abstract class AbstractConfig implements Config {
    *                             given path
    */
   @Override
-  public Object get(String path) {
+  public Object get(@Nullable String path) {
+    if (path == null) {
+      return null;
+    }
+
     if (contains(path)) {
       return this.valueProvider.get(path);
     } else {
@@ -54,7 +59,7 @@ public abstract class AbstractConfig implements Config {
    * {@inheritDoc}
    */
   @Override
-  public void set(String path, Object value) {
+  public void set(@NotNull String path, Object value) {
     this.valueProvider.set(path, value);
   }
 
@@ -64,7 +69,7 @@ public abstract class AbstractConfig implements Config {
    *                             given path
    */
   @Override
-  public String getString(String path) {
+  public String getString(@NotNull String path) {
     return get(path).toString();
   }
 
@@ -72,7 +77,7 @@ public abstract class AbstractConfig implements Config {
    * {@inheritDoc}
    */
   @Override
-  public void setString(String path, String value) {
+  public void setString(@NotNull String path, String value) {
     set(path, value);
   }
 
@@ -93,7 +98,7 @@ public abstract class AbstractConfig implements Config {
    *                               isn't an integer
    */
   @Override
-  public int getInt(String path) {
+  public int getInt(@NotNull String path) {
     if (isInt(path)) {
       Object target = get(path);
 
@@ -103,7 +108,11 @@ public abstract class AbstractConfig implements Config {
         return Integer.parseInt(target.toString());
       }
     } else {
-      throw new InvalidValueException(path, Integer.class);
+      if (contains(path)) {
+        throw new InvalidValueException(path, Integer.class);
+      } else {
+        throw new UnknownKeyException(path);
+      }
     }
   }
 
@@ -111,7 +120,7 @@ public abstract class AbstractConfig implements Config {
    * {@inheritDoc}
    */
   @Override
-  public void setInt(String path, int value) {
+  public void setInt(@NotNull String path, int value) {
     set(path, value);
   }
 
@@ -119,7 +128,7 @@ public abstract class AbstractConfig implements Config {
    * {@inheritDoc}
    */
   @Override
-  public boolean isDouble(String path) {
+  public boolean isDouble(@Nullable String path) {
     return contains(path) && (get(path).getClass().equals(Double.class)
         || getString(path).matches("^-?(\\d+\\.?\\d*)|(\\d*\\.?\\d+)$"));
   }
@@ -132,7 +141,7 @@ public abstract class AbstractConfig implements Config {
    *                               isn't a double
    */
   @Override
-  public double getDouble(String path) {
+  public double getDouble(@NotNull String path) {
     if (isDouble(path)) {
       Object target = get(path);
 
@@ -142,7 +151,11 @@ public abstract class AbstractConfig implements Config {
         return Double.parseDouble(target.toString());
       }
     } else {
-      throw new InvalidValueException(path, Double.class);
+      if (contains(path)) {
+        throw new InvalidValueException(path, Double.class);
+      } else {
+        throw new UnknownKeyException(path);
+      }
     }
   }
 
@@ -150,7 +163,7 @@ public abstract class AbstractConfig implements Config {
    * {@inheritDoc}
    */
   @Override
-  public void setDouble(String path, double value) {
+  public void setDouble(@NotNull String path, double value) {
     set(path, value);
   }
 
@@ -171,7 +184,7 @@ public abstract class AbstractConfig implements Config {
    *                               isn't a long
    */
   @Override
-  public long getLong(String path) {
+  public long getLong(@NotNull String path) {
     if (isLong(path)) {
       Object target = get(path);
 
@@ -181,7 +194,11 @@ public abstract class AbstractConfig implements Config {
         return Long.parseLong(target.toString());
       }
     } else {
-      throw new InvalidValueException(path, Long.class);
+      if (contains(path)) {
+        throw new InvalidValueException(path, Long.class);
+      } else {
+        throw new UnknownKeyException(path);
+      }
     }
   }
 
@@ -189,7 +206,7 @@ public abstract class AbstractConfig implements Config {
    * {@inheritDoc}
    */
   @Override
-  public void setLong(String path, long value) {
+  public void setLong(@NotNull String path, long value) {
     set(path, value);
   }
 
@@ -198,7 +215,7 @@ public abstract class AbstractConfig implements Config {
    */
   @Override
   public boolean isBoolean(String path) {
-    return contains(path) && (get(path).getClass().equals(Long.class)
+    return contains(path) && (get(path).getClass().equals(Boolean.class)
         || getString(path).matches("^(true)|(false)$"));
   }
 
@@ -210,7 +227,7 @@ public abstract class AbstractConfig implements Config {
    *                               isn't a boolean
    */
   @Override
-  public boolean getBoolean(String path) {
+  public boolean getBoolean(@NotNull String path) {
     if (isBoolean(path)) {
       Object target = get(path);
 
@@ -220,7 +237,11 @@ public abstract class AbstractConfig implements Config {
         return Boolean.parseBoolean(target.toString());
       }
     } else {
-      throw new InvalidValueException(path, Boolean.class);
+      if (contains(path)) {
+        throw new InvalidValueException(path, Boolean.class);
+      } else {
+        throw new UnknownKeyException(path);
+      }
     }
   }
 
@@ -228,7 +249,7 @@ public abstract class AbstractConfig implements Config {
    * {@inheritDoc}
    */
   @Override
-  public void setBoolean(String path, boolean value) {
+  public void setBoolean(@NotNull String path, boolean value) {
     set(path, value);
   }
 }
