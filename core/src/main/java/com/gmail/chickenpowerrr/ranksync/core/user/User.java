@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class User {
 
-  private final List<UserLink> links;
+  private final List<UserLink<?>> links;
 
   /**
    * Instantiates a {@code User} based on the {@code UserLink}s
@@ -29,7 +29,7 @@ public class User {
    * @param links the {@code UserLink}s which attach {@code Account}s
    *              on {@code Platform}s to this {@code User}
    */
-  public User(@NotNull List<UserLink> links) {
+  public User(@NotNull List<UserLink<?>> links) {
     this.links = links;
   }
 
@@ -40,7 +40,7 @@ public class User {
    */
   @Contract(pure = true)
   @NotNull
-  public Collection<Account> getAccounts() {
+  public Collection<Account<?>> getAccounts() {
     return Collections.unmodifiableCollection(
         this.links.stream()
             .filter(UserLink::isActive)
@@ -67,7 +67,7 @@ public class User {
   public <T extends Platform<T>> boolean addLink(@NotNull UserLink<T> link,
       @NotNull Collection<Reward<T>> rewards) {
     if (link.isActive()) {
-      Collection<Account> accounts = getAccounts();
+      Collection<Account<?>> accounts = getAccounts();
       if (!accounts.contains(link.getAccount())) {
         rewards.forEach(reward -> reward.apply(link.getAccount()));
         this.links.add(link);

@@ -20,7 +20,7 @@ public class RankLink {
 
   private final String identifier;
   private final String nameFormat;
-  private final Map<Platform, Collection<Rank>> ranks;
+  private final Map<Platform<?>, Collection<Rank<?>>> ranks;
 
   /**
    * Establishes a new link, based on the unique identifier
@@ -32,7 +32,7 @@ public class RankLink {
    * @param ranks the ranks which will be linked
    */
   public RankLink(@NotNull String identifier, @NotNull String nameFormat,
-      @NotNull Map<Platform, Collection<Rank>> ranks) {
+      @NotNull Map<Platform<?>, Collection<Rank<?>>> ranks) {
     this.identifier = identifier;
     this.nameFormat = nameFormat;
     this.ranks = Collections.unmodifiableMap(ranks.entrySet()
@@ -65,7 +65,7 @@ public class RankLink {
    */
   @Contract(pure = true)
   @NotNull
-  public Map<Platform, Collection<Rank>> getRanks() {
+  public Map<Platform<?>, Collection<Rank<?>>> getRanks() {
     return this.ranks;
   }
 
@@ -83,7 +83,7 @@ public class RankLink {
    */
   @Range(from = -1, to = Integer.MAX_VALUE)
   @Contract(pure = true)
-  public int getPriority(@NotNull Platform platform) {
+  public int getPriority(@NotNull Platform<?> platform) {
     return this.ranks.containsKey(platform) ? this.ranks.get(platform).stream()
         .mapToInt(Rank::getPriority)
         .min()

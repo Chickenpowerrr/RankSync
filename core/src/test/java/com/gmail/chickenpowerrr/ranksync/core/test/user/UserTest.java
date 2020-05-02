@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.gmail.chickenpowerrr.ranksync.core.reward.Reward;
+import com.gmail.chickenpowerrr.ranksync.core.test.util.TestPlatform;
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import com.gmail.chickenpowerrr.ranksync.core.user.User;
 import com.gmail.chickenpowerrr.ranksync.core.user.UserLink;
@@ -31,13 +32,13 @@ public class UserTest {
   private Date startDate;
   private Date endDate;
   private User user;
-  private Collection<Reward> rewards;
+  private Collection<Reward<TestPlatform>> rewards;
 
   @Mock
-  private Reward reward;
+  private Reward<TestPlatform> reward;
 
   @Mock
-  private Account account1, account2;
+  private Account<TestPlatform> account1, account2;
 
   @BeforeEach
   public void setUp() {
@@ -59,10 +60,10 @@ public class UserTest {
 
   @Test
   public void testAddLinkNewAccount() {
-    UserLink userLink = new UserLink(this.account1, this.user, this.startDate);
+    UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate);
     assertThat(this.user.getAccounts(), hasSize(0));
     
-    assertThat(this.user.addLink(userLink, (Collection) this.rewards), is(true));
+    assertThat(this.user.addLink(userLink, this.rewards), is(true));
 
     assertThat(this.user.getAccounts(), hasSize(1));
     assertThat(this.user.getAccounts(), hasItem(userLink.getAccount()));
@@ -71,13 +72,13 @@ public class UserTest {
 
   @Test
   public void testAddLinkDuplicateAccount() {
-    UserLink userLink1 = new UserLink(this.account1, this.user, this.startDate);
-    UserLink userLink2 = new UserLink(this.account1, this.user, this.startDate);
+    UserLink<TestPlatform> userLink1 = new UserLink<>(this.account1, this.user, this.startDate);
+    UserLink<TestPlatform> userLink2 = new UserLink<>(this.account1, this.user, this.startDate);
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    assertThat(this.user.addLink(userLink1, (Collection) this.rewards), is(true));
-    assertThat(this.user.addLink(userLink2, (Collection) this.rewards), is(false));
+    assertThat(this.user.addLink(userLink1, this.rewards), is(true));
+    assertThat(this.user.addLink(userLink2, this.rewards), is(false));
 
     assertThat(this.user.getAccounts(), hasSize(1));
     assertThat(this.user.getAccounts(), hasItem(userLink1.getAccount()));
@@ -86,13 +87,13 @@ public class UserTest {
 
   @Test
   public void testAddLinkMultipleAccounts() {
-    UserLink userLink1 = new UserLink(this.account1, this.user, this.startDate);
-    UserLink userLink2 = new UserLink(this.account2, this.user, this.startDate);
+    UserLink<TestPlatform> userLink1 = new UserLink<>(this.account1, this.user, this.startDate);
+    UserLink<TestPlatform> userLink2 = new UserLink<>(this.account2, this.user, this.startDate);
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    assertThat(this.user.addLink(userLink1, (Collection) this.rewards), is(true));
-    assertThat(this.user.addLink(userLink2, (Collection) this.rewards), is(true));
+    assertThat(this.user.addLink(userLink1, this.rewards), is(true));
+    assertThat(this.user.addLink(userLink2, this.rewards), is(true));
 
     assertThat(this.user.getAccounts(), hasSize(2));
     assertThat(this.user.getAccounts(), hasItem(userLink1.getAccount()));
@@ -103,11 +104,11 @@ public class UserTest {
 
   @Test
   public void testGetAccountsExpired() {
-    UserLink userLink = new UserLink(this.account1, this.user, this.startDate, this.endDate);
+    UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate, this.endDate);
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
-    assertThat(this.user.addLink(userLink, (Collection) this.rewards), is(false));
+    assertThat(this.user.addLink(userLink, this.rewards), is(false));
 
     assertThat(this.user.getAccounts(), hasSize(0));
     verify(this.reward, times(0)).apply(userLink.getAccount());
@@ -115,14 +116,14 @@ public class UserTest {
 
   @Test
   public void testGetAccountsOverridden() {
-    UserLink userLinkExpired = new UserLink(this.account1, this.user, this.startDate, this.endDate);
-    UserLink userLinkValid = new UserLink(this.account2, this.user, this.endDate);
+    UserLink<TestPlatform> userLinkExpired = new UserLink<>(this.account1, this.user, this.startDate, this.endDate);
+    UserLink<TestPlatform> userLinkValid = new UserLink<>(this.account2, this.user, this.endDate);
 
     assertThat(this.user.getAccounts(), hasSize(0));
 
     System.out.println(userLinkExpired.isActive());
-    assertThat(this.user.addLink(userLinkExpired, (Collection) this.rewards), is(false));
-    assertThat(this.user.addLink(userLinkValid, (Collection) this.rewards), is(true));
+    assertThat(this.user.addLink(userLinkExpired, this.rewards), is(false));
+    assertThat(this.user.addLink(userLinkValid, this.rewards), is(true));
 
     assertThat(this.user.getAccounts(), hasSize(1));
     assertThat(this.user.getAccounts(), hasItem(userLinkValid.getAccount()));

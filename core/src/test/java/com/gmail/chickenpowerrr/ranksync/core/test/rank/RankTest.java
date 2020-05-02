@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.core.test.util.TestPlatform;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +15,11 @@ public class RankTest {
   private static final String NAME = "name";
   private static final int PRIORITY = 5;
 
-  private Rank rank;
+  private Rank<TestPlatform> rank;
 
   @BeforeEach
   public void setUp() {
-    this.rank = new Rank(IDENTIFIER, NAME, PRIORITY);
+    this.rank = new Rank<>(IDENTIFIER, NAME, PRIORITY);
   }
 
   @Test

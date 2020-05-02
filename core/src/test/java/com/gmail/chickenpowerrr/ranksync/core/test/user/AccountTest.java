@@ -4,10 +4,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import com.gmail.chickenpowerrr.ranksync.core.test.util.TestPlatform;
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import com.gmail.chickenpowerrr.ranksync.core.user.UserLink;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,21 +17,29 @@ import org.junit.jupiter.api.Test;
 public class AccountTest {
 
   private static final String IDENTIFIER = "identifier";
-  private static final List<UserLink> LINKS = Collections.emptyList();
+  private static final List<UserLink<TestPlatform>> LINKS = Collections.emptyList();
 
-  private Account account;
+  private TestPlatform testPlatform;
+  private Account<TestPlatform> account;
 
   @BeforeEach
   public void setUp() {
-    this.account = new Account(IDENTIFIER, LINKS) {
+    this.testPlatform = new TestPlatform();
+
+    this.account = new Account<TestPlatform>(IDENTIFIER, this.testPlatform, LINKS) {
       @Override
       public @NotNull String getName() {
-        return null;
+        return "SomeName";
       }
 
       @Override
       public boolean updateName(@NotNull String name) {
         return false;
+      }
+
+      @Override
+      public @NotNull CompletableFuture<String> formatName(@NotNull Account<TestPlatform> account) {
+        return new CompletableFuture<>();
       }
     };
   }

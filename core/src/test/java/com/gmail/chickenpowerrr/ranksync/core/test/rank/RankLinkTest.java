@@ -25,7 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-@SuppressWarnings("unchecked")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
 public class RankLinkTest {
@@ -36,19 +35,19 @@ public class RankLinkTest {
   private static final int SOURCE_PRIORITY = 1;
   private static final int DESTINATION_PRIORITY = 2;
 
-  private Rank sourceRank;
-  private Rank destinationRank;
+  private Rank<?> sourceRank;
+  private Rank<?> destinationRank;
   private RankLink rankLink;
 
   @Mock
-  private Platform sourcePlatform, destinationPlatform, uselessPlatform;
+  private Platform<?> sourcePlatform, destinationPlatform, uselessPlatform;
 
   @BeforeEach
   public void setUp() {
-    this.sourceRank = new Rank(RANK_IDENTIFIER + 1, RANK_NAME + 1, SOURCE_PRIORITY);
-    this.destinationRank = new Rank(RANK_IDENTIFIER + 2, RANK_NAME + 2, DESTINATION_PRIORITY);
+    this.sourceRank = new Rank<>(RANK_IDENTIFIER + 1, RANK_NAME + 1, SOURCE_PRIORITY);
+    this.destinationRank = new Rank<>(RANK_IDENTIFIER + 2, RANK_NAME + 2, DESTINATION_PRIORITY);
 
-    Map<Platform, Collection<Rank>> ranks = new HashMap<>();
+    Map<Platform<?>, Collection<Rank<?>>> ranks = new HashMap<>();
     ranks.put(this.sourcePlatform, Collections.singletonList(this.sourceRank));
     ranks.put(this.destinationPlatform, Collections.singletonList(this.destinationRank));
     ranks.put(this.uselessPlatform, new HashSet<>());
@@ -64,7 +63,7 @@ public class RankLinkTest {
 
   @Test
   public void testGetRanks() {
-    Map<Platform, Collection<Rank>> ranks = this.rankLink.getRanks();
+    Map<Platform<?>, Collection<Rank<?>>> ranks = this.rankLink.getRanks();
 
     assertThat(ranks, is(aMapWithSize(2)));
     assertThat(ranks, hasKey(this.sourcePlatform));
@@ -78,7 +77,7 @@ public class RankLinkTest {
 
   @Test
   public void testGetPriorityUnknownPlatform() {
-    Platform platform = mock(Platform.class);
+    Platform<?> platform = mock(Platform.class);
     assertThat(this.rankLink.getPriority(platform), is(-1));
   }
 

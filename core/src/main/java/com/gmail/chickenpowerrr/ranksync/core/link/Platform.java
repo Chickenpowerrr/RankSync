@@ -27,7 +27,7 @@ public abstract class Platform<T extends Platform<T>> {
   private final String name;
   private final String baseNameFormat;
   private final boolean canChangeName;
-  private final Collection<RankResource> rankResources;
+  private final Collection<RankResource<T>> rankResources;
 
   /**
    * Initializes a new {@code Platform} based on the name
@@ -113,7 +113,6 @@ public abstract class Platform<T extends Platform<T>> {
    */
   @Contract(pure = true)
   @NotNull
-  @SuppressWarnings("unchecked")
   private CompletableFuture<Collection<Rank<T>>> getRanks(
       Function<RankResource<T>, CompletableFuture<Collection<Rank<T>>>> function) {
     Collection<Rank<T>> ranks = new HashSet<>();

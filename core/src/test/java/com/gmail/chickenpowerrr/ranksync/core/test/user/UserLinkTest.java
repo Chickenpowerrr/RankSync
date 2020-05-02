@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.gmail.chickenpowerrr.ranksync.core.reward.Reward;
+import com.gmail.chickenpowerrr.ranksync.core.test.util.TestPlatform;
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import com.gmail.chickenpowerrr.ranksync.core.user.User;
 import com.gmail.chickenpowerrr.ranksync.core.user.UserLink;
@@ -34,7 +35,7 @@ public class UserLinkTest {
   private User user;
 
   @Mock
-  private Account account1, account2;
+  private Account<TestPlatform> account1, account2;
 
   @BeforeEach
   public void setUp() {
@@ -47,30 +48,30 @@ public class UserLinkTest {
 
   @Test
   public void testSetup() {
-    UserLink userLink = new UserLink(this.account1, this.user);
+    UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user);
     assertThat(userLink.getUser(), is(equalTo(this.user)));
     assertThat(userLink.getAccount(), is(equalTo(this.account1)));
   }
 
   @Test
   public void testActiveInactive() {
-    UserLink userLink = new UserLink(this.account1, this.user, this.startDate, this.endDate);
+    UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate, this.endDate);
     assertThat(userLink.isActive(), is(false));
   }
 
   @Test
   public void testActiveActive() {
-    UserLink userLink = new UserLink(this.account1, this.user, this.startDate);
+    UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate);
     assertThat(userLink.isActive(), is(true));
   }
 
   @Test
   public void testUnlinkNew() {
-    UserLink userLink = new UserLink(this.account1, this.user, this.startDate);
-    Reward reward = mock(Reward.class);
-    Collection<Reward> rewards = new HashSet<Reward>() {{
-      add(reward);
-    }};
+    UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate);
+    Reward<TestPlatform> reward = mock(Reward.class);
+
+    Collection<Reward<TestPlatform>> rewards = new HashSet<>();
+    rewards.add(reward);
 
     assertThat(userLink.isActive(), is(true));
 
@@ -82,11 +83,10 @@ public class UserLinkTest {
 
   @Test
   public void testUnlinkOld() {
-    UserLink userLink = new UserLink(this.account1, this.user, this.startDate, this.endDate);
-    Reward reward = mock(Reward.class);
-    Collection<Reward> rewards = new HashSet<Reward>() {{
-      add(reward);
-    }};
+    UserLink<TestPlatform> userLink = new UserLink<>(this.account1, this.user, this.startDate, this.endDate);
+    Reward<TestPlatform> reward = mock(Reward.class);
+    Collection<Reward<TestPlatform>> rewards = new HashSet<>();
+    rewards.add(reward);
 
     assertThat(userLink.isActive(), is(false));
 
