@@ -36,7 +36,7 @@ public class AccountTest {
       }
 
       @Override
-      public @NotNull CompletableFuture<String> formatName(@NotNull Account<TestPlatform> account) {
+      public @NotNull CompletableFuture<String> formatName() {
         return new CompletableFuture<>();
       }
     };

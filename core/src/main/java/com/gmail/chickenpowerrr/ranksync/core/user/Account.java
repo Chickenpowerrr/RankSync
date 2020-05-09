@@ -76,20 +76,18 @@ public abstract class Account<T extends Platform<T>> {
    * formats found in the {@code Platform} and the
    * {@code Rank}s.
    *
-   * @param account the {@code Account} which wants to update
-   *                their name
    * @return the formatted name of the {@code Account}
    */
   @Contract(pure = true)
   @NotNull
-  public abstract CompletableFuture<String> formatName(@NotNull Account<T> account);
+  public abstract CompletableFuture<String> formatName();
 
   /**
    * Returns the {@code Platform} on which this {@code Account}
    * is located.
    */
   @NotNull
-  protected Platform<T> getPlatform() {
+  public Platform<T> getPlatform() {
     return this.platform;
   }
 }
