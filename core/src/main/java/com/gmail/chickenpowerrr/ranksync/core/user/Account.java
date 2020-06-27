@@ -1,10 +1,12 @@
 package com.gmail.chickenpowerrr.ranksync.core.user;
 
 import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
+import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class represents an {@code Account} on
@@ -89,5 +91,28 @@ public abstract class Account<T extends Platform<T>> {
   @NotNull
   public Platform<T> getPlatform() {
     return this.platform;
+  }
+
+  /**
+   * Sets the {@link Rank}s of the {@link Account} on the current
+   * {@link Platform} to the given {@link Rank}s. If the {@code currentRanks}
+   * have been provided, they <b>might</b> be used by the implementation
+   * for a speedup.
+   *
+   * @param ranks the new {@link Rank}s of the {@link Account} on
+   *              the {@link Platform}
+   */
+  public abstract void updateRanks(@NotNull List<Rank<T>> ranks,
+      @Nullable List<Rank<T>> currentRanks);
+
+  /**
+   * Sets the {@link Rank}s of the {@link Account} on the current
+   * {@link Platform} to the given {@link Rank}s.
+   *
+   * @param ranks the new {@link Rank}s of the {@link Account} on
+   *              the {@link Platform}
+   */
+  public void updateRanks(@NotNull List<Rank<T>> ranks) {
+    updateRanks(ranks, null);
   }
 }

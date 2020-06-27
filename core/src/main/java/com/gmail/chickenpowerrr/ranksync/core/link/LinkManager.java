@@ -1,8 +1,11 @@
 package com.gmail.chickenpowerrr.ranksync.core.link;
 
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.core.rank.RankLink;
 import com.gmail.chickenpowerrr.ranksync.core.user.User;
+import com.gmail.chickenpowerrr.ranksync.core.util.Util;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -21,6 +24,7 @@ public class LinkManager {
   private final boolean sendWarnings;
   private final int updateInterval;
   private final boolean syncNames;
+  private final Map<Rank<?>, Collection<RankLink>> rankLinks;
   private final Map<Platform<?>, Map<String, User>> cachedUsers;
 
   /**
@@ -37,13 +41,39 @@ public class LinkManager {
    *                       will automatically check if all assets have
    *                       been synced correctly, -1 if this feature
    *                       should be disabled
-   * @param syncNames true if the name sync feature is enabled,
+   * @param syncNames true if the name sync feature is enabled
+   * @param rankLinks the {@link RankLink}s which link the {@link Rank}s
+   *                  of the different {@link Platform}s
    */
-  public LinkManager(boolean sendWarnings, int updateInterval, boolean syncNames) {
+  public LinkManager(boolean sendWarnings, int updateInterval, boolean syncNames,
+      @NotNull Collection<RankLink> rankLinks) {
     this.sendWarnings = sendWarnings;
     this.updateInterval = updateInterval;
     this.syncNames = syncNames;
+    this.rankLinks = Util.interchange(rankLinks.stream()
+        .collect(Collectors.toMap(link -> link, link -> Util.flatMap(link.getRanks().values()))));
     this.cachedUsers = new ConcurrentHashMap<>();
+  }
+
+  /**
+   * Instantiates a new manager, based on  if it should send
+   * warnings when it does not have enough permissions to perform a
+   * certain action, the interval in which it should regularly
+   * update the {@code Rank}s and if the name sync feature has
+   * been enabled.
+   *
+   * @param sendWarnings true if the program should print warnings
+   *                     when it does not have sufficient permissions
+   *                     to perform a certain action
+   * @param updateInterval the interval in seconds in which the program
+   *                       will automatically check if all assets have
+   *                       been synced correctly, -1 if this feature
+   *                       should be disabled
+   * @param syncNames true if the name sync feature is enabled
+   * @
+   */
+  public LinkManager(boolean sendWarnings, int updateInterval, boolean syncNames) {
+    this(sendWarnings, updateInterval, syncNames, new HashSet<>());
   }
 
   /**
@@ -64,7 +94,7 @@ public class LinkManager {
   }
 
   /**
-   * Caches a {@link User} such that the {@link #sync()}
+   * Caches a {@link User} such that the {@link #forceSync()}
    * method will update the {@link Rank}s for the given
    * {@link User}.
    *
@@ -82,7 +112,7 @@ public class LinkManager {
   /**
    * Un caches a {@link User} if the have been cached through
    * a {@link #cacheUser(User)} call, based on only one of their
-   * unique identifiers, to make sure the {@link #sync()} method
+   * unique identifiers, to make sure the {@link #forceSync()} method
    * won't update them anymore.
    *
    * @param platform the {@link Platform} on which the provided
@@ -107,26 +137,38 @@ public class LinkManager {
   }
 
   /**
-   * Updates all {@link User}s in the cache, which have been added
-   * through a {@link #cacheUser(User)} without being deleted by a
-   * {@link #unCacheUser(Platform, String)} before the execution
-   * of this method.
-   */
-  @Contract(pure = false)
-  public void sync() {
-
-  }
-
-  /**
    * Returns all {@link User}s who have been cached through a
    * {@link #cacheUser(User)} call, without being removed through
    * a {@link #unCacheUser(Platform, String)} call.
    */
+  @Contract(pure = true)
   @NotNull
   public Collection<User> getCachedUsers() {
     return this.cachedUsers.values().stream()
         .map(Map::values)
         .flatMap(Collection::stream)
         .collect(Collectors.toSet());
+  }
+
+  /**
+   * Returns all {@link RankLink}s managed by this manager.
+   */
+  @NotNull
+  public Collection<RankLink> getRankLinks() {
+    return Util.flatMap(this.rankLinks.values());
+  }
+
+  /**
+   * Forces a synchronization of all the {@link User}s which have
+   * been cached through a {@link #cacheUser(User)} without being
+   * un cached by a {@link #unCacheUser(Platform, String)}.
+   */
+  @Contract(pure = false)
+  public void forceSync() {
+    this.cachedUsers.values().stream()
+        .map(Map::values)
+        .flatMap(Collection::stream)
+        .distinct()
+        .forEach(User::update);
   }
 }

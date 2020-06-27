@@ -1,6 +1,8 @@
 package com.gmail.chickenpowerrr.ranksync.core.user;
 
+import com.gmail.chickenpowerrr.ranksync.core.link.LinkManager;
 import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
+import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.reward.Reward;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class User {
 
+  private final LinkManager linkManager;
   private final List<UserLink<?>> links;
 
   /**
@@ -26,11 +29,14 @@ public class User {
    * which attaches {@code Account}s on {@code Platform}s to
    * this {@code User}.
    *
+   * @param linkManager the {@link LinkManager} which which {@link Rank}s
+   *                    have been linked to other {@link Rank}s
    * @param links the {@code UserLink}s which attach {@code Account}s
    *              on {@code Platform}s to this {@code User}
    */
-  public User(@NotNull List<UserLink<?>> links) {
+  public User(@NotNull LinkManager linkManager, @NotNull List<UserLink<?>> links) {
     this.links = links;
+    this.linkManager = linkManager;
   }
 
   /**
@@ -75,5 +81,15 @@ public class User {
       }
     }
     return false;
+  }
+
+  /**
+   * Synchronizes the current {@link Rank}s over the {@link Platform}s
+   * which have been synced to the {@link User}.
+   */
+  @Contract(pure = false)
+  public void update() {
+
+    // TODO update the ranks
   }
 }

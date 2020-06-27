@@ -26,7 +26,7 @@ public class DiscordAccount extends Account<DiscordPlatform> {
 
   @NotNull
   @Override
-  public CompletableFuture<String> formatName(@NotNull Account<DiscordPlatform> account) {
+  public CompletableFuture<String> formatName() {
     return null;
   }
 

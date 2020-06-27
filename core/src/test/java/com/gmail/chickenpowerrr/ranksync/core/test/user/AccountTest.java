@@ -2,6 +2,7 @@ package com.gmail.chickenpowerrr.ranksync.core.test.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.test.util.TestPlatform;
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import com.gmail.chickenpowerrr.ranksync.core.user.UserLink;
@@ -9,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +40,12 @@ public class AccountTest {
       @Override
       public @NotNull CompletableFuture<String> formatName() {
         return new CompletableFuture<>();
+      }
+
+      @Override
+      public void updateRanks(@NotNull List<Rank<TestPlatform>> ranks,
+          @Nullable List<Rank<TestPlatform>> currentRanks) {
+
       }
     };
   }
