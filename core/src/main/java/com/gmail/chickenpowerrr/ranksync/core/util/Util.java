@@ -1,9 +1,12 @@
 package com.gmail.chickenpowerrr.ranksync.core.util;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,26 +32,42 @@ public class Util {
   @Contract(pure = true)
   public static <K, V> Map<V, Collection<K>> interchange(@NotNull Map<K, Collection<V>> map) {
     Map<V, Collection<K>> result = new HashMap<>();
-    map.forEach((key, values) -> values.forEach(value -> {
-      result.computeIfAbsent(value, v -> new HashSet<>());
-      result.get(value).add(key);
-    }));
+    map.forEach((key, values) -> values.forEach(value ->
+      result.computeIfAbsent(value, v -> new HashSet<>()).add(key)));
     return result;
   }
 
   /**
-   * Allows checked {@link Exception}s to be thrown as if they
-   * were a {@link RuntimeException}.
+   * A Java hack which tricks the compiler into believing a certain {@link Throwable} is
+   * an unchecked exception, while in reality, it's a checked exception, if a {@link Throwable}
+   * is thrown, otherwise the regular result will be returned.
    *
-   * @param t the {@link Throwable} which should be thrown
-   * @param <T> the type of the {@link Throwable}
-   * @param <U> the fake return type
-   * @return nothing
-   * @throws T the provide {@link Throwable}
+   * @param callable the callable which will contain the result or throw the {@link Throwable}
+   * @param <U> the return type
+   * @return the result of the given callable
    */
-  @SuppressWarnings("unchecked")
   @Contract(pure = true)
-  public static <T extends Throwable, U> U sneakyThrow(@NotNull Throwable t) throws T {
+  public static <U> U sneakyExecute(@NotNull Callable<U> callable) {
+    try {
+      return callable.call();
+    } catch (Exception e) {
+      return sneakyThrow(e);
+    }
+  }
+
+  /**
+   * A Java hack which tricks the compiler into believing a certain {@link Throwable} is
+   * an unchecked exception, while in reality, it's a checked exception.
+   *
+   * @param t the {@link Throwable} which needs to be thrown
+   * @param <T> the type of the throwable
+   * @param <U> the return type the Java method wants
+   * @return nothing
+   * @throws T the given {@link Throwable}
+   */
+  @Contract(pure = true)
+  @SuppressWarnings("unchecked")
+  public static <T extends Throwable, U> U sneakyThrow(Throwable t) throws T {
     throw (T) t;
   }
 
@@ -119,6 +138,21 @@ public class Util {
     map.put(k1, v1);
     map.put(k2, v2);
     return map;
+  }
+
+  /**
+   * Returns a {@link Set} with the given values.
+   *
+   * @param values the values which will be in the {@link Set}
+   * @param <T> the type of the values in the {@link Set}
+   * @return the {@link Set} filled with the given values
+   */
+  @SafeVarargs
+  @NotNull
+  public static <T> Set<T> setOf(T... values) {
+    Set<T> result = new HashSet<>();
+    Collections.addAll(result, values);
+    return result;
   }
 
   /**
