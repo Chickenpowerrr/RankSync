@@ -89,7 +89,6 @@ public class User {
    */
   @Contract(pure = false)
   public void update() {
-
     // TODO update the ranks
   }
 }

@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,8 +42,7 @@ public class AccountTest {
       }
 
       @Override
-      public void updateRanks(@NotNull List<Rank<TestPlatform>> ranks,
-          @Nullable List<Rank<TestPlatform>> currentRanks) {
+      public void updateRanks(@NotNull List<Rank<TestPlatform>> ranks) {
 
       }
     };

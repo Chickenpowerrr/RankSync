@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -144,7 +143,7 @@ public class LinkManagerTest {
       }
 
       @Override
-      public void updateRanks(@NotNull List<Rank<T>> ranks, @Nullable List<Rank<T>> currentRanks) {
+      public void updateRanks(@NotNull List<Rank<T>> ranks) {
 
       }
     };
