@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Range;
  * @author Mark van Wijk
  * @since 2.0.0
  */
-public class Rank<T extends Platform<T>> {
+public class Rank<T extends Platform<T>> implements Comparable<Rank<?>> {
 
   private final String identifier;
   private final int priority;
@@ -64,5 +64,17 @@ public class Rank<T extends Platform<T>> {
   @NotNull
   public String getName() {
     return this.name;
+  }
+
+  /**
+   * Compare two {@link Rank}s by their priority.
+   *
+   * @param rank the target {@link Rank}
+   * @return -1 if the current priority is lower, 0 if they are equal
+   *         and 1 if the other one is bigger
+   */
+  @Override
+  public int compareTo(@NotNull Rank<?> rank) {
+    return Integer.compare(this.priority, rank.priority);
   }
 }

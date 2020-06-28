@@ -45,8 +45,7 @@ public abstract class Platform<T extends Platform<T>> {
    *                      {@code Account} on the {@code Platform},
    *                      false otherwise
    */
-  public Platform(@NotNull String name, @NotNull String baseNameFormat,
-      boolean canChangeName) {
+  public Platform(@NotNull String name, @NotNull String baseNameFormat, boolean canChangeName) {
     this.name = name;
     this.baseNameFormat = baseNameFormat;
     this.canChangeName = canChangeName;

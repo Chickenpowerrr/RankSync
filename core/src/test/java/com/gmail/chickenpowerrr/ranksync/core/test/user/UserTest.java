@@ -176,7 +176,7 @@ public class UserTest {
 
     assertThat(this.user.getAccounts()).hasSize(2);
 
-    this.user.update();
+    this.user.updateRanks();
 
     assertThat(this.user.getAccounts()).hasSize(2);
     verify(this.account1, atLeastOnce()).updateRanks(eq(Arrays.asList(this.rank3, this.rank4)));

@@ -1,9 +1,11 @@
 package com.gmail.chickenpowerrr.ranksync.core.rank;
 
 import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
+import com.gmail.chickenpowerrr.ranksync.core.util.Util;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +18,7 @@ import org.jetbrains.annotations.Range;
  * @author Mark van Wijk
  * @since 2.0.0
  */
-public class RankLink {
+public class RankLink implements Comparable<RankLink> {
 
   private final String identifier;
   private final String nameFormat;
@@ -88,5 +90,24 @@ public class RankLink {
         .mapToInt(Rank::getPriority)
         .min()
         .orElse(-1) : -1;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int compareTo(@NotNull RankLink other) {
+    Optional<Rank<?>> rankOptional = Util.flatMap(
+        this.ranks.values()).stream().sorted().findFirst();
+    Optional<Rank<?>> otherRankOptional = Util.flatMap(
+        other.ranks.values()).stream().sorted().findFirst();
+
+    if (rankOptional.isPresent() && otherRankOptional.isPresent()) {
+      return rankOptional.get().compareTo(otherRankOptional.get());
+    } else if (!rankOptional.isPresent() && !otherRankOptional.isPresent()) {
+      return 0;
+    } else {
+      return rankOptional.isPresent() ? -1 : 1;
+    }
   }
 }

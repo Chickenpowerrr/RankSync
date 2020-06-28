@@ -2,10 +2,14 @@ package com.gmail.chickenpowerrr.ranksync.core.user;
 
 import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.core.rank.RankLink;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class represents an {@code Account} on
@@ -79,9 +83,34 @@ public abstract class Account<T extends Platform<T>> {
    *
    * @return the formatted name of the {@code Account}
    */
-  @Contract(pure = true)
   @NotNull
-  public abstract CompletableFuture<String> formatName();
+  public CompletableFuture<String> formatName() {
+    Optional<User> optionalUser = getUser();
+    if (!optionalUser.isPresent()) {
+      return CompletableFuture.supplyAsync(this::getName);
+    }
+
+    User user = optionalUser.get();
+    Optional<Account<?>> optionalAccount = user.getAccounts().stream()
+        .filter(account -> !account.equals(this)).sorted().findFirst();
+
+    if (!optionalAccount.isPresent()) {
+      return CompletableFuture.supplyAsync(this::getName);
+    }
+
+    Account<?> account = optionalAccount.get();
+
+    String name = account.getName();
+    return getPlatform().getRanks(this).thenApply(ranks -> {
+      Optional<Rank<T>> rank = ranks.stream().sorted().findAny();
+      if (!rank.isPresent()) {
+        return getName();
+      } else {
+        String format = getFormat(user, rank.get());
+        return format != null ? format.replace("%name%", name) : getName();
+      }
+    });
+  }
 
   /**
    * Returns the {@code Platform} on which this {@code Account}
@@ -100,4 +129,31 @@ public abstract class Account<T extends Platform<T>> {
    *              the {@link Platform}
    */
   public abstract void updateRanks(@NotNull List<Rank<T>> ranks);
+
+  /**
+   * Returns the {@link User} linked to this {@link Account}.
+   */
+  @NotNull
+  public Optional<User> getUser() {
+    return this.links.stream().filter(UserLink::isActive).map(UserLink::getUser).findAny();
+  }
+
+  /**
+   * Returns the format which will be used to update names for a certain {@link Account}.
+   *
+   * @param user the {@link User} of the {@link Account}
+   * @param platformRank the primary {@link Rank} of the {@link Account}
+   * @return the format which will be used to update names for a certain {@link Account}
+   */
+  @Nullable
+  private String getFormat(@NotNull User user, @NotNull Rank<T> platformRank) {
+    Collection<RankLink> rankLinks = user.getLinks().get(platformRank);
+
+    if (rankLinks == null || rankLinks.isEmpty()) {
+      return null;
+    }
+
+    RankLink rankLink = rankLinks.stream().sorted().findFirst().get();
+    return rankLink.getNameFormat();
+  }
 }

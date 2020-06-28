@@ -121,7 +121,7 @@ public class LinkManagerTest {
     linkManager.cacheUser(user);
     linkManager.forceSync();
 
-    verify(user, atLeastOnce()).update();
+    verify(user, atLeastOnce()).updateRanks();
   }
 
   private <T extends Platform<T>> Account<T> getAccount(@NotNull Platform<T> platform,

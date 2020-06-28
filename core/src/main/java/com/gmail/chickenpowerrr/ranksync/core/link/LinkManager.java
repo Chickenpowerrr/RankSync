@@ -4,6 +4,7 @@ import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.rank.RankLink;
 import com.gmail.chickenpowerrr.ranksync.core.user.User;
 import com.gmail.chickenpowerrr.ranksync.core.util.Util;
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -153,9 +154,24 @@ public class LinkManager {
   /**
    * Returns all {@link RankLink}s managed by this manager.
    */
+  @Contract(pure = true)
   @NotNull
   public Collection<RankLink> getRankLinks() {
     return Util.flatMap(this.rankLinks.values());
+  }
+
+  /**
+   * Returns all {@link RankLink}s with the combined {@link Rank}s.
+   */
+  @Contract(pure = true)
+  @NotNull
+  public Map<Rank<?>, Collection<RankLink>> getMappedRankLinks() {
+    Map<RankLink, Collection<Rank<?>>> rankLinks = getRankLinks().stream()
+        .map(rankLink ->
+            new AbstractMap.SimpleEntry<>(rankLink, Util.flatMap(rankLink.getRanks().values())))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+    return Util.interchange(rankLinks);
   }
 
   /**
@@ -169,6 +185,6 @@ public class LinkManager {
         .map(Map::values)
         .flatMap(Collection::stream)
         .distinct()
-        .forEach(User::update);
+        .forEach(User::updateRanks);
   }
 }

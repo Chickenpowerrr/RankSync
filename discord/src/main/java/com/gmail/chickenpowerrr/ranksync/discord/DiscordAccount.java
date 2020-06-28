@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import org.jetbrains.annotations.NotNull;
 
 public class DiscordAccount extends Account<DiscordPlatform> {
@@ -26,12 +27,6 @@ public class DiscordAccount extends Account<DiscordPlatform> {
   @Override
   public String getName() {
     return this.member.getEffectiveName();
-  }
-
-  @NotNull
-  @Override
-  public CompletableFuture<String> formatName() {
-    return null;
   }
 
   @Override
@@ -56,9 +51,12 @@ public class DiscordAccount extends Account<DiscordPlatform> {
 
   @Override
   public boolean updateName(@NotNull String name) {
-    this.member.modifyNickname(name).queue();
-    // TODO implement
-    return false;
+    try {
+      this.member.modifyNickname(name).queue();
+      return true;
+    } catch (HierarchyException e) {
+      return false;
+    }
   }
 
   private CompletableFuture<Collection<Role>> getRoles(@NotNull Guild guild,

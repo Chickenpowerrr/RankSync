@@ -3,10 +3,12 @@ package com.gmail.chickenpowerrr.ranksync.core.user;
 import com.gmail.chickenpowerrr.ranksync.core.link.LinkManager;
 import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
+import com.gmail.chickenpowerrr.ranksync.core.rank.RankLink;
 import com.gmail.chickenpowerrr.ranksync.core.reward.Reward;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -88,7 +90,25 @@ public class User {
    * which have been synced to the {@link User}.
    */
   @Contract(pure = false)
-  public void update() {
+  public void updateRanks() {
     // TODO update the ranks
+  }
+
+  /**
+   * Synchronizes the current names over the {@link Platform}s
+   * which have been synced to the {@link User}.
+   */
+  @Contract(pure = false)
+  public void updateNames() {
+    // TODO update the names
+  }
+
+  /**
+   * Returns all {@link RankLink}s with the combined {@link Rank}s.
+   */
+  @Contract(pure = true)
+  @NotNull
+  public Map<Rank<?>, Collection<RankLink>> getLinks() {
+    return this.linkManager.getMappedRankLinks();
   }
 }
