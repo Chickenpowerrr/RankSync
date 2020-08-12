@@ -113,6 +113,7 @@ public class Util {
    * @param <V> the type of the values
    * @return the {@link Map} with the given key value pairs
    */
+  @Contract(pure = true)
   @NotNull
   public static <K, V> Map<K, V> mapOf(K k1, V v1) {
     Map<K, V> map = new HashMap<>();
@@ -132,6 +133,7 @@ public class Util {
    * @param <V> the type of the values
    * @return the {@link Map} with the given key value pairs
    */
+  @Contract(pure = true)
   @NotNull
   public static <K, V> Map<K, V> mapOf(K k1, V v1, K k2, V v2) {
     Map<K, V> map = new HashMap<>();
@@ -147,6 +149,7 @@ public class Util {
    * @param <T> the type of the values in the {@link Set}
    * @return the {@link Set} filled with the given values
    */
+  @Contract(pure = true)
   @SafeVarargs
   @NotNull
   public static <T> Set<T> setOf(T... values) {

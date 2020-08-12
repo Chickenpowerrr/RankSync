@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 /**
- * This class represents a link between multiple {@code Rank}s
- * on different {@code Platform}s.
+ * This class represents a link between multiple {@link Rank}s
+ * on different {@link Platform}s.
  *
  * @author Mark van Wijk
  * @since 2.0.0
@@ -72,15 +72,15 @@ public class RankLink implements Comparable<RankLink> {
   }
 
   /**
-   * Returns the best priority for the linked {@code Rank}s,
-   * which are available on the given {@code Platform} and
-   * linked by this {@code RankLink}.
+   * Returns the best priority for the linked {@link Rank}s,
+   * which are available on the given {@link Platform} and
+   * linked by this {@link RankLink}.
    *
-   * @param platform the {@code Platform} which contains the
-   *                 target {@code Rank}s
+   * @param platform the {@link Platform} which contains the
+   *                 target {@link Rank}s
    * @return a value between 0 and Integer.MAX_VALUE if a
-   *         {@code Rank} has been linked for the specified
-   *         {@code Platform} by this {@code RankLink},
+   *         {@link Rank} has been linked for the specified
+   *         {@link Platform} by this {@link RankLink},
    *         -1 otherwise
    */
   @Range(from = -1, to = Integer.MAX_VALUE)
@@ -95,6 +95,7 @@ public class RankLink implements Comparable<RankLink> {
   /**
    * {@inheritDoc}
    */
+  @Contract(pure = true)
   @Override
   public int compareTo(@NotNull RankLink other) {
     Optional<Rank<?>> rankOptional = Util.flatMap(

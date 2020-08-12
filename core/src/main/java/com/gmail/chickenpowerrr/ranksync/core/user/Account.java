@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * This class represents an {@code Account} on
- * a {@code Platform}.
+ * This class represents an {@link Account} on
+ * a {@link Platform}.
  *
- * @param <T> the type of the {@code Platform} o
- *            the {@code Account}
+ * @param <T> the type of the {@link Platform} o
+ *            the {@link Account}
  *
  * @author Mark van Wijk
  * @since 2.0.0
@@ -28,16 +28,16 @@ public abstract class Account<T extends Platform<T>> {
   private final List<UserLink<T>> links;
 
   /**
-   * Instantiates an {@code Account} based on
-   * the unique identifier and the {@code UserLink}s
-   * which connect the {@code Account} to {@code User}s.
+   * Instantiates an {@link Account} based on
+   * the unique identifier and the {@link UserLink}s
+   * which connect the {@link Account} to {@link User}s.
    *
    * @param identifier the unique identifier of the
-   *                   {@code Account} on the {@code Platform}
-   * @param platform the {@code Platform} on which this
-   *                 {@code Account} is synced
-   * @param links the {@code UserLink}s which connects the
-   *              {@code Account} to {@code User}s
+   *                   {@link Account} on the {@link Platform}
+   * @param platform the {@link Platform} on which this
+   *                 {@link Account} is synced
+   * @param links the {@link UserLink}s which connects the
+   *              {@link Account} to {@link User}s
    */
   public Account(@NotNull String identifier, @NotNull Platform<T> platform,
       @NotNull List<UserLink<T>> links) {
@@ -47,8 +47,8 @@ public abstract class Account<T extends Platform<T>> {
   }
 
   /**
-   * Returns the unique identifier of the {@code Account}
-   * on its {@code Platform}.
+   * Returns the unique identifier of the {@link Account}
+   * on its {@link Platform}.
    */
   @Contract(pure = true)
   @NotNull
@@ -57,32 +57,32 @@ public abstract class Account<T extends Platform<T>> {
   }
 
   /**
-   * Returns the name of the {@code Account} on the
-   * {@code Platform}.
+   * Returns the name of the {@link Account} on the
+   * {@link Platform}.
    */
   @Contract(pure = true)
   @NotNull
   public abstract String getName();
 
   /**
-   * Updates the name of the {@code Account} on the
-   * {@code Platform}, if possible.
+   * Updates the name of the {@link Account} on the
+   * {@link Platform}, if possible.
    *
-   * @param name the name of the {@code Account} on
-   *             the {@code Platform}
+   * @param name the name of the {@link Account} on
+   *             the {@link Platform}
    * @return true if the update was successful, false
    *         otherwise
    */
-  @Contract(pure = false)
   public abstract boolean updateName(@NotNull String name);
 
   /**
-   * Format the name of an {@code Account} based on the
-   * formats found in the {@code Platform} and the
-   * {@code Rank}s.
+   * Format the name of an {@link Account} based on the
+   * formats found in the {@link Platform} and the
+   * {@link Rank}s.
    *
-   * @return the formatted name of the {@code Account}
+   * @return the formatted name of the {@link Account}
    */
+  @Contract(pure = true)
   @NotNull
   public CompletableFuture<String> formatName() {
     Optional<User> optionalUser = getUser();
@@ -115,9 +115,10 @@ public abstract class Account<T extends Platform<T>> {
   }
 
   /**
-   * Returns the {@code Platform} on which this {@code Account}
+   * Returns the {@link Platform} on which this {@link Account}
    * is located.
    */
+  @Contract(pure = true)
   @NotNull
   public Platform<T> getPlatform() {
     return this.platform;
@@ -135,6 +136,7 @@ public abstract class Account<T extends Platform<T>> {
   /**
    * Returns the {@link User} linked to this {@link Account}.
    */
+  @Contract(pure = true)
   @NotNull
   public Optional<User> getUser() {
     return this.links.stream().filter(UserLink::isActive).map(UserLink::getUser).findAny();
@@ -147,6 +149,7 @@ public abstract class Account<T extends Platform<T>> {
    * @param platformRank the primary {@link Rank} of the {@link Account}
    * @return the format which will be used to update names for a certain {@link Account}
    */
+  @Contract(pure = true)
   @Nullable
   private String getFormat(@NotNull User user, @NotNull Rank<T> platformRank) {
     Collection<RankLink> rankLinks = user.getLinks().get(platformRank);

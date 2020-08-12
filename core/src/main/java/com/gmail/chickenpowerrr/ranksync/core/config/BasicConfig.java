@@ -2,6 +2,7 @@ package com.gmail.chickenpowerrr.ranksync.core.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,6 +44,7 @@ public final class BasicConfig extends AbstractConfig {
     /**
      * {@inheritDoc}
      */
+    @Contract(pure = true)
     @Nullable
     @Override
     public Object get(@NotNull String path) {

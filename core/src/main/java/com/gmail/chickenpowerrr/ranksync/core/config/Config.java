@@ -43,7 +43,6 @@ public interface Config {
    * @param value the {@link Object} which should be stored at
    *              the given path
    */
-  @Contract(pure = false)
   void set(@NotNull String path, @Nullable Object value);
 
   /**
@@ -64,7 +63,6 @@ public interface Config {
    * @param value the {@link String} which should be stored at
    *              the given path
    */
-  @Contract(pure = false)
   void setString(@NotNull String path, @Nullable String value);
 
   /**
@@ -96,7 +94,6 @@ public interface Config {
    * @param value the {@link Integer} which should be stored at
    *              the given path
    */
-  @Contract(pure = false)
   void setInt(@NotNull String path, int value);
 
   /**
@@ -128,7 +125,6 @@ public interface Config {
    * @param value the {@link Double} which should be stored at
    *              the given path
    */
-  @Contract(pure = false)
   void setDouble(@NotNull String path, double value);
 
   /**
@@ -160,7 +156,6 @@ public interface Config {
    * @param value the {@link Long} which should be stored at
    *              the given path
    */
-  @Contract(pure = false)
   void setLong(@NotNull String path, long value);
 
   /**
@@ -192,6 +187,5 @@ public interface Config {
    * @param value the {@link Boolean} which should be stored at
    *              the given path
    */
-  @Contract(pure = false)
   void setBoolean(@NotNull String path, boolean value);
 }

@@ -12,10 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import sun.awt.image.ImageWatched.Link;
 
 /**
- * This class manages all {@code Link}s and syncs for
- * the registered {@code User}s.
+ * This class manages all {@link Link}s and syncs for
+ * the registered {@link User}s.
  *
  * @author Mark van Wijk
  * @since 2.0.0
@@ -32,7 +33,7 @@ public class LinkManager {
    * Instantiates a new manager, based on  if it should send
    * warnings when it does not have enough permissions to perform a
    * certain action, the interval in which it should regularly
-   * update the {@code Rank}s and if the name sync feature has
+   * update the {@link Rank}s and if the name sync feature has
    * been enabled.
    *
    * @param sendWarnings true if the program should print warnings
@@ -60,7 +61,7 @@ public class LinkManager {
    * Instantiates a new manager, based on  if it should send
    * warnings when it does not have enough permissions to perform a
    * certain action, the interval in which it should regularly
-   * update the {@code Rank}s and if the name sync feature has
+   * update the {@link Rank}s and if the name sync feature has
    * been enabled.
    *
    * @param sendWarnings true if the program should print warnings
@@ -101,8 +102,8 @@ public class LinkManager {
    *
    * @param user the {@link User} whose {@link Rank}s should
    *             be synchronized
+   * @see #forceSync()
    */
-  @Contract(pure = false)
   public void cacheUser(@NotNull User user) {
     user.getAccounts().forEach(account -> {
       this.cachedUsers.computeIfAbsent(account.getPlatform(), p -> new ConcurrentHashMap<>());
@@ -121,7 +122,6 @@ public class LinkManager {
    * @param identifier the unique identifier of the {@link User}
    *                   on the given {@link Platform}
    */
-  @Contract(pure = false)
   public void unCacheUser(@NotNull Platform<?> platform, @NotNull String identifier) {
     Map<String, User> users = this.cachedUsers.get(platform);
     if (users != null) {
@@ -179,7 +179,6 @@ public class LinkManager {
    * been cached through a {@link #cacheUser(User)} without being
    * un cached by a {@link #unCacheUser(Platform, String)}.
    */
-  @Contract(pure = false)
   public void forceSync() {
     this.cachedUsers.values().stream()
         .map(Map::values)

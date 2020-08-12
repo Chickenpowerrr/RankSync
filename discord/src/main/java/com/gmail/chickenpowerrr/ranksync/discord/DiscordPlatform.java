@@ -2,6 +2,7 @@ package com.gmail.chickenpowerrr.ranksync.discord;
 
 import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
 import java.util.Arrays;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class DiscordPlatform extends Platform<DiscordPlatform> {
@@ -14,12 +15,14 @@ public class DiscordPlatform extends Platform<DiscordPlatform> {
     super("Discord", baseNameFormat, true);
   }
 
+  @Contract(pure = true)
   @Override
   public boolean isValidName(@NotNull String name) {
     return name.length() <= MAX_NAME_SIZE && name.length() >= MIN_NAME_SIZE
         && Arrays.stream(ILLEGAL_NAME_CHARACTERS).noneMatch(name::contains);
   }
 
+  @Contract(pure = true)
   @Override
   public boolean isValidFormat(@NotNull String format) {
     return isValidName(format.replace("%name%", "a name"));

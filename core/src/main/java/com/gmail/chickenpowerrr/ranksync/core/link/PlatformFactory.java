@@ -17,7 +17,7 @@ public class PlatformFactory {
   }
 
   @SuppressWarnings("unchecked")
-  @Contract("null, _ -> null; _, null -> null")
+  @Contract(value = "null, _ -> null; _, null -> null", pure = true)
   public <P extends Platform<P>> P getPlatform(@Nullable String name, @Nullable Config config) {
     if (this.constructors.containsKey(name) && config != null) {
       return (P) this.constructors.get(name).apply(config);

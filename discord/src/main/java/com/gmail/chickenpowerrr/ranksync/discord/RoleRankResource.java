@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class RoleRankResource extends RankResource<DiscordPlatform> {
@@ -28,6 +29,7 @@ public class RoleRankResource extends RankResource<DiscordPlatform> {
     this.allRanks = allRanks;
   }
 
+  @Contract(pure = true)
   @NotNull
   @Override
   public CompletableFuture<Collection<Rank<DiscordPlatform>>> getRanks() {
@@ -37,6 +39,7 @@ public class RoleRankResource extends RankResource<DiscordPlatform> {
         .collect(Collectors.toList()));
   }
 
+  @Contract(pure = true)
   @NotNull
   @Override
   public CompletableFuture<Collection<Rank<DiscordPlatform>>> getRanks(

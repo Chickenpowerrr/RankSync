@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class BoostRankResource extends RankResource<DiscordPlatform> {
@@ -27,12 +28,14 @@ public class BoostRankResource extends RankResource<DiscordPlatform> {
         .collect(Collectors.toList());
   }
 
+  @Contract(pure = true)
   @NotNull
   @Override
   public CompletableFuture<Collection<Rank<DiscordPlatform>>> getRanks() {
     return CompletableFuture.completedFuture(this.boostedRanks);
   }
 
+  @Contract(pure = true)
   @NotNull
   @Override
   public CompletableFuture<Collection<Rank<DiscordPlatform>>> getRanks(

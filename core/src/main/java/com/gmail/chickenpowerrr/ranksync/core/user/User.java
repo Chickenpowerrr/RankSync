@@ -12,11 +12,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import sun.awt.image.ImageWatched.Link;
 
 /**
- * This class represents a {@code User} which can have
- * {@code Account} attached to it through several
- * {@code UserLink}.
+ * This class represents a {@link User} which can have
+ * {@link Account} attached to it through several
+ * {@link UserLink}.
  *
  * @author Mark van Wijk
  * @since 2.0.0
@@ -27,14 +28,14 @@ public class User {
   private final List<UserLink<?>> links;
 
   /**
-   * Instantiates a {@code User} based on the {@code UserLink}s
-   * which attaches {@code Account}s on {@code Platform}s to
-   * this {@code User}.
+   * Instantiates a {@link User} based on the {@link UserLink}s
+   * which attaches {@link Account}s on {@link Platform}s to
+   * this {@link User}.
    *
    * @param linkManager the {@link LinkManager} which which {@link Rank}s
    *                    have been linked to other {@link Rank}s
-   * @param links the {@code UserLink}s which attach {@code Account}s
-   *              on {@code Platform}s to this {@code User}
+   * @param links the {@link UserLink}s which attach {@link Account}s
+   *              on {@link Platform}s to this {@link User}
    */
   public User(@NotNull LinkManager linkManager, @NotNull List<UserLink<?>> links) {
     this.links = links;
@@ -42,9 +43,9 @@ public class User {
   }
 
   /**
-   * Returns the {@code Account}s which have been linked
-   * to the current {@code User} based on the active
-   * {@code UserLink}s.
+   * Returns the {@link Account}s which have been linked
+   * to the current {@link User} based on the active
+   * {@link UserLink}s.
    */
   @Contract(pure = true)
   @NotNull
@@ -57,18 +58,18 @@ public class User {
   }
 
   /**
-   * Adds a {@code UserLink} to the current {@code User}
-   * which links an {@code Account} to this {@code User}
-   * if the {@code UserLink} is currently active. If it
-   * is active, the given {@code Reward}s will be issued
-   * to the {@code Account}.
+   * Adds a {@link UserLink} to the current {@link User}
+   * which links an {@link Account} to this {@link User}
+   * if the {@link UserLink} is currently active. If it
+   * is active, the given {@link Link}s will be issued
+   * to the {@link Account}.
    *
-   * @param link the {@code UserLink} which should link the
-   *             {@code Account} to the {@code User}
-   * @param rewards the {@code Reward}s which should be issued
+   * @param link the {@link UserLink} which should link the
+   *             {@link Account} to the {@link User}
+   * @param rewards the {@link Reward}s which should be issued
    *                if the link was successful
-   * @param <T> the type of the {@code Platform} of the {@code Account}
-   * @return true if the {@code UserLink} was active, false
+   * @param <T> the type of the {@link Platform} of the {@link Account}
+   * @return true if the {@link UserLink} was active, false
    *         otherwise
    */
   @Contract(mutates = "this")
@@ -89,7 +90,6 @@ public class User {
    * Synchronizes the current {@link Rank}s over the {@link Platform}s
    * which have been synced to the {@link User}.
    */
-  @Contract(pure = false)
   public void updateRanks() {
     // TODO update the ranks
   }
@@ -98,7 +98,6 @@ public class User {
    * Synchronizes the current names over the {@link Platform}s
    * which have been synced to the {@link User}.
    */
-  @Contract(pure = false)
   public void updateNames() {
     // TODO update the names
   }

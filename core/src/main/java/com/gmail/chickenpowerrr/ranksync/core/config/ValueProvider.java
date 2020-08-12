@@ -1,5 +1,6 @@
 package com.gmail.chickenpowerrr.ranksync.core.config;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ public interface ValueProvider {
    *         {@code null} if there is no such value
    */
   @Nullable
+  @Contract(pure = true)
   Object get(@NotNull String path);
 
   /**

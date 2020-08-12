@@ -31,7 +31,7 @@ public abstract class AbstractConfig implements Config {
   /**
    * {@inheritDoc}
    */
-  @Contract("null -> false")
+  @Contract(value = "null -> false", pure = true)
   @Override
   public boolean contains(String path) {
     return this.valueProvider.get(path) != null;
@@ -42,6 +42,7 @@ public abstract class AbstractConfig implements Config {
    * @throws UnknownKeyException if there is no value at the
    *                             given path
    */
+  @Contract(pure = true)
   @Override
   public Object get(@Nullable String path) {
     if (path == null) {
@@ -68,6 +69,7 @@ public abstract class AbstractConfig implements Config {
    * @throws UnknownKeyException if there is no value at the
    *                             given path
    */
+  @Contract(pure = true)
   @Override
   public String getString(@NotNull String path) {
     return get(path).toString();
@@ -84,6 +86,7 @@ public abstract class AbstractConfig implements Config {
   /**
    * {@inheritDoc}
    */
+  @Contract(pure = true)
   @Override
   public boolean isInt(String path) {
     return contains(path) && (get(path).getClass().equals(Integer.class)
@@ -97,6 +100,7 @@ public abstract class AbstractConfig implements Config {
    * @throws InvalidValueException if the value at the given path
    *                               isn't an integer
    */
+  @Contract(pure = true)
   @Override
   public int getInt(@NotNull String path) {
     if (isInt(path)) {
@@ -127,6 +131,7 @@ public abstract class AbstractConfig implements Config {
   /**
    * {@inheritDoc}
    */
+  @Contract(pure = true)
   @Override
   public boolean isDouble(@Nullable String path) {
     return contains(path) && (get(path).getClass().equals(Double.class)
@@ -140,6 +145,7 @@ public abstract class AbstractConfig implements Config {
    * @throws InvalidValueException if the value at the given path
    *                               isn't a double
    */
+  @Contract(pure = true)
   @Override
   public double getDouble(@NotNull String path) {
     if (isDouble(path)) {
@@ -170,6 +176,7 @@ public abstract class AbstractConfig implements Config {
   /**
    * {@inheritDoc}
    */
+  @Contract(pure = true)
   @Override
   public boolean isLong(String path) {
     return contains(path) && (get(path).getClass().equals(Long.class)
@@ -183,6 +190,7 @@ public abstract class AbstractConfig implements Config {
    * @throws InvalidValueException if the value at the given path
    *                               isn't a long
    */
+  @Contract(pure = true)
   @Override
   public long getLong(@NotNull String path) {
     if (isLong(path)) {
@@ -213,6 +221,7 @@ public abstract class AbstractConfig implements Config {
   /**
    * {@inheritDoc}
    */
+  @Contract(pure = true)
   @Override
   public boolean isBoolean(String path) {
     return contains(path) && (get(path).getClass().equals(Boolean.class)
@@ -226,6 +235,7 @@ public abstract class AbstractConfig implements Config {
    * @throws InvalidValueException if the value at the given path
    *                               isn't a boolean
    */
+  @Contract(pure = true)
   @Override
   public boolean getBoolean(@NotNull String path) {
     if (isBoolean(path)) {

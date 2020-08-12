@@ -13,11 +13,11 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * This class represents a {@code Platform} which has
- * {@code Account}s and {@code Rank}s which can be
- * synced with other {@code Platform}s.
+ * This class represents a {@link Platform} which has
+ * {@link Account}s and {@link Rank}s which can be
+ * synced with other {@link Platform}s.
  *
- * @param <T> the type of the {@code Platform}
+ * @param <T> the type of the {@link Platform}
  *
  * @author Mark van Wijk
  * @since 2.0.0
@@ -30,19 +30,19 @@ public abstract class Platform<T extends Platform<T>> {
   private final Collection<RankResource<T>> rankResources;
 
   /**
-   * Initializes a new {@code Platform} based on the name
-   * of the {@code Platform}, the maximum length of the
-   * name of an {@code Account} and if the application
-   * is able to change names on this {@code Platform}.
+   * Initializes a new {@link Platform} based on the name
+   * of the {@link Platform}, the maximum length of the
+   * name of an {@link Account} and if the application
+   * is able to change names on this {@link Platform}.
    *
-   * @param name the name of this {@code Platform}
+   * @param name the name of this {@link Platform}
    * @param baseNameFormat the default name format for
    *                       the name sync feature if the
-   *                       {@code Rank} doesn't override
+   *                       {@link Rank} doesn't override
    *                       it
    * @param canChangeName true if the application is
    *                      able to change the name of an
-   *                      {@code Account} on the {@code Platform},
+   *                      {@link Account} on the {@link Platform},
    *                      false otherwise
    */
   public Platform(@NotNull String name, @NotNull String baseNameFormat, boolean canChangeName) {
@@ -53,7 +53,7 @@ public abstract class Platform<T extends Platform<T>> {
   }
 
   /**
-   * Returns the name of the {@code Platform}.
+   * Returns the name of the {@link Platform}.
    */
   @Contract(pure = true)
   @NotNull
@@ -62,10 +62,10 @@ public abstract class Platform<T extends Platform<T>> {
   }
 
   /**
-   * Returns a {@code CompletableFuture} which will be completed
-   * once all {@code RankResource}s have submitted which {@code Rank}s
-   * they are syncing. The result will be a {@code Collection} which
-   * contains all {@code Rank}s synced by the {@code RankResource}s.
+   * Returns a {@link CompletableFuture} which will be completed
+   * once all {@link RankResource}s have submitted which {@link Rank}s
+   * they are syncing. The result will be a {@link Collection} which
+   * contains all {@link Rank}s synced by the {@link RankResource}s.
    */
   @Contract(pure = true)
   @NotNull
@@ -74,19 +74,19 @@ public abstract class Platform<T extends Platform<T>> {
   }
 
   /**
-   * Returns a {@code CompletableFuture} which will be completed
-   * once all {@code RankResource}s have submitted which {@code Rank}s
-   * a certain {@code Account} has on this {@code Platform}. The result
-   * will be a {@code Collection} which contains all {@code Rank}s
-   * determined by the {@code RankResource}s.
+   * Returns a {@link CompletableFuture} which will be completed
+   * once all {@link RankResource}s have submitted which {@link Rank}s
+   * a certain {@link Account} has on this {@link Platform}. The result
+   * will be a {@link Collection} which contains all {@link Rank}s
+   * determined by the {@link RankResource}s.
    *
-   * @param account the {@code Account} which {@code Rank}s are requested
-   * @return a {@code CompletableFuture} which will be completed
-   *         once all {@code RankResource}s have submitted which
-   *         {@code Rank}s a certain {@code Account} has on this
-   *         {@code Platform}. The result will be a {@code Collection}
-   *         which contains all {@code Rank}s determined by the
-   *         {@code RankResource}s.
+   * @param account the {@link Account} which {@link Rank}s are requested
+   * @return a {@link CompletableFuture} which will be completed
+   *         once all {@link RankResource}s have submitted which
+   *         {@link Rank}s a certain {@link Account} has on this
+   *         {@link Platform}. The result will be a {@link Collection}
+   *         which contains all {@link Rank}s determined by the
+   *         {@link RankResource}s.
    */
   @Contract(pure = true)
   @NotNull
@@ -95,20 +95,20 @@ public abstract class Platform<T extends Platform<T>> {
   }
 
   /**
-   * Returns a {@code CompletableFuture} which will be completed
-   * once all {@code RankResource}s have submitted which {@code Rank}s
-   * they are syncing. The result will be a {@code Collection} which
-   * contains all {@code Rank}s synced by the {@code RankResource}s.
+   * Returns a {@link CompletableFuture} which will be completed
+   * once all {@link RankResource}s have submitted which {@link Rank}s
+   * they are syncing. The result will be a {@link Collection} which
+   * contains all {@link Rank}s synced by the {@link RankResource}s.
    *
-   * @param function the {@code Function} which retrieves a
-   *                 {@code CompletableFuture} which will be used
-   *                 to determine the {@code Rank}s with which the
+   * @param function the {@link Function} which retrieves a
+   *                 {@link CompletableFuture} which will be used
+   *                 to determine the {@link Rank}s with which the
    *                 result will be completed
-   * @return a {@code CompletableFuture} which will be completed
-   *        once all {@code RankResource}s have submitted which
-   *        {@code Rank}s they are syncing. The result will be
-   *        a {@code Collection} which contains all {@code Rank}s
-   *        synced by the {@code RankResource}s.
+   * @return a {@link CompletableFuture} which will be completed
+   *        once all {@link RankResource}s have submitted which
+   *        {@link Rank}s they are syncing. The result will be
+   *        a {@link Collection} which contains all {@link Rank}s
+   *        synced by the {@link RankResource}s.
    */
   @Contract(pure = true)
   @NotNull
@@ -137,7 +137,7 @@ public abstract class Platform<T extends Platform<T>> {
 
   /**
    * Returns true if the application is able to change
-   * the name of an {@code Account} on the {@code Platform},
+   * the name of an {@link Account} on the {@link Platform},
    * false otherwise.
    */
   @Contract(pure = true)
@@ -146,12 +146,12 @@ public abstract class Platform<T extends Platform<T>> {
   }
 
   /**
-   * Adds a {@code RankResource} which is able to retrieve
-   * {@code Rank}s or this {@code Platform}.
+   * Adds a {@link RankResource} which is able to retrieve
+   * {@link Rank}s or this {@link Platform}.
    *
-   * @param rankResource the {@code RankResource} which is able
-   *                     to manage certain {@code Rank}s on
-   *                     this {@code Platform}
+   * @param rankResource the {@link RankResource} which is able
+   *                     to manage certain {@link Rank}s on
+   *                     this {@link Platform}
    */
   @Contract(mutates = "this")
   public void addRankResource(@NotNull RankResource<T> rankResource) {
@@ -160,7 +160,7 @@ public abstract class Platform<T extends Platform<T>> {
 
   /**
    * Returns the default name format for the name sync
-   * feature if the {@code Rank} doesn't override it.
+   * feature if the {@link Rank} doesn't override it.
    */
   @Contract(pure = true)
   @NotNull
@@ -170,10 +170,10 @@ public abstract class Platform<T extends Platform<T>> {
 
   /**
    * Returns if the provided, formatted name is valid on this
-   * {@code Platform}.
+   * {@link Platform}.
    *
    * @param name the formatted name which will be validated
-   * @return true if the name is valid on this {@code Platform},
+   * @return true if the name is valid on this {@link Platform},
    *         false otherwise
    */
   @Contract(pure = true)
@@ -181,10 +181,10 @@ public abstract class Platform<T extends Platform<T>> {
 
   /**
    * Returns if the provided, format is valid on this
-   * {@code Platform}.
+   * {@link Platform}.
    *
    * @param format the format which will be validated
-   * @return true if the format is valid on this {@code Platform},
+   * @return true if the format is valid on this {@link Platform},
    *         false otherwise
    */
   @Contract(pure = true)

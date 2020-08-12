@@ -10,12 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * This class represents a link between a {@code User}
- * and an {@code Account}.
+ * This class represents a link between a {@link User}
+ * and an {@link Account}.
  *
- * @param <T> the type of the {@code Platform} of the
- *            {@code Account} which is linked to the
- *            {@code User}
+ * @param <T> the type of the {@link Platform} of the
+ *            {@link Account} which is linked to the
+ *            {@link User}
  *
  * @author Mark van Wijk
  * @since 2.0.0
@@ -28,13 +28,13 @@ public class UserLink<T extends Platform<T>> {
   private Date end;
 
   /**
-   * Instantiates a new link, based on which {@code Account}
-   * should be linked to which {@code User} and the lifetime
+   * Instantiates a new link, based on which {@link Account}
+   * should be linked to which {@link User} and the lifetime
    * of this link.
    *
-   * @param account the {@code Account} which will be linked
-   *                to the {@code User}
-   * @param user the {@code User} which gets an {@code Account}
+   * @param account the {@link Account} which will be linked
+   *                to the {@link User}
+   * @param user the {@link User} which gets an {@link Account}
    *             linked to it
    * @param start the start time of the link
    * @param end the end time of the link, null if it hasn't
@@ -49,13 +49,13 @@ public class UserLink<T extends Platform<T>> {
   }
 
   /**
-   * Instantiates a new link, based on which {@code Account}
-   * should be linked to which {@code User} and the start time
+   * Instantiates a new link, based on which {@link Account}
+   * should be linked to which {@link User} and the start time
    * of this link. It won't have an end time.
    *
-   * @param account the {@code Account} which will be linked
-   *                to the {@code User}
-   * @param user the {@code User} which gets an {@code Account}
+   * @param account the {@link Account} which will be linked
+   *                to the {@link User}
+   * @param user the {@link User} which gets an {@link Account}
    *             linked to it
    * @param start the start time of the link
    */
@@ -64,14 +64,14 @@ public class UserLink<T extends Platform<T>> {
   }
 
   /**
-   * Instantiates a new link, based on which {@code Account}
-   * should be linked to which {@code User}. The start time will
+   * Instantiates a new link, based on which {@link Account}
+   * should be linked to which {@link User}. The start time will
    * be the moment on which the constructor has been called and
    * the end time won't yet have been specified.
    *
-   * @param account the {@code Account} which will be linked
-   *                to the {@code User}
-   * @param user the {@code User} which gets an {@code Account}
+   * @param account the {@link Account} which will be linked
+   *                to the {@link User}
+   * @param user the {@link User} which gets an {@link Account}
    *             linked to it
    */
   public UserLink(@NotNull Account<T> account, @NotNull User user) {
@@ -90,14 +90,14 @@ public class UserLink<T extends Platform<T>> {
   }
 
   /**
-   * Unlinks an {@code Account} from a {@code User} if the
-   * {@code UserLink} is still valid. If it was still valid,
-   * the {@code UserLink} will be deactivated and the
-   * {@code Reward}s will be issued to the {@code Account}.
+   * Unlinks an {@link Account} from a {@link User} if the
+   * {@link UserLink} is still valid. If it was still valid,
+   * the {@link UserLink} will be deactivated and the
+   * {@link Reward}s will be issued to the {@link Account}.
    *
-   * @param rewards the {@code Reward}s which the {@code Account}
+   * @param rewards the {@link Reward}s which the {@link Account}
    *                will receive for a valid unlink
-   * @return true if the {@code UserLink} is active, false
+   * @return true if the {@link UserLink} is active, false
    *         otherwise
    */
   @Contract(mutates = "this")
@@ -112,8 +112,8 @@ public class UserLink<T extends Platform<T>> {
   }
 
   /**
-   * Returns the {@code User} which has an {@code Account} attached
-   * to it based on the current {@code UserLink}.
+   * Returns the {@link User} which has an {@link Account} attached
+   * to it based on the current {@link UserLink}.
    */
   @Contract(pure = true)
   @NotNull
@@ -122,8 +122,8 @@ public class UserLink<T extends Platform<T>> {
   }
 
   /**
-   * Returns the {@code Account} which has been attached to the
-   * {@code User} by the current {@code UserLink}.
+   * Returns the {@link Account} which has been attached to the
+   * {@link User} by the current {@link UserLink}.
    */
   @Contract(pure = true)
   @NotNull

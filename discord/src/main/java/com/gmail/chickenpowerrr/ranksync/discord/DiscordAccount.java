@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class DiscordAccount extends Account<DiscordPlatform> {
@@ -24,6 +25,7 @@ public class DiscordAccount extends Account<DiscordPlatform> {
     this.member = member;
   }
 
+  @Contract(pure = true)
   @NotNull
   @Override
   public String getName() {
@@ -46,10 +48,12 @@ public class DiscordAccount extends Account<DiscordPlatform> {
     }
   }
 
+  @Contract(pure = true)
   public Member getMember() {
     return this.member;
   }
 
+  @Contract(pure = true)
   private Collection<Role> getRoles(@NotNull Guild guild,
       @NotNull Collection<Rank<DiscordPlatform>> supportedRanks) {
     return supportedRanks.stream().map(rank -> guild.getRoleById(rank.getIdentifier()))
