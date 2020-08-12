@@ -5,7 +5,8 @@ import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import com.gmail.chickenpowerrr.ranksync.core.user.UserLink;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -31,22 +32,8 @@ public class DiscordAccount extends Account<DiscordPlatform> {
 
   @Override
   public void updateRanks(@NotNull List<Rank<DiscordPlatform>> ranks) {
-    getPlatform().getRanks().whenComplete((supportedRanks, throwable1) -> {
-      if (throwable1 != null) {
-        throwable1.printStackTrace();
-        return;
-      }
-
-      Guild guild = this.member.getGuild();
-      getRoles(guild, supportedRanks).whenComplete((newRoles, throwable2) -> {
-        if (throwable2 != null) {
-          throwable2.printStackTrace();
-          return;
-        }
-
-        guild.modifyMemberRoles(this.member, newRoles).queue();
-      });
-    });
+    Guild guild = this.member.getGuild();
+    guild.modifyMemberRoles(this.member, getRoles(guild, ranks)).queue();
   }
 
   @Override
@@ -59,15 +46,13 @@ public class DiscordAccount extends Account<DiscordPlatform> {
     }
   }
 
-  private CompletableFuture<Collection<Role>> getRoles(@NotNull Guild guild,
+  public Member getMember() {
+    return this.member;
+  }
+
+  private Collection<Role> getRoles(@NotNull Guild guild,
       @NotNull Collection<Rank<DiscordPlatform>> supportedRanks) {
-    List<Role> result = this.member.getRoles();
-    supportedRanks.stream().map(rank -> guild.getRoleById(rank.getIdentifier()))
-        .forEach(result::remove);
-    return getPlatform().getRanks(this).thenApply(ranks -> {
-      ranks.stream().map(rank -> guild.getRoleById(rank.getIdentifier()))
-          .forEach(result::add);
-      return result;
-    });
+    return supportedRanks.stream().map(rank -> guild.getRoleById(rank.getIdentifier()))
+        .filter(Objects::nonNull).collect(Collectors.toList());
   }
 }

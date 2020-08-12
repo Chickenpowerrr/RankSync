@@ -19,6 +19,7 @@ public class Rank<T extends Platform<T>> implements Comparable<Rank<?>> {
 
   private final String identifier;
   private final int priority;
+  private final String type;
   private final String name;
 
   /**
@@ -27,11 +28,14 @@ public class Rank<T extends Platform<T>> implements Comparable<Rank<?>> {
    *
    * @param identifier the identifier of the {@code Rank}
    * @param name the name of the {@code Rank}
+   * @param type the shared type which is for the {@link RankResource}
    * @param priority the priority of the {@code Rank}
    */
-  public Rank(@NotNull String identifier, @NotNull String name, int priority) {
+  public Rank(@NotNull String identifier, @NotNull String name, @NotNull String type,
+      int priority) {
     this.identifier = identifier;
     this.priority = priority;
+    this.type = type;
     this.name = name;
   }
 
@@ -64,6 +68,15 @@ public class Rank<T extends Platform<T>> implements Comparable<Rank<?>> {
   @NotNull
   public String getName() {
     return this.name;
+  }
+
+  /**
+   * Returns the shared type which is for the {@link RankResource}.
+   */
+  @Contract(pure = true)
+  @NotNull
+  public String getType() {
+    return this.type;
   }
 
   /**

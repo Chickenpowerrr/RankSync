@@ -23,6 +23,7 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
 public class RankLinkTest {
 
+  private static final String TYPE = "test type";
   private static final String RANK_IDENTIFIER = "identifier";
   private static final String RANK_NAME = "name";
   private static final String NAME_FORMAT = "%name%";
@@ -38,8 +39,8 @@ public class RankLinkTest {
 
   @BeforeEach
   public void setUp() {
-    this.sourceRank = new Rank<>(RANK_IDENTIFIER + 1, RANK_NAME + 1, SOURCE_PRIORITY);
-    this.destinationRank = new Rank<>(RANK_IDENTIFIER + 2, RANK_NAME + 2, DESTINATION_PRIORITY);
+    this.sourceRank = new Rank<>(RANK_IDENTIFIER + 1, RANK_NAME + 1, TYPE, SOURCE_PRIORITY);
+    this.destinationRank = new Rank<>(RANK_IDENTIFIER + 2, RANK_NAME + 2, TYPE, DESTINATION_PRIORITY);
 
     Map<Platform<?>, Collection<Rank<?>>> ranks = new HashMap<>();
     ranks.put(this.sourcePlatform, Collections.singletonList(this.sourceRank));

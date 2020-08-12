@@ -87,7 +87,8 @@ public abstract class Account<T extends Platform<T>> {
   public CompletableFuture<String> formatName() {
     Optional<User> optionalUser = getUser();
     if (!optionalUser.isPresent()) {
-      return CompletableFuture.supplyAsync(this::getName);
+      return CompletableFuture.completedFuture(
+          this.platform.getBaseNameFormat().replace("%name%", getName()));
     }
 
     User user = optionalUser.get();
@@ -95,7 +96,8 @@ public abstract class Account<T extends Platform<T>> {
         .filter(account -> !account.equals(this)).sorted().findFirst();
 
     if (!optionalAccount.isPresent()) {
-      return CompletableFuture.supplyAsync(this::getName);
+      return CompletableFuture.completedFuture(
+          this.platform.getBaseNameFormat().replace("%name%", getName()));
     }
 
     Account<?> account = optionalAccount.get();

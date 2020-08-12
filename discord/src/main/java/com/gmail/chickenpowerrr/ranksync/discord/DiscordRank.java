@@ -9,8 +9,8 @@ public class DiscordRank extends Rank<DiscordPlatform> {
 
   private final Role role;
 
-  public DiscordRank(@NotNull Role role, int priority) {
-    super(role.getId(), role.getName(), priority);
+  public DiscordRank(@NotNull Role role, @NotNull String type, int priority) {
+    super(role.getId(), role.getName(), type, priority);
 
     this.role = role;
   }

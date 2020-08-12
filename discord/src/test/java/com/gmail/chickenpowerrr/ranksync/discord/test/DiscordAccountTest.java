@@ -1,6 +1,10 @@
 package com.gmail.chickenpowerrr.ranksync.discord.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,10 +18,13 @@ import com.gmail.chickenpowerrr.ranksync.discord.DiscordRank;
 import com.gmail.chickenpowerrr.ranksync.discord.RoleRankResource;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,14 +36,15 @@ import org.mockito.quality.Strictness;
 
 @SuppressWarnings("unchecked")
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.STRICT_STUBS)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class DiscordAccountTest {
 
+  private static final String TYPE = "test type";
   private static final String MEMBER_NAME = "name";
   private static final String PLATFORM_FORMAT = "Platform: %name%";
-  private static final String RANK_1_FORMAT = "Rank 1: %name%";
-  private static final String RANK_2_FORMAT = "Rank 2: %name%";
-  private static final String RANK_3_FORMAT = "Rank 3: %name%";
+  private static final String ROLE_ID_1 = "1";
+  private static final String ROLE_ID_2 = "2";
+  private static final String ROLE_ID_3 = "3";
 
   private User user;
   private DiscordAccount account;
@@ -100,20 +108,33 @@ public class DiscordAccountTest {
 
   @Test
   public void testUpdateRanks() {
+    when(this.member.getGuild()).thenReturn(this.guild);
+    when(this.rankResource.getRanks(this.account)).thenReturn(
+        CompletableFuture.completedFuture(Collections.emptyList()));
+    when(this.guild.getRoleById(ROLE_ID_1)).thenReturn(this.role1);
+    when(this.guild.getRoleById(ROLE_ID_2)).thenReturn(this.role2);
+    when(this.guild.getRoleById(ROLE_ID_3)).thenReturn(this.role3);
+    when(this.guild.modifyMemberRoles(eq(this.member), anyList()))
+        .thenReturn(mock(AuditableRestAction.class));
+
     this.account.updateRanks(Arrays.asList(
-        new DiscordRank(this.role1, 1), new DiscordRank(this.role3, 3)));
+        new DiscordRank(this.role1, TYPE, 1), new DiscordRank(this.role3, TYPE, 3)));
 
     ArgumentCaptor<List<Role>> captor = ArgumentCaptor.forClass(List.class);
-    verify(this.guild, times(1))
-        .modifyMemberRoles(this.member, captor.capture()).queue();
+    //noinspection ResultOfMethodCallIgnored
+    verify(this.guild,
+        times(1)).modifyMemberRoles(eq(this.member), captor.capture());
 
     assertThat(captor.getValue()).containsExactly(this.role1, this.role3);
   }
 
   @Test
   public void testUpdateName() {
+    when(this.member.modifyNickname(anyString())).thenReturn(mock(AuditableRestAction.class));
+
     this.account.updateName("Test Name");
 
-    verify(this.member).modifyNickname("Test Name").queue();
+    //noinspection ResultOfMethodCallIgnored
+    verify(this.member).modifyNickname("Test Name");
   }
 }

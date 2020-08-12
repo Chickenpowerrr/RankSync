@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 public class RankTest {
 
   private static final String IDENTIFIER = "identifier";
+  private static final String TYPE = "test type";
   private static final String NAME = "name";
   private static final int PRIORITY = 5;
 
@@ -17,7 +18,7 @@ public class RankTest {
 
   @BeforeEach
   public void setUp() {
-    this.rank = new Rank<>(IDENTIFIER, NAME, PRIORITY);
+    this.rank = new Rank<>(IDENTIFIER, NAME, TYPE, PRIORITY);
   }
 
   @Test

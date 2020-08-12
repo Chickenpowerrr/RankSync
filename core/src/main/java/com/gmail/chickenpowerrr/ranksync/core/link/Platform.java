@@ -114,7 +114,7 @@ public abstract class Platform<T extends Platform<T>> {
   @NotNull
   private CompletableFuture<Collection<Rank<T>>> getRanks(
       Function<RankResource<T>, CompletableFuture<Collection<Rank<T>>>> function) {
-    Collection<Rank<T>> ranks = new HashSet<>();
+    Collection<Rank<T>> ranks = new ArrayList<>();
     List<CompletableFuture<Collection<Rank<T>>>> completableFutures = new ArrayList<>();
 
     for (RankResource<T> rankResource : this.rankResources) {
