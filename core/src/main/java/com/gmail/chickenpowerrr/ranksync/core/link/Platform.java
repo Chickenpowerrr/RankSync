@@ -27,6 +27,7 @@ public abstract class Platform<T extends Platform<T>> {
   private final String name;
   private final String baseNameFormat;
   private final boolean canChangeName;
+  private final boolean isSourcePlatform;
   private final Collection<RankResource<T>> rankResources;
 
   /**
@@ -44,11 +45,16 @@ public abstract class Platform<T extends Platform<T>> {
    *                      able to change the name of an
    *                      {@link Account} on the {@link Platform},
    *                      false otherwise
+   * @param isSourcePlatform {@code true} if the {@link Platform}
+   *                         should be treated as the source of
+   *                         the {@link Rank}s, {@code false} otherwise
    */
-  public Platform(@NotNull String name, @NotNull String baseNameFormat, boolean canChangeName) {
+  public Platform(@NotNull String name, @NotNull String baseNameFormat, boolean canChangeName,
+      boolean isSourcePlatform) {
     this.name = name;
     this.baseNameFormat = baseNameFormat;
     this.canChangeName = canChangeName;
+    this.isSourcePlatform = isSourcePlatform;
     this.rankResources = new HashSet<>();
   }
 
@@ -64,12 +70,12 @@ public abstract class Platform<T extends Platform<T>> {
   /**
    * Returns a {@link CompletableFuture} which will be completed
    * once all {@link RankResource}s have submitted which {@link Rank}s
-   * they are syncing. The result will be a {@link Collection} which
+   * they are syncing. The result will be a {@link List} which
    * contains all {@link Rank}s synced by the {@link RankResource}s.
    */
   @Contract(pure = true)
   @NotNull
-  public CompletableFuture<Collection<Rank<T>>> getRanks() {
+  public CompletableFuture<List<Rank<T>>> getRanks() {
     return getRanks(RankResource::getRanks);
   }
 
@@ -77,7 +83,7 @@ public abstract class Platform<T extends Platform<T>> {
    * Returns a {@link CompletableFuture} which will be completed
    * once all {@link RankResource}s have submitted which {@link Rank}s
    * a certain {@link Account} has on this {@link Platform}. The result
-   * will be a {@link Collection} which contains all {@link Rank}s
+   * will be a {@link List} which contains all {@link Rank}s
    * determined by the {@link RankResource}s.
    *
    * @param account the {@link Account} which {@link Rank}s are requested
@@ -90,14 +96,14 @@ public abstract class Platform<T extends Platform<T>> {
    */
   @Contract(pure = true)
   @NotNull
-  public CompletableFuture<Collection<Rank<T>>> getRanks(Account<T> account) {
+  public CompletableFuture<List<Rank<T>>> getRanks(Account<T> account) {
     return getRanks(rankResource -> rankResource.getRanks(account));
   }
 
   /**
    * Returns a {@link CompletableFuture} which will be completed
    * once all {@link RankResource}s have submitted which {@link Rank}s
-   * they are syncing. The result will be a {@link Collection} which
+   * they are syncing. The result will be a {@link List} which
    * contains all {@link Rank}s synced by the {@link RankResource}s.
    *
    * @param function the {@link Function} which retrieves a
@@ -112,9 +118,9 @@ public abstract class Platform<T extends Platform<T>> {
    */
   @Contract(pure = true)
   @NotNull
-  private CompletableFuture<Collection<Rank<T>>> getRanks(
+  private CompletableFuture<List<Rank<T>>> getRanks(
       Function<RankResource<T>, CompletableFuture<Collection<Rank<T>>>> function) {
-    Collection<Rank<T>> ranks = new ArrayList<>();
+    List<Rank<T>> ranks = new ArrayList<>();
     List<CompletableFuture<Collection<Rank<T>>>> completableFutures = new ArrayList<>();
 
     for (RankResource<T> rankResource : this.rankResources) {
@@ -189,4 +195,12 @@ public abstract class Platform<T extends Platform<T>> {
    */
   @Contract(pure = true)
   public abstract boolean isValidFormat(@NotNull String format);
+
+  /**
+   * Returns {@code true} if the {@link Platform} should be treated as
+   * the source of the {@link Rank}s, {@code false} otherwise.
+   */
+  public boolean isSourcePlatform() {
+    return this.isSourcePlatform;
+  }
 }

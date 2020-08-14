@@ -36,7 +36,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.STRICT_STUBS)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class UserTest {
 
   private Date startDate;
@@ -81,6 +81,7 @@ public class UserTest {
         Util.mapOf(this.platform, Arrays.asList(this.rank3, this.rank4),
             this.linkedPlatform, Arrays.asList(this.rank1, this.rank2)));
 
+    when(this.account1.getPlatform()).thenReturn(this.platform);
     when(this.linkedAccount.getPlatform()).thenReturn(cast(this.linkedPlatform));
     when(this.linkManager.getRankLinks()).thenReturn(Collections.singleton(this.rankLink));
     when(this.linkedPlatform.getRanks(any())).thenAnswer(invocation -> {

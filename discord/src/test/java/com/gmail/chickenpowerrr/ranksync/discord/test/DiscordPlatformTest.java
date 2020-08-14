@@ -12,7 +12,7 @@ public class DiscordPlatformTest {
 
   @BeforeEach
   public void setUp() {
-    this.platform = new DiscordPlatform("%name%");
+    this.platform = new DiscordPlatform("%name%", true);
   }
 
   @Test

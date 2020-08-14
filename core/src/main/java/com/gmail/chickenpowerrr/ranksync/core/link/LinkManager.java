@@ -12,10 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import sun.awt.image.ImageWatched.Link;
 
 /**
- * This class manages all {@link Link}s and syncs for
+ * This class manages all {@link RankLink}s and syncs for
  * the registered {@link User}s.
  *
  * @author Mark van Wijk

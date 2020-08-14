@@ -3,6 +3,7 @@ package com.gmail.chickenpowerrr.ranksync.discord;
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.user.Account;
 import com.gmail.chickenpowerrr.ranksync.core.user.UserLink;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -34,8 +35,24 @@ public class DiscordAccount extends Account<DiscordPlatform> {
 
   @Override
   public void updateRanks(@NotNull List<Rank<DiscordPlatform>> ranks) {
-    Guild guild = this.member.getGuild();
-    guild.modifyMemberRoles(this.member, getRoles(guild, ranks)).queue();
+    getPlatform().getRanks().whenComplete((supportedRanks, throwable1) -> {
+      try {
+        if (throwable1 != null) {
+          throwable1.printStackTrace();
+          return;
+        }
+
+        Guild guild = this.member.getGuild();
+
+        List<Role> newRoles = new ArrayList<>(this.member.getRoles());
+        newRoles.removeAll(getRoles(guild, supportedRanks));
+        newRoles.addAll(getRoles(guild, ranks));
+
+        guild.modifyMemberRoles(this.member, newRoles).queue();
+      } catch (Throwable throwable) {
+        throwable.printStackTrace();
+      }
+    });
   }
 
   @Override
@@ -56,7 +73,9 @@ public class DiscordAccount extends Account<DiscordPlatform> {
   @Contract(pure = true)
   private Collection<Role> getRoles(@NotNull Guild guild,
       @NotNull Collection<Rank<DiscordPlatform>> supportedRanks) {
-    return supportedRanks.stream().map(rank -> guild.getRoleById(rank.getIdentifier()))
-        .filter(Objects::nonNull).collect(Collectors.toList());
+    return supportedRanks.stream()
+        .map(rank -> guild.getRoleById(rank.getIdentifier()))
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
   }
 }

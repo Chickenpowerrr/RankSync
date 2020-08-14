@@ -5,6 +5,7 @@ import com.gmail.chickenpowerrr.ranksync.core.link.Platform;
 import com.gmail.chickenpowerrr.ranksync.core.rank.Rank;
 import com.gmail.chickenpowerrr.ranksync.core.rank.RankLink;
 import com.gmail.chickenpowerrr.ranksync.core.reward.Reward;
+import com.gmail.chickenpowerrr.ranksync.core.util.Util;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import sun.awt.image.ImageWatched.Link;
 
 /**
  * This class represents a {@link User} which can have
@@ -61,7 +61,7 @@ public class User {
    * Adds a {@link UserLink} to the current {@link User}
    * which links an {@link Account} to this {@link User}
    * if the {@link UserLink} is currently active. If it
-   * is active, the given {@link Link}s will be issued
+   * is active, the given {@link RankLink}s will be issued
    * to the {@link Account}.
    *
    * @param link the {@link UserLink} which should link the
@@ -91,7 +91,42 @@ public class User {
    * which have been synced to the {@link User}.
    */
   public void updateRanks() {
-    // TODO update the ranks
+    getAccounts().stream()
+        .filter(account -> account.getPlatform().isSourcePlatform())
+        .findAny().ifPresent(sourceAccount -> {
+      sourceAccount.getPlatform().getRanks(Util.cast(sourceAccount))
+          .whenComplete(((ranks, throwable) -> {
+            try {
+              if (throwable != null) {
+                throwable.printStackTrace();
+                return;
+              }
+
+              getAccounts().forEach(targetAccount -> {
+                if (!targetAccount.equals(sourceAccount)) {
+                  targetAccount.updateRanks(Util.cast(ranks));
+                }
+              });
+            } catch (Throwable t) {
+              t.printStackTrace();
+            }
+      }));
+    });
+
+    getAccounts().forEach(account -> {
+      account.getPlatform().getRanks(Util.cast(account)).whenComplete((ranks, throwable) -> {
+        try {
+          if (throwable != null) {
+            throwable.printStackTrace();
+            return;
+          }
+
+          account.updateRanks(Util.cast(ranks));
+        } catch (Throwable t) {
+          t.printStackTrace();
+        }
+      });
+    });
   }
 
   /**
@@ -99,7 +134,22 @@ public class User {
    * which have been synced to the {@link User}.
    */
   public void updateNames() {
-    // TODO update the names
+    getAccounts().forEach(account -> {
+      if (!account.getPlatform().isSourcePlatform()) {
+        account.formatName().whenComplete((name, throwable) -> {
+          try {
+            if (throwable != null) {
+              throwable.printStackTrace();
+              return;
+            }
+
+            account.updateName(name);
+          } catch (Throwable t) {
+            t.printStackTrace();
+          }
+        });
+      }
+    });
   }
 
   /**

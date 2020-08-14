@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import com.gmail.chickenpowerrr.ranksync.core.link.LinkManager;
 import com.gmail.chickenpowerrr.ranksync.core.user.User;
 import com.gmail.chickenpowerrr.ranksync.core.user.UserLink;
+import com.gmail.chickenpowerrr.ranksync.core.util.Util;
 import com.gmail.chickenpowerrr.ranksync.discord.DiscordAccount;
 import com.gmail.chickenpowerrr.ranksync.discord.DiscordPlatform;
 import com.gmail.chickenpowerrr.ranksync.discord.DiscordRank;
@@ -50,6 +51,7 @@ public class DiscordAccountTest {
   private DiscordAccount account;
   private DiscordPlatform discordPlatform;
   private UserLink<DiscordPlatform> userLink;
+  private DiscordRank rank1, rank2, rank3;
 
   @Mock
   private RoleRankResource rankResource;
@@ -68,7 +70,7 @@ public class DiscordAccountTest {
 
   @BeforeEach
   public void setUp() {
-    this.discordPlatform = new DiscordPlatform(PLATFORM_FORMAT);
+    this.discordPlatform = new DiscordPlatform(PLATFORM_FORMAT, true);
 
     List<UserLink<DiscordPlatform>> userLinks = new ArrayList<>();
     List<Role> roles = new ArrayList<>();
@@ -93,6 +95,10 @@ public class DiscordAccountTest {
     when(this.role2.getId()).thenReturn("2");
     when(this.role3.getName()).thenReturn("Role 3");
     when(this.role3.getId()).thenReturn("3");
+
+    this.rank1 = new DiscordRank(this.role1, RoleRankResource.ROLE_TYPE, 1);
+    this.rank2 = new DiscordRank(this.role2, RoleRankResource.ROLE_TYPE, 2);
+    this.rank3 = new DiscordRank(this.role3, RoleRankResource.ROLE_TYPE, 3);
   }
 
   @Test
@@ -109,6 +115,8 @@ public class DiscordAccountTest {
   @Test
   public void testUpdateRanks() {
     when(this.member.getGuild()).thenReturn(this.guild);
+    when(this.rankResource.getRanks()).thenReturn(
+        CompletableFuture.completedFuture(Util.setOf(this.rank1, this.rank2, this.rank3)));
     when(this.rankResource.getRanks(this.account)).thenReturn(
         CompletableFuture.completedFuture(Collections.emptyList()));
     when(this.guild.getRoleById(ROLE_ID_1)).thenReturn(this.role1);

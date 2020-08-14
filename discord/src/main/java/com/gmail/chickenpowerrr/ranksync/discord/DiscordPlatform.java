@@ -11,8 +11,8 @@ public class DiscordPlatform extends Platform<DiscordPlatform> {
   public static final int MIN_NAME_SIZE = 2;
   public static final String[] ILLEGAL_NAME_CHARACTERS = new String[] {"@", "#", "```"};
 
-  public DiscordPlatform(@NotNull String baseNameFormat) {
-    super("Discord", baseNameFormat, true);
+  public DiscordPlatform(@NotNull String baseNameFormat, boolean isSource) {
+    super("Discord", baseNameFormat, true, isSource);
   }
 
   @Contract(pure = true)

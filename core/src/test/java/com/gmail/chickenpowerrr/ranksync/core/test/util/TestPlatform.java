@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 public class TestPlatform extends Platform<TestPlatform> {
 
   public TestPlatform(@NotNull String name, @NotNull String baseNameFormat, boolean canChangeName) {
-    super(name, baseNameFormat, canChangeName);
+    super(name, baseNameFormat, canChangeName, false);
   }
 
   public TestPlatform() {
