@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.stream.Collectors;
 
@@ -18,12 +17,9 @@ public class UpdateChecker {
 
   public void check() {
     try {
-      URL url = new URL(
-          "https://api.spigotmc.org/legacy/update.php?resource=61393");
-      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      connection.setRequestMethod("GET");
-      connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-      try (InputStream inputStream = connection.getInputStream();
+      URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=61393");
+
+      try (InputStream inputStream = url.openStream();
           InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
           BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
         Version latestVersion = new Version(bufferedReader.lines().collect(Collectors.joining()));
@@ -44,7 +40,7 @@ public class UpdateChecker {
         }
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("RankSync failed to perform version check...");
     }
   }
 
