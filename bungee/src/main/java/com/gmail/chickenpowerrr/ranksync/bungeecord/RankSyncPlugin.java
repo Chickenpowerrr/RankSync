@@ -33,6 +33,7 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import org.bstats.bungeecord.Metrics;
+import org.bstats.charts.SimplePie;
 
 /**
  * This class starts all of the parts needed to sync Ranks with the given platforms
@@ -60,12 +61,28 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
    */
   @Override
   public void onEnable() {
-    enable();
-    Metrics metrics = new Metrics(this);
-    metrics.addCustomChart(
-        new Metrics.SimplePie("used_storage", () -> getConfigString("database.type")));
-    metrics.addCustomChart(
-        new Metrics.SimplePie("used_language", () -> getConfigString("language")));
+    try {
+      enable();
+      Metrics metrics = new Metrics(this, 5069);
+      metrics.addCustomChart(
+          new SimplePie("used_storage", () -> getConfigString("database.type")));
+      metrics.addCustomChart(
+          new SimplePie("used_language", () -> getConfigString("language")));
+    } catch (IllegalStateException e) {
+      // Since Spigot now closes the Jar directly after a shutdown, but doesn't
+      // immediately stop the main thread, we cannot load any classes
+      if (!e.getMessage().equals("zip file closed")) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  /**
+   * Shuts all the bots down on disabling.
+   */
+  @Override
+  public void onDisable() {
+    this.bots.values().forEach(Bot::shutdown);
   }
 
   /**
@@ -320,7 +337,6 @@ public final class RankSyncPlugin extends Plugin implements RankSyncServerPlugin
       Configuration defaults = (Configuration) defaultField.get(this.configuration);
       Field selfField = this.configuration.getClass().getDeclaredField("self");
       selfField.setAccessible(true);
-      System.out.println(defaults);
       Map<String, Object> self = (Map<String, Object>) selfField.get(defaults);
       self.remove("ranks");
     } catch (NoSuchFieldException | IllegalAccessException e) {

@@ -49,13 +49,13 @@ public class DiscordBot implements Bot<Member, Role> {
   @Getter
   private CommandFactory commandFactory;
   @Getter
-  private NameResource nameResource;
+  private final NameResource nameResource;
 
   @Getter
   @Setter
   private boolean enabled;
 
-  private Properties properties;
+  private final Properties properties;
 
   private JDA jda;
 
@@ -67,12 +67,13 @@ public class DiscordBot implements Bot<Member, Role> {
     this.nameResource = (NameResource) properties.getObject("name_resource");
 
     try {
-      new JDABuilder(properties.getString("token"))
+      this.jda = JDABuilder.createDefault(properties.getString("token"))
           .addEventListeners(new DiscordEventListeners(this)).build();
     } catch (LoginException e) {
       if (e.toString().contains("The provided token is invalid!")) {
         RankSyncApi.getApi()
-            .execute(new BotForceShutdownEvent(this, "===================================",
+            .execute(new BotForceShutdownEvent(this,
+                "===================================",
                 "RankSync Error:", "The Discord token provided in the config.yml is invalid.",
                 "For more information see:",
                 "https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Token",
@@ -84,7 +85,6 @@ public class DiscordBot implements Bot<Member, Role> {
   }
 
   public void enable(JDA jda) {
-    this.jda = jda;
     this.guild = jda.getGuildById(this.properties.getLong("guild_id"));
     if (this.guild != null) {
       this.rankFactory = com.gmail.chickenpowerrr.ranksync.discord.rank.RankFactory
@@ -111,6 +111,13 @@ public class DiscordBot implements Bot<Member, Role> {
               "https://github.com/Chickenpowerrr/RankSync/wiki/Getting-a-Discord-Guild-id",
               "==================================="));
       jda.shutdownNow();
+    }
+  }
+
+  @Override
+  public void shutdown() {
+    if (this.jda != null) {
+      this.jda.shutdown();
     }
   }
 
@@ -157,6 +164,10 @@ public class DiscordBot implements Bot<Member, Role> {
   @Override
   public int getUpdateInterval() {
     return this.properties.getInt("update_interval");
+  }
+
+  public JDA getJda() {
+    return this.jda;
   }
 
   private void updateUsers() {

@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.Configuration;
@@ -54,12 +55,28 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
    */
   @Override
   public void onEnable() {
-    enable();
-    Metrics metrics = new Metrics(this);
-    metrics.addCustomChart(
-        new Metrics.SimplePie("used_storage", () -> getConfigString("database.type")));
-    metrics.addCustomChart(
-        new Metrics.SimplePie("used_language", () -> getConfigString("language")));
+    try {
+      enable();
+      Metrics metrics = new Metrics(this, 5068);
+      metrics.addCustomChart(
+          new SimplePie("used_storage", () -> getConfigString("database.type")));
+      metrics.addCustomChart(
+          new SimplePie("used_language", () -> getConfigString("language")));
+    } catch (IllegalStateException e) {
+      // Since Spigot now closes the Jar directly after a shutdown, but doesn't
+      // immediately stop the main thread, we cannot load any classes
+      if (!e.getMessage().equals("zip file closed")) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  /**
+   * Shuts all the bots down on disabling.
+   */
+  @Override
+  public void onDisable() {
+    this.bots.values().forEach(Bot::shutdown);
   }
 
   /**
@@ -96,7 +113,8 @@ public final class RankSyncPlugin extends JavaPlugin implements RankSyncServerPl
     for (String reasonString : reason) {
       getLogger().warning(reasonString);
     }
-    Bukkit.getPluginManager().disablePlugin(JavaPlugin.getPlugin(RankSyncPlugin.class));
+    Bukkit.getScheduler().runTask(this, () ->
+        Bukkit.getPluginManager().disablePlugin(JavaPlugin.getPlugin(RankSyncPlugin.class)));
   }
 
   /**

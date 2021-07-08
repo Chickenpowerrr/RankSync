@@ -8,6 +8,7 @@ import com.gmail.chickenpowerrr.ranksync.api.user.User;
 import com.gmail.chickenpowerrr.ranksync.server.language.Translation;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -122,12 +123,14 @@ public class LinkHelper {
    * @param service the service that should get linked
    * @param key the key used to link the account
    */
-  public void link(UUID uuid, String service, String key) {
+  public CompletableFuture<Void> link(UUID uuid, String service, String key) {
     Map.Entry<Long, Player> authInfo = this.authenticationKeys.get(key);
-    this.linkInfos.get(getLinkInfo(service)).put(uuid, authInfo.getValue());
-    this.rankSyncPlugin.getBot(service).getEffectiveDatabase()
-        .setUuid(authInfo.getValue().getPersonalId(), uuid);
-    this.authenticationKeys.remove(key);
+
+    return this.rankSyncPlugin.getBot(service).getEffectiveDatabase()
+        .setUuid(authInfo.getValue().getPersonalId(), uuid).thenAccept(aVoid -> {
+          this.linkInfos.get(getLinkInfo(service)).put(uuid, authInfo.getValue());
+          this.authenticationKeys.remove(key);
+        });
   }
 
   /**

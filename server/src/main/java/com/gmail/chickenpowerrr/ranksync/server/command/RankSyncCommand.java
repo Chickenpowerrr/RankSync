@@ -61,14 +61,13 @@ public abstract class RankSyncCommand extends AbstractCommand {
           if (bot != null && bot.isEnabled()) {
             bot.getPlayerFactory().getPlayer(user.getUuid()).thenAccept(player -> {
               if (player == null) {
-                if (this.linkHelper
-                    .isAllowedToLink(user, user.getUuid(),
-                        args[0], args[1])) {
-                  this.linkHelper.link(user.getUuid(), args[0], args[1]);
-                  user.sendMessage(Translation.RANKSYNC_COMMAND_LINKED.getTranslation());
-                  bot.getPlayerFactory().getPlayer(user.getUuid())
-                      .thenAccept(linkedPlayer -> RankSyncApi.getApi()
-                          .execute(new PlayerLinkedEvent(linkedPlayer)));
+                if (this.linkHelper.isAllowedToLink(user, user.getUuid(), args[0], args[1])) {
+                  this.linkHelper.link(user.getUuid(), args[0], args[1]).thenAccept(aVoid -> {
+                    user.sendMessage(Translation.RANKSYNC_COMMAND_LINKED.getTranslation());
+                    bot.getPlayerFactory().getPlayer(user.getUuid())
+                        .thenAccept(linkedPlayer -> RankSyncApi.getApi()
+                            .execute(new PlayerLinkedEvent(linkedPlayer)));
+                  });
                 }
               } else {
                 user.sendMessage(

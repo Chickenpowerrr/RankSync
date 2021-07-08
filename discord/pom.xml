@@ -14,9 +14,9 @@
 
   <repositories>
     <repository>
-      <id>jcenter</id>
-      <name>jcenter-bintray</name>
-      <url>http://jcenter.bintray.com</url>
+      <id>dv8tion</id>
+      <name>m2-dv8tion</name>
+      <url>https://m2.dv8tion.net/releases</url>
     </repository>
   </repositories>
 
@@ -38,7 +38,7 @@
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>4.0.0_73</version>
+      <version>4.3.0_293</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -61,35 +61,35 @@
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20180813</version>
+      <version>20210307</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
-      <version>3.3.1</version>
+      <version>4.0.3</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.15</version>
+      <version>8.0.25</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.6.4</version>
+      <version>1.7.31</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.6.4</version>
+      <version>1.7.31</version>
       <scope>compile</scope>
     </dependency>
 
@@ -103,7 +103,7 @@
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
-      <version>1.21</version>
+      <version>1.29</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

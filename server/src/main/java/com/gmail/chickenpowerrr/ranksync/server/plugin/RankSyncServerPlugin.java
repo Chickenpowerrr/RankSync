@@ -200,7 +200,7 @@ public interface RankSyncServerPlugin {
   }
 
   /**
-   * Enables the plugin
+   * Enables the plugin.
    */
   default void enable() {
     new UpdateChecker().check();
@@ -254,7 +254,7 @@ public interface RankSyncServerPlugin {
               .addProperty("language", language)
               .addProperty("language_helper", languageHelper)));
 
-      Bot discordBot = getBot("discord");
+      Bot<?, ?> discordBot = getBot("discord");
       rankResource.setBot(discordBot);
 
       setRankHelper(new com.gmail.chickenpowerrr.ranksync.server.rank.RankHelper(getSyncedRanks()));

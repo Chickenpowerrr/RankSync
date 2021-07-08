@@ -19,6 +19,11 @@ import java.util.Collection;
 public interface Bot<P, R> {
 
   /**
+   * Shuts down the bot.
+   */
+  void shutdown();
+
+  /**
    * Updates the way the Bot should get its data
    *
    * @param database the new way the Bot should get its data

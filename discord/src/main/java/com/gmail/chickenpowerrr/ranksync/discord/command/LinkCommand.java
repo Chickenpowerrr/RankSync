@@ -66,13 +66,13 @@ public class LinkCommand implements Command {
   public String execute(Player invoker, List<String> arguments) {
     if (invoker.getUuid() == null) {
       if (!onCooldown(invoker.getPersonalId())) {
-        this.timeOuts.put(invoker.getPersonalId(), System.currentTimeMillis());
         String secretKey = randomString(10 + random.nextInt(2));
         RankSyncApi.getApi().execute(new PlayerLinkCodeCreateEvent(invoker, secretKey));
 
         if (invoker.sendPrivateMessage(
             Translation.LINK_COMMAND_PRIVATE
                 .getTranslation("name", invoker.getFancyName(), "key", secretKey))) {
+          this.timeOuts.put(invoker.getPersonalId(), System.currentTimeMillis());
           return Translation.LINK_COMMAND_PUBLIC.getTranslation("name", invoker.getFancyName());
         } else {
           return Translation.LINK_COMMAND_ENABLE_PRIVATE_MESSAGES
@@ -137,7 +137,7 @@ public class LinkCommand implements Command {
    * Returns a random character
    */
   private char randomChar() {
-    int randomNumber = LinkCommand.random.nextInt(52);
+    int randomNumber = random.nextInt(52);
     char base = (randomNumber < 26) ? 'A' : 'a';
     return (char) (base + randomNumber % 26);
   }

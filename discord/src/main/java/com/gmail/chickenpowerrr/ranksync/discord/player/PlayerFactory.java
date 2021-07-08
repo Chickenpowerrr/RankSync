@@ -122,8 +122,13 @@ public class PlayerFactory implements
     return this.bot.getEffectiveDatabase()
         .getPlayer(uuid, (uuid1, identifier, timesSynced, timesUnsynced) -> {
           if (identifier != null) {
-            return new com.gmail.chickenpowerrr.ranksync.discord.player.Player(uuid,
-                this.guild.getMemberById(identifier), this.bot, timesSynced, timesUnsynced);
+            Member member = this.guild.getMemberById(identifier);
+            if (member != null) {
+              return new com.gmail.chickenpowerrr.ranksync.discord.player.Player(uuid,
+                  member, this.bot, timesSynced, timesUnsynced);
+            } else {
+              return null;
+            }
           } else {
             return null;
           }

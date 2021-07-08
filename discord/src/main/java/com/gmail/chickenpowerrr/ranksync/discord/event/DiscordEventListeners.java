@@ -22,7 +22,9 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
+import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.hooks.EventListener;
+import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -91,10 +93,11 @@ public class DiscordEventListeners implements EventListener {
                           : new ArrayList<>());
                   if (message != null) {
                     messageReceivedEvent.getTextChannel().sendMessage(message)
-                        .queue(sentMessage -> {
-                          queueDelete(messageReceivedEvent.getMessage());
-                          queueDelete(sentMessage);
-                        });
+                        .delay(deleteDelay, TimeUnit.SECONDS)
+                        .flatMap(Message::delete)
+                        .flatMap(a -> messageReceivedEvent.getMessage().delete())
+                        .queue(null, new ErrorHandler()
+                            .ignore(ErrorResponse.UNKNOWN_MESSAGE));
                   }
                 }).exceptionally(throwable -> {
               throwable.printStackTrace();
@@ -103,20 +106,6 @@ public class DiscordEventListeners implements EventListener {
           }
         }
       }
-    }
-  }
-
-  /**
-   * Delete the given message after the in the config.yml specified config-timer, if the value is
-   * greater or equal to 0
-   *
-   * @param message the message that will be deleted
-   */
-  private void queueDelete(Message message) {
-    if (this.deleteDelay >= 0) {
-      this.executorService
-          .schedule(() -> message.delete().queue(a -> {}, a -> {}), this.deleteDelay,
-              TimeUnit.SECONDS);
     }
   }
 }
