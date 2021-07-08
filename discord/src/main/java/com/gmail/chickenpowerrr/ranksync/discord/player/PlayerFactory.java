@@ -69,19 +69,31 @@ public class PlayerFactory implements
    */
   @Override
   public CompletableFuture<Void> setUuid(String playerId, UUID uuid) {
-    return getPlayer(this.guild.getMemberById(playerId)).thenAccept(player -> {
-      if (uuid == null) {
-        this.players.remove(player.getUuid());
-        player.setUuid(null);
-      } else {
-        this.players.remove(player.getUuid());
-        this.players.put(uuid, player);
-        player.setUuid(uuid);
-      }
+    CompletableFuture<Void> result = new CompletableFuture<>();
+
+    this.guild.retrieveMemberById(playerId).submit().thenAccept(member -> {
+      getPlayer(member).thenAccept(player -> {
+        if (uuid == null) {
+          this.players.remove(player.getUuid());
+          player.setUuid(null);
+        } else {
+          this.players.remove(player.getUuid());
+          this.players.put(uuid, player);
+          player.setUuid(uuid);
+        }
+        result.complete(null);
+      }).exceptionally(throwable -> {
+        throwable.printStackTrace();
+        result.completeExceptionally(throwable);
+        return null;
+      });
     }).exceptionally(throwable -> {
       throwable.printStackTrace();
+      result.completeExceptionally(throwable);
       return null;
     });
+
+    return result;
   }
 
   /**
@@ -122,7 +134,8 @@ public class PlayerFactory implements
     return this.bot.getEffectiveDatabase()
         .getPlayer(uuid, (uuid1, identifier, timesSynced, timesUnsynced) -> {
           if (identifier != null) {
-            Member member = this.guild.getMemberById(identifier);
+            Member member = this.guild.retrieveMemberById(identifier)
+                .onErrorMap(throwable -> null).complete();
             if (member != null) {
               return new com.gmail.chickenpowerrr.ranksync.discord.player.Player(uuid,
                   member, this.bot, timesSynced, timesUnsynced);
