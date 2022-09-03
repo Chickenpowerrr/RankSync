@@ -14,6 +14,7 @@ import com.gmail.chickenpowerrr.ranksync.api.player.Player;
 import com.gmail.chickenpowerrr.ranksync.api.player.PlayerFactory;
 import com.gmail.chickenpowerrr.ranksync.api.rank.RankFactory;
 import com.gmail.chickenpowerrr.ranksync.discord.command.LinkCommand;
+import com.gmail.chickenpowerrr.ranksync.discord.event.DiscordCommandListeners;
 import com.gmail.chickenpowerrr.ranksync.discord.event.DiscordEventListeners;
 import com.gmail.chickenpowerrr.ranksync.discord.language.Translation;
 import java.util.Collection;
@@ -68,7 +69,8 @@ public class DiscordBot implements Bot<Member, Role> {
 
     try {
       this.jda = JDABuilder.createDefault(properties.getString("token"))
-          .addEventListeners(new DiscordEventListeners(this)).build();
+          .addEventListeners(new DiscordEventListeners(this))
+          .addEventListeners(new DiscordCommandListeners(this)).build();
     } catch (LoginException e) {
       if (e.toString().contains("The provided token is invalid!")) {
         RankSyncApi.getApi()

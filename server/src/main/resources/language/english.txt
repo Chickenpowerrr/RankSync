@@ -13,6 +13,7 @@ minecraft-unsync-command-invalid-service = &c%service% &4isn't a valid service. 
 minecraft-unsync-command-usage = &4Please use that command like this: &c/%command% %services%
 minecraft-discord-linkinfo = Type !link in the Discord channel containing the RankSync bot.
 minecraft-invalid-rank = %rank% is not a valid rank on %platform%
+discord-link-command-description = Link your account
 discord-link-command-already-linked = Your account has already been linked, %name%!
 discord-link-command-enable-private-messages = %name% please enable your private messages
 discord-link-command-rightthere = Your message is right here ^

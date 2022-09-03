@@ -27,6 +27,7 @@ public enum Translation {
   DISCORD_LINKINFO,
   INVALID_RANK;
 
+  private static final String DEFAULT_LANGUAGE = "english";
   @Setter private static LanguageHelper languageHelper;
   @Setter private static String language;
 
@@ -47,7 +48,7 @@ public enum Translation {
    * @return a translation based on the placeholders
    */
   public String getTranslation(String... replacements) {
-    String message = languageHelper.getMessage(language, this.key);
+    String message = languageHelper.getMessage(language, DEFAULT_LANGUAGE, this.key);
 
     for (int i = 0; i < replacements.length; i += 2) {
       message = message.replaceAll("%" + replacements[i] + "%", replacements[i + 1]);

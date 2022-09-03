@@ -13,6 +13,7 @@ minecraft-unsync-command-invalid-service = &c%service% &4is geen valide service,
 minecraft-unsync-command-usage = &4Gebruik dit commando alsjeblieft op de volgende manier: &c/%command% %services%
 minecraft-discord-linkinfo = typ !link in het bot kanaal op Discord
 minecraft-invalid-rank = %rank% is geen valide rank op %platform%
+discord-link-command-description = Koppel je account
 discord-link-command-already-linked = Jouw account is al gesynchroniseerd %name%
 discord-link-command-enable-private-messages = %name% zet alsjeblieft je privé berichten aan
 discord-link-command-rightthere = Je bericht is daar ^
